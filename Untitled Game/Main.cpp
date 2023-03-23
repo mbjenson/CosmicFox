@@ -114,14 +114,13 @@ using namespace std;
 // add limdashvel to update
 // update the player update function so that It adds dashing to the final vel before moving the player 
 
-// maybe:
-// redo the animation class so that a class can have animations and not 
-// 
+
 
 //CURRENTLY:
-// redoing how the movement and things work.
-// I will now use directional bools from if key pressed
-// I will also use states like dashing, walking, idle, and whatnot
+// 1) fix apply friction
+// 2) get rid of cluttered code that is unused like setDiagBool (could be useful actually)
+// 3) rejoice, for the Lord my God is with me
+// 4) rejoice yet again because I finally understand how to 
 
 void setKeyPresses(Player& player) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -307,7 +306,6 @@ int main() {
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
 	
-	
 	//int testFrameiterator = 0;
 	sf::Clock mainClock;
 	sf::Clock pMoveClock;	
@@ -330,7 +328,7 @@ int main() {
 				p1.walkSouth(dt);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 				p1.walkEast(dt);
-				*/
+			*/
 			/*
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				p1.attack();
@@ -348,8 +346,8 @@ int main() {
 			window.clear();
 
 			// 1) update player information
-
-
+			
+			
 			p1.update(dt, &tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);

@@ -10,58 +10,51 @@ public:
 	Player(	sf::Texture& texture, sf::RenderWindow& win, 
 			sf::Vector2u textureDim, int rowLength, 
 			int rowNumber, float animationTime );
+	
+	// try and declare most things inside of the class so that you dont need to pass all above giberish as params
+	//Player (sf::RenderWindow& win, sf::Vector2u textureDim)
+	void walkNorth();
+	void walkEast();
+	void walkSouth();
+	void walkWest();
 
-	void walkNorth(float deltaTime);
-	void walkEast(float deltaTime);
-	void walkSouth(float deltaTime);
-	void walkWest(float deltaTime);
-
+	//redo:
 	void dash(float curTime, float deltaTime);
-
-	void updateMovement(float deltaTime, TileMap* map);
-
+	
+	//main update function for the player
 	void update(float deltaTime, TileMap* map);
-
 	// allowed movements
 	bool northAllowed = true;
 	bool eastAllowed = true;
 	bool southAllowed = true;
 	bool westAllowed = true;
 	bool dashingAllowed = true;
-
+	// current walking movements
 	bool travNorth;
 	bool travEast;
 	bool travSouth;
 	bool travWest;
+	// current dashing movments
 	bool dashNorth;
 	bool dashEast;
 	bool dashWest;
 	bool dashSouth;
-
+	// button pressed bools
 	bool upPressed;
 	bool downPressed;
 	bool leftPressed;
 	bool rightPressed;
 	bool spacePressed;
 	bool escapePressed;
-
-	//later put some update functions into a more concise and clear single public function
+	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	void updatePlayerTile(TileMap* map); // update the curTile var for given map
-	
-	void collisionCheck(TileMap* map);
-	
-	bool isDashing = false;
-	//void checkDash(int frameNum, float deltaTime);
-
-	//the actual direciton that player is travelling
-	
-
+	// check for collision with a specified tilemap
+	void collisionCheckTile(TileMap* map);
+	//gets walkingVelocity
 	sf::Vector2f getWlkVel();
 	sf::Vector2f getFinalVel();
-	
-	// create a switch statement in player.cpp that checks if the player is in one of these states and if so, 
-	// sets parameters for them which change how the player is playing
+	// player states
 	enum class State {
 		deactivated,
 		nominal,
@@ -70,15 +63,16 @@ public:
 		invulnerable,
 		dead
 	};
-
+	// inits many values for the player like textures, animations, bools, and other things
 	void init();
-	void getKeyPresses(bool up, bool down, bool left, bool right, bool space, bool escape);
+	//void getKeyPresses(bool up, bool down, bool left, bool right, bool space, bool escape);
+	// WIP:
+	// sets the player state manually
+	// later will set the player state based on certain values
 	void setState(State _state);
 
 private:
-	
-	//add animations functions that change the row based on instructions
-	//animation information
+	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
 	void wRightAnim();
 	void wUpAnim();
@@ -87,9 +81,9 @@ private:
 	void idleDownAnim();
 	void idleLeftAnim();
 	void idleRightAnim();
-
-	// the animations should all have the same runtime but different row number
 	// ** update these in a player.init() function that just sets these values
+	// the animations should all have the same runtime but different row number
+	// animation dimensions (which row on spriteSheet and how long each row is).
 	sf::Vector2u wUpAnimDim;
 	sf::Vector2u wDownAnimDim;
 	sf::Vector2u wLeftAnimDim;
@@ -98,55 +92,73 @@ private:
 	sf::Vector2u idleDownAnimDim;
 	sf::Vector2u idleLeftAnimDim;
 	sf::Vector2u idleRightAnimDim;
+	/*
+	* Effects
+	* here I will code in functions that do things to the players sprite and change how it works
+	* like adding a flashing red effect for low health
+	* or like a flashing for invulnerability
+	*/
+	
+	/*
+	* the walking movement logic is as follows:
+	*	The player inputs a direction on the keyboard,
+	*	that is recognized by the game and the moveDir is set
+	*	in response. 
+	*	For example: If I press 'W', the moveDir.y is set to -1.
+	*	Then, the vector is normalized and walkVelocity is 
+	*   set to moveDir * walkSpeed * deltaTime.
+	*/
+	float walkSpeed = 1.3f;
+	void normalizeWalkVel();
+	sf::Vector2f moveDir;
+	sf::Vector2f walkVelocity;
 
-	//effects
-	// here I will code in functions that do things to the players sprite and change how it works
-	// like adding a flashing red effect for low health
-	// or like a flashing for invulnerability
-	
-	//walking specs
-	float maxWlkVel = 0.07;
-	float wlkAcc = 1.f;
-	
 	//dashing specs
 	float maxDashVel = 0.14;
 	float dashAcc = 5.f;
 	int dashTimeStart = 0;
 	int dashCooldown = 3;
-	//int dashLength = 60;
-	//void updateDash(float deltaTime, int frameNum);
-	// make a variable to represent the current change in velocity (dy/dx)
-	sf::Vector2f deltaVel;
-	
-
-	sf::Vector2f finalVel;
 	sf::Vector2f dashVel;
-	void limitDashVel();
-	sf::Vector2f wlkVel;
-	void limWalkVel();
-	//sf::Vector2f limitVel(float deltaTime, float maxVel, sf::Vector2f velocity);
 
-	//applying friction
-	float kinFrictionCoef = 0.01;
-	void applyFriction();
+	// ** may not need this
+	// simply checks if the player is travelling diagonally and sets the bool accordingly.
+	void setDiagBool();
+	bool travDiag;
+	// sum of dash velocity and walk velocity.
+	sf::Vector2f finalVel;
+	
+	// applies friction to the players walkspeed
+	void applyWalkFriction();
+	float kinFrictionCoef = 0.015;
 
 	//direction of movement
 	float movementAngle = 0;
 	float lastMovementAngle = 0;
-	void updateMovementAngle();
 	
-	void updateDir();
-	//rotating the player towards the mouse
-	void updateRot();
+	// ** probably dont need but keeping in case
+	// updates playerAngle based on directon
+	//void updateDir();
+	// updates directional booleans to match which direction the player is travelling in
+	void updateTrav();
+	// ** may not use but I will be setting the sword swinging direction to face the mouse so keeping it for that reason.
+	// rotating the player towards the mouse
+	
 	void updateRotMouse();
-
-	sf::RenderWindow* pWindow;
+	// player hitbox size
 	sf::Vector2f hitBoxSize = sf::Vector2f(10, 10);
-
+	// updates the location of the hitbox with the players current location
 	void updateHitBox();
 
 	State state;
+
+	float playerAngle;
+
+	sf::RenderWindow* pWindow;
 	
+	//void updateRot();
+	//void updateMovementAngle();
+	//void updateMovement(float deltaTime, TileMap* map);
+
 	
 };
 
