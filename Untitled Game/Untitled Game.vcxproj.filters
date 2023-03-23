@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="_TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\enemy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\link.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\wall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\linkscaled.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\link128.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\arraysprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\arrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grassalpha.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\stonealpha.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\animationtest.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\arrowSmall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grassalpha64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\stonealpha64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grassalpha32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\stonealpha32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\animationtest2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\arrowSpriteSheet32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\waterSpriteSheettest32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\terrainsheet2mk2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\playerSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\testTileSheet16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\playerCube16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\tileSheet16mk1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\boxtest16x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\boxtesttwo16x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\terrainSheettestone16x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\black.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\testLevelMap.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_TileMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\test1.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\light_test.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\light_test_vert.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
