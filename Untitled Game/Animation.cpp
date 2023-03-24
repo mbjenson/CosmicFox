@@ -55,7 +55,7 @@ void Animation::updateAnimation(sf::Clock* clock)
 		{
 			// check if at end of row
 			clock->restart();
-			if (texRect.left == tDim.x * (rowLen-1))
+			if (texRect.left >= tDim.x * (rowLen-1))
 			{
 				//return to beginning of texture frame
 				texRect.left = 0;
@@ -73,6 +73,8 @@ void Animation::updateAnimation(sf::Clock* clock)
 
 void Animation::updateRow(int rowNumber, int rowLength)
 {
+	texRect.top = rowNumber * tDim.y;
+	tSprite.setTextureRect(texRect);
 	rowNum = rowNumber;
 	rowLen = rowLength;
 }

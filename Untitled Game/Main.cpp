@@ -114,17 +114,17 @@ using namespace std;
 // add limdashvel to update
 // update the player update function so that It adds dashing to the final vel before moving the player 
 
+// TODO:
+// give animationClass an internal clock so that it can monitor its own animation updates
+
+// TODO: maybe...
+// create circular hitbox for player and create collision function for circular hitbox?
 
 
-//CURRENTLY:
-// 1) fix apply friction
-// 2) get rid of cluttered code that is unused like setDiagBool (could be useful actually)
-// 3) rejoice, for the Lord my God is with me
-// 4) rejoice yet again because I finally understand how to 
 
 
 
-void setKeyPresses(Player& player) {
+void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 	player.downPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 	player.leftPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
@@ -206,9 +206,7 @@ int main() {
 	);
 
 	//tile and player settup ===========
-	sf::Texture square;
-	if (!square.loadFromFile("Textures/playerCube16.png"))
-		return -1;
+	
 
 	sf::Vector2i temp_mapSize(8, 8);
 	// the 2nd level tilemap
@@ -288,8 +286,13 @@ int main() {
 	Tile grassT(grasst, sf::Vector2u(16, 32), 0);
 	grassT.setPosition(sf::Vector2f(0.f, 0.f));
 
-	Player p1(square, window, sf::Vector2u(16, 16), 1, 0, 0.1);
-	p1.tSprite.setScale(0.60, 0.60);
+	sf::Texture fox;
+	if (!fox.loadFromFile("Textures/foxSpriteSheetmk1.png"))
+		return -1;
+
+	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 0.1f);
+	p1.setHitBoxSize(sf::Vector2f(12.f, 12.f));
+	//p1.tSprite.setScale(0.60, 0.60);
 	p1.setPosition(sf::Vector2f(45.f, 45.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
@@ -327,15 +330,11 @@ int main() {
 			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 			//	p1.dash(mainClock.getElapsedTime().asSeconds(), dt);
 			//}
-			/*
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-				p1.spacePressed = true;
-				p1.upPressed = true;
-				p1.rightPressed = true;
-			}
-			*/
 			
-			setKeyPresses(p1);
+			
+			
+			
+			setKeyPressesKBD(p1);
 			window.clear();
 
 			//if (p1.spacePressed)
@@ -346,9 +345,13 @@ int main() {
 			window.setView(camera);
 			sf::Vector2i renderSize(13, 8);
 			tileMap.render(p1.curTile, window, renderSize);
+			p1.updateAnimation(&pMoveClock);
 			window.draw(p1);
 			topTileMap.render(p1.curTile, window, renderSize);
 			
+			// TODO:
+			// ?? maybe not needed because I am going to have a 16x16 sprite anyway
+			// add new check for the tile collision that checks the center of each component of hitbox on the x and the y
 			/*
 			//1)
 			p1.updatePlayerTile(&tileMap);

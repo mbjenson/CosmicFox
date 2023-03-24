@@ -137,6 +137,18 @@
     <Image Include="Textures\testLevelMap.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\animTestIdle1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\foxIdleDown1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\foxIdleDown2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\foxSpriteSheetmk1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">

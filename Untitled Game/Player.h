@@ -24,7 +24,7 @@ public:
 	* the Direction the player is facing will be updated each frame.
 	* 
 	*/
-	void dash();
+	//void dash();
 	
 	//main update function for the player
 	void update(float deltaTime, TileMap* map);
@@ -78,8 +78,13 @@ public:
 	sf::Vector2f getWlkVel();
 	sf::Vector2f getFinalVel();
 	sf::Vector2f getDashVel();
+	void setHitBoxSize(sf::Vector2f size);
+
 
 private:
+
+	
+	
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
 	void wRightAnim();
@@ -89,9 +94,15 @@ private:
 	void idleDownAnim();
 	void idleLeftAnim();
 	void idleRightAnim();
+	void dashRightAnim();
+	void dashLeftAnim();
+	void dashUpAnim();
+	void dashDownAnim();
+
 	// ** update these in a player.init() function that just sets these values
 	// the animations should all have the same runtime but different row number
 	// animation dimensions (which row on spriteSheet and how long each row is).
+	//Animation walkUpAnim = Animation()
 	sf::Vector2u wUpAnimDim;
 	sf::Vector2u wDownAnimDim;
 	sf::Vector2u wLeftAnimDim;
@@ -100,6 +111,14 @@ private:
 	sf::Vector2u idleDownAnimDim;
 	sf::Vector2u idleLeftAnimDim;
 	sf::Vector2u idleRightAnimDim;
+	sf::Vector2u dashLeftAnimDim;
+	sf::Vector2u dashRightAnimDim;
+	sf::Vector2u dashUpAnimDim;
+	sf::Vector2u dashDownAnimDim;
+
+
+	
+
 	/*
 	* Effects
 	* here I will code in functions that do things to the players sprite and change how it works
@@ -126,11 +145,13 @@ private:
 	
 	
 	
-	float dashSpeed = 200.f;
-	int dashCooldown = 1500;
-	int dashSpeedTime = 200;
+	float dashSpeed = 250.f;
+	int dashCooldown = 1000;
+	int dashSpeedTime = 170;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
+
+	sf::Vector2f lastDirection;
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.
 	void setDiagBool();

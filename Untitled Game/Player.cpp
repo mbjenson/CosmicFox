@@ -1,5 +1,7 @@
 #include "Player.h"
 
+
+
 Player::Player(	sf::Texture& texture, sf::RenderWindow& win, sf::Vector2u textureDim, 
 				int rowLength, int rowNumber, float animationTime) :
 		Entity( texture, textureDim, rowLength, rowNumber, animationTime)
@@ -23,15 +25,20 @@ void Player::update(float deltaTime, TileMap* map) {
 				walkSouth();
 			if (leftPressed)
 				walkWest();
-			if (rightPressed)
+			if (rightPressed) {
 				walkEast();
+				wRightAnim();
+			}
 			if (spacePressed) 
 				setState(State::dashing);
 			if (isDashing)
 				setState(State::dashing);
 			else
 				dashVel = sf::Vector2f(0, 0);
-			
+			if (moveDir.x == 0 && moveDir.y == 0) {
+				idleDownAnim();
+			}
+
 			// calculates the walking velocity and only applies it here if the state has not changed.
 			normalizeWalkVel();
 			walkVelocity += moveDir * walkSpeed * deltaTime;
@@ -43,34 +50,45 @@ void Player::update(float deltaTime, TileMap* map) {
 				finalVel = walkVelocity;
 				collisionCheckTile(map);
 				move(finalVel);
-				break;
 				// walking or idle animations here
+				break;
 			}
 		//case State::cooldown: // cooldown from dashing or something else
 			
 		case State::dashing:
-			// *allowed to dash
-			if (dashTimer.getElapsedTime().asMilliseconds() > dashCooldown) {
+			// IF ERROR THEN CHANGE BACK:
+			// ** NOTE: replaced the dashTimer.getElapsed times with curDashTimer
+			int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
+			// protect from integer overflow
+			if (curDashTimer > 300000000) {
 				dashTimer.restart();
 			}
-			// *checking if speed should be increased
-			if (dashTimer.getElapsedTime().asMilliseconds() < dashSpeedTime) {
-				dashVel.x = moveDir.x * deltaTime * dashSpeed;
-				dashVel.y = moveDir.y * deltaTime * dashSpeed;
+			// *if player has passed cooldown
+			if (curDashTimer > dashCooldown) {
+				dashTimer.restart();
+				prepDashVel = moveDir;
+			}
+			// *checking if the speed should be increased
+			if (curDashTimer < dashSpeedTime) {
+				
+				dashVel.x = prepDashVel.x * deltaTime * dashSpeed;
+				dashVel.y = prepDashVel.y * deltaTime * dashSpeed;
 				finalVel = walkVelocity + dashVel;
 				collisionCheckTile(map);
 				move(finalVel);
 				isDashing = true;
 			}
+			// if we hit a wall, dashing stops
 			if (dashVel.x == 0 && dashVel.y == 0)
 				isDashing = false;
-			
 			// *if in dash cooldown phase
-			if (dashTimer.getElapsedTime().asMilliseconds() > dashSpeedTime && dashTimer.getElapsedTime().asMilliseconds() < dashCooldown) {
+			if (curDashTimer > dashSpeedTime && curDashTimer < dashCooldown) {
+				finalVel = walkVelocity;
+				collisionCheckTile(map);
+				move(finalVel);
 				isDashing = false;
 				setState(State::nominal);
 			}
-			// setting bool so that if we stop moving because of collision, dashing is not still happening
 			else {
 				isDashing = true;
 				setState(State::nominal);
@@ -139,8 +157,17 @@ void Player::init() {
 	spacePressed = false; upPressed = false; downPressed = false; leftPressed = false;
 	rightPressed = false;
 	dashVel = sf::Vector2f(0, 0);
+	// row num and row len
+	wRightAnimDim = sf::Vector2u(4, 1);
+	idleDownAnimDim = sf::Vector2u(8, 0);
+	
+
+
+
+
 	
 }
+
 
 // takes position (middle of player) and calculates the top and left coord of hitbox
 void Player::updateHitBox()
@@ -181,8 +208,9 @@ void Player::walkWest() {
 //	then, after the breif moment, a.k.a the frame number is greater than allowed for breif dash, perform a cooldown time that takes the number and does
 //	nothing to the velocity;
 
-void Player::dash() {
-		
+void Player::setHitBoxSize(sf::Vector2f size) {
+	hitBox.height = size.y;
+	hitBox.width = size.x;
 }
 
 // the xxAnim() functions will update the row that the animation updates from in the sprite sheet
@@ -190,7 +218,7 @@ void Player::wLeftAnim() {
 	Animation::updateRow(wLeftAnimDim.y, wLeftAnimDim.y);
 }
 void Player::wRightAnim() {
-	Animation::updateRow(wRightAnimDim.y, wRightAnimDim.x);
+	Player::Animation::updateRow(wRightAnimDim.y, wRightAnimDim.x);
 }
 void Player::wUpAnim() {
 	Animation::updateRow(wUpAnimDim.y, wUpAnimDim.x);
@@ -199,7 +227,7 @@ void Player::wDownAnim() {
 	Animation::updateRow(wDownAnimDim.y, wDownAnimDim.x);
 }
 void Player::idleDownAnim() {
-	Animation::updateRow(idleDownAnimDim.y, idleDownAnimDim.x);
+	Player::Animation::updateRow(idleDownAnimDim.y, idleDownAnimDim.x);
 }
 void Player::idleUpAnim() {
 	Animation::updateRow(idleUpAnimDim.y, idleUpAnimDim.x);
@@ -210,6 +238,21 @@ void Player::idleLeftAnim() {
 void Player::idleRightAnim() {
 	Animation::updateRow(idleRightAnimDim.y, idleRightAnimDim.x);
 }
+void Player::dashLeftAnim() {
+	Animation::updateRow(dashLeftAnimDim.y, dashLeftAnimDim.x);
+}
+void Player::dashRightAnim() {
+	Animation::updateRow(dashRightAnimDim.y, dashRightAnimDim.x);
+}
+void Player::dashUpAnim() {
+	Animation::updateRow(dashUpAnimDim.y, dashUpAnimDim.x);
+}
+void Player::dashDownAnim() {
+	Animation::updateRow(dashDownAnimDim.y, dashDownAnimDim.x);
+}
+
+
+
 
 void Player::updateTrav() {
 	//sf::Vector2f rndVel(floor(wlkVel.x / 1), floor(wlkVel.y / 1));

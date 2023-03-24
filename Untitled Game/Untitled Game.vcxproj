@@ -159,6 +159,7 @@
   <ItemGroup>
     <Image Include="Textures\animationtest.png" />
     <Image Include="Textures\animationtest2.png" />
+    <Image Include="Textures\animTestIdle1.png" />
     <Image Include="Textures\arraysprite.png" />
     <Image Include="Textures\arrow.png" />
     <Image Include="Textures\arrowSmall.png" />
@@ -167,6 +168,9 @@
     <Image Include="Textures\boxtest16x32.png" />
     <Image Include="Textures\boxtesttwo16x32.png" />
     <Image Include="Textures\enemy.png" />
+    <Image Include="Textures\foxIdleDown1.png" />
+    <Image Include="Textures\foxIdleDown2.png" />
+    <Image Include="Textures\foxSpriteSheetmk1.png" />
     <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png" />
     <Image Include="Textures\grass.png" />
     <Image Include="Textures\grassalpha.png" />
