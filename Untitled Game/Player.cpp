@@ -12,6 +12,8 @@ Player::Player(	sf::Texture& texture, sf::RenderWindow& win, sf::Vector2u textur
 
 void Player::update(float deltaTime, TileMap* map) {
 	//getKeyPresses();
+	
+	moveDir = sf::Vector2f(0, 0);
 	switch (state) {
 		// nominal = walking or idle
 		case State::nominal:
@@ -23,41 +25,77 @@ void Player::update(float deltaTime, TileMap* map) {
 				walkWest();
 			if (rightPressed)
 				walkEast();
+			if (spacePressed) 
+				setState(State::dashing);
+			if (isDashing)
+				setState(State::dashing);
+			else
+				dashVel = sf::Vector2f(0, 0);
+			
+			// calculates the walking velocity and only applies it here if the state has not changed.
 			normalizeWalkVel();
 			walkVelocity += moveDir * walkSpeed * deltaTime;
-			finalVel = walkVelocity;
-			moveDir = sf::Vector2f(0, 0);
+			
 			applyWalkFriction();
-
+			// * walkVelocity is now packed and ready for shipment... *
 			updateTrav();
-			setDiagBool();
-
-			updatePlayerTile(map);
-			collisionCheckTile(map);
-			//collisionCheckEnemy();
-			//collisionCheckSpace();
-			//collisionCheckSomeotherthing();
-			move(finalVel);
-			// handle animations in here aswell
-			// so if left then walk left animation
-			break;
-		case State::cooldown: // cooldown from dashing
+			if (state == State::nominal) {
+				finalVel = walkVelocity;
+				collisionCheckTile(map);
+				move(finalVel);
+				break;
+				// walking or idle animations here
+			}
+		//case State::cooldown: // cooldown from dashing or something else
+			
+		case State::dashing:
+			// *allowed to dash
+			if (dashTimer.getElapsedTime().asMilliseconds() > dashCooldown) {
+				dashTimer.restart();
+			}
+			// *checking if speed should be increased
+			if (dashTimer.getElapsedTime().asMilliseconds() < dashSpeedTime) {
+				dashVel.x = moveDir.x * deltaTime * dashSpeed;
+				dashVel.y = moveDir.y * deltaTime * dashSpeed;
+				finalVel = walkVelocity + dashVel;
+				collisionCheckTile(map);
+				move(finalVel);
+				isDashing = true;
+			}
+			if (dashVel.x == 0 && dashVel.y == 0)
+				isDashing = false;
+			
+			// *if in dash cooldown phase
+			if (dashTimer.getElapsedTime().asMilliseconds() > dashSpeedTime && dashTimer.getElapsedTime().asMilliseconds() < dashCooldown) {
+				isDashing = false;
+				setState(State::nominal);
+			}
+			// setting bool so that if we stop moving because of collision, dashing is not still happening
+			else {
+				isDashing = true;
+				setState(State::nominal);
+			}
+			
+			
+			// if state = dashing then 
+			// have a dash clock that is local to the player class, everytime you are able to dash you update the dash class
 			// if dashtime > total dashtime as microseconds
 			// dash time = 0 and state = walking
-			break;
-		case State::dashing:
-			// if state = dashing then 
-			// set movment velocity much higher for a short time
-			break;
+			
+			
+			
 
-		case State::deactivated:
-			break;
-		case State::dead:
-			break;
-		case State::invulnerable:
-			break;
+		//case State::deactivated:
+			
+		//case State::dead:
+			
+		//case State::invulnerable:
+			
+
 	}
-	// finally move the player to new position
+	// finally, update the player's position on the map
+	updatePlayerTile(map);
+
 	
 }
 
@@ -99,7 +137,9 @@ void Player::init() {
 	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;
 	// key press bools
 	spacePressed = false; upPressed = false; downPressed = false; leftPressed = false;
-	rightPressed = false; escapePressed = false;
+	rightPressed = false;
+	dashVel = sf::Vector2f(0, 0);
+	
 }
 
 // takes position (middle of player) and calculates the top and left coord of hitbox
@@ -139,57 +179,10 @@ void Player::walkWest() {
 
 // put a piecewise function in here that takes a frame number and performs an acceleration on the players velocity for a breif moment
 //	then, after the breif moment, a.k.a the frame number is greater than allowed for breif dash, perform a cooldown time that takes the number and does
-//		nothing to the velocity;
-// BAD FUNCTION DOESN'T WORK
-void Player::dash(float curTime, float deltaTime) {
-	// simply set the players velocity to a set amount when space is pressed
-	if (curTime - dashCooldown > dashTimeStart) {
-		dashTimeStart = curTime;
-	}
-	if (curTime - dashCooldown < dashTimeStart){
-		if (curTime < dashTimeStart + dashCooldown) {
-			if (travSouth) {
-				if (travEast) {
-					dashVel.y = dashAcc * deltaTime * 0.7071;
-					dashVel.x = dashAcc * deltaTime * 0.7071;
-					return;
-				}
-				if (travWest) {
-					dashVel.y = dashAcc * deltaTime * 0.7071;
-					dashVel.x = -dashAcc * deltaTime * 0.7071;
-					return;
-				}
-				else {
-					dashVel.y = dashAcc * deltaTime;
-					return;
-				}
-			}
-			if (travNorth) {
-				if (travEast) {
-					dashVel.y = -dashAcc * deltaTime * 0.7071;
-					dashVel.x = dashAcc * deltaTime * 0.7071;
-					return;
-				}
-				if (travWest) {
-					dashVel.y = -dashAcc * deltaTime * 0.7071;
-					dashVel.x = -dashAcc * deltaTime * 0.7071;
-					return;
-				}
-				else {
-					dashVel.y = -dashAcc * deltaTime;
-					return;
-				}
-			}
-			if (travEast) {
-				dashVel.x = dashAcc * deltaTime;
-				return;
-			}
-			if (travWest) {
-				dashVel.x = -dashAcc * deltaTime;
-				return;
-			}
-		}
-	}
+//	nothing to the velocity;
+
+void Player::dash() {
+		
 }
 
 // the xxAnim() functions will update the row that the animation updates from in the sprite sheet
@@ -369,6 +362,16 @@ sf::Vector2f Player::getWlkVel() {
 sf::Vector2f Player::getFinalVel() {
 	return finalVel;
 }
+
+sf::Vector2f Player::getDashVel() {
+	return dashVel;
+}
+
+int Player::getDashTimer() {
+	return dashTimer.getElapsedTime().asMilliseconds();
+}
+
+
 
 //THE FOLLOWING ARE RELATIVELY USELESS FUNCTIONS just keeping for good measure
 /*

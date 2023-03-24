@@ -18,8 +18,13 @@ public:
 	void walkSouth();
 	void walkWest();
 
-	//redo:
-	void dash(float curTime, float deltaTime);
+	/*
+	* Dashing Mechanics:
+	* The dash will be performed in the direction the player is facing.
+	* the Direction the player is facing will be updated each frame.
+	* 
+	*/
+	void dash();
 	
 	//main update function for the player
 	void update(float deltaTime, TileMap* map);
@@ -35,6 +40,7 @@ public:
 	bool travSouth;
 	bool travWest;
 	// current dashing movments
+	bool isDashing;
 	bool dashNorth;
 	bool dashEast;
 	bool dashWest;
@@ -45,15 +51,13 @@ public:
 	bool leftPressed;
 	bool rightPressed;
 	bool spacePressed;
-	bool escapePressed;
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
 	void collisionCheckTile(TileMap* map);
-	//gets walkingVelocity
-	sf::Vector2f getWlkVel();
-	sf::Vector2f getFinalVel();
+
+	
 	// player states
 	enum class State {
 		deactivated,
@@ -70,6 +74,10 @@ public:
 	// sets the player state manually
 	// later will set the player state based on certain values
 	void setState(State _state);
+	int getDashTimer();
+	sf::Vector2f getWlkVel();
+	sf::Vector2f getFinalVel();
+	sf::Vector2f getDashVel();
 
 private:
 	//animation functions that set the row number for the animation for the player
@@ -108,18 +116,21 @@ private:
 	*	Then, the vector is normalized and walkVelocity is 
 	*   set to moveDir * walkSpeed * deltaTime.
 	*/
-	float walkSpeed = 1.3f;
+	float walkSpeed = 1.6f;
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
 	sf::Vector2f walkVelocity;
 
 	//dashing specs
-	float maxDashVel = 0.14;
-	float dashAcc = 5.f;
-	int dashTimeStart = 0;
-	int dashCooldown = 3;
+	sf::Clock dashTimer;
+	
+	
+	
+	float dashSpeed = 200.f;
+	int dashCooldown = 1500;
+	int dashSpeedTime = 200;
 	sf::Vector2f dashVel;
-
+	sf::Vector2f prepDashVel;
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.
 	void setDiagBool();
@@ -129,11 +140,11 @@ private:
 	
 	// applies friction to the players walkspeed
 	void applyWalkFriction();
-	float kinFrictionCoef = 0.015;
+	float kinFrictionCoef = 0.018;
 
-	//direction of movement
-	float movementAngle = 0;
-	float lastMovementAngle = 0;
+	//direction of movement (**old)
+	//float movementAngle = 0;
+	//float lastMovementAngle = 0;
 	
 	// ** probably dont need but keeping in case
 	// updates playerAngle based on directon

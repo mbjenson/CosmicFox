@@ -122,32 +122,14 @@ using namespace std;
 // 3) rejoice, for the Lord my God is with me
 // 4) rejoice yet again because I finally understand how to 
 
+
+
 void setKeyPresses(Player& player) {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		player.upPressed = true;
-	else
-		player.upPressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		player.downPressed = true;
-	else
-		player.downPressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		player.leftPressed = true;
-	else
-		player.leftPressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		player.rightPressed = true;
-	else
-		player.rightPressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		player.spacePressed = true;
-	else
-		player.spacePressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		player.escapePressed = true;
-		//open pause menu
-	else
-		player.escapePressed = false;
+	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+	player.downPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+	player.leftPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+	player.rightPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+	player.spacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }
 
 // takes the maps and renders everything one row at a time
@@ -172,10 +154,18 @@ void processEvents(sf::RenderWindow& window) {
 		if (event.type == sf::Event::Closed) {
 			window.close();
 		}
+		if (event.type == sf::Event::LostFocus) {
+			window.setFramerateLimit(5);
+		}
+		if (event.type == sf::Event::GainedFocus) {
+			// disables the limit
+			window.setFramerateLimit(0);
+		}
 	}
 }
 
 int main() {
+
 	bool gameState = true;
 
 	sf::Vector2f winDim(2048, 1024);
@@ -193,6 +183,7 @@ int main() {
 	sf::Text winText;
 	winText.setFont(roboto);
 	winText.setCharacterSize(10);
+	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
 
 	// Shader settup
@@ -218,8 +209,6 @@ int main() {
 	sf::Texture square;
 	if (!square.loadFromFile("Textures/playerCube16.png"))
 		return -1;
-	
-	
 
 	sf::Vector2i temp_mapSize(8, 8);
 	// the 2nd level tilemap
@@ -312,12 +301,13 @@ int main() {
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
+		
 		float dt = dtClock.restart().asSeconds();
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
 		// or not I am not sure If i need a game file tbh
-		if (gameState)
-		{
+		if (gameState) {
+			
 
 			/*
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -337,17 +327,20 @@ int main() {
 			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 			//	p1.dash(mainClock.getElapsedTime().asSeconds(), dt);
 			//}
-			
-			
-
+			/*
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				p1.spacePressed = true;
+				p1.upPressed = true;
+				p1.rightPressed = true;
+			}
+			*/
 			
 			setKeyPresses(p1);
-				
 			window.clear();
 
-			// 1) update player information
-			
-			
+			//if (p1.spacePressed)
+			//	int x = 1;
+
 			p1.update(dt, &tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
@@ -379,22 +372,23 @@ int main() {
 			string xPlayerCord = roundedString(2, p1.getPosition().x);
 			string yPlayerCord = roundedString(2, p1.getPosition().y);
 
+			winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2, camera.getCenter().y + 5 - camera.getSize().y / 2));
 			winText.setString("x = " + xPlayerCord);
-			winText.setPosition(sf::Vector2f( camera.getCenter().x + 5 - camera.getSize().x / 2, 
-				camera.getCenter().y + 5 - camera.getSize().y / 2));
-			
 			window.draw(winText);
 
-			winText.setString("y = " + yPlayerCord);
-			winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2,
-				camera.getCenter().y - (camera.getSize().y / 2) + 20));
+			winText.setString("\ny = " + yPlayerCord);
 			window.draw(winText);
 			
-			winText.setString("\nxVel = " + roundedString(3, p1.getFinalVel().x) + "\nyVel = " + roundedString(3, p1.getFinalVel().y));
+			winText.setString("\n\nxVel = " + roundedString(3, p1.getFinalVel().x) + "\nyVel = " + roundedString(3, p1.getFinalVel().y));
 			window.draw(winText);
-			// stop ignoring this :::::
 
 
+			winText.setString("\n\n\n\nDashTimer: " + to_string(p1.getDashTimer()));
+			window.draw(winText);
+
+			winText.setString("\n\n\n\n\nDashVelx = " + roundedString(3, p1.getDashVel().x) +
+				"\nDashVely = " + roundedString(3, p1.getDashVel().y));
+			window.draw(winText);
 
 			window.display();
 		}
