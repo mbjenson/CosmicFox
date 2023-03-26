@@ -15,7 +15,7 @@ Animation::Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int row
 	rowNum = rowNumber;
 	rowLen = rowLength;
 	tDim = textureDim;
-}	
+}
 
 Animation::Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int rowNumber) {
 	tSprite.setTexture(textureSheet);
@@ -30,23 +30,35 @@ Animation::Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int row
 //deconstructor
 Animation::~Animation() {};
 
-void Animation::updateAnimation()
-{
-	if (animTime > 0)
-	{
-		if (texRect.left == tDim.x * (rowLen - 1))
-		{
+void Animation::updateAnimation() {
+	if (animTime > 0) {
+		if (texRect.left == tDim.x * (rowLen - 1)) {
 			//return to beginning of texture frame
 			texRect.left = 0;
 		}
 		// if not at end of row
-		else
-		{
+		else {
 			//move to next texture frame
 			texRect.left += tDim.x;
 		}
 	}
 }
+
+void Animation::updateAnim() {
+	int curTime = animTimer.getElapsedTime().asMilliseconds();
+	// making sure that thing is animated
+	if (animTime > 0) {
+		if (curTime > animTime) {
+			animTimer.restart();
+			if (texRect.left >= tDim.x * (rowLen - 1))
+				texRect.left = 0;
+			else
+				texRect.left += tDim.x;
+		}
+		tSprite.setTextureRect(texRect);
+	}
+}
+
 void Animation::updateAnimation(sf::Clock* clock)
 {
 	if (animTime != 0)

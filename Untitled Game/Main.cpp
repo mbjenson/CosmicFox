@@ -121,6 +121,10 @@ using namespace std;
 // create circular hitbox for player and create collision function for circular hitbox?
 
 
+///TODO: make topdown render wrk
+
+//ANIMATION NOTES: make fox legs the same as fur color. fix tail in walking up. 
+
 
 
 
@@ -289,11 +293,11 @@ int main() {
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk1.png"))
 		return -1;
-
-	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 0.1f);
-	p1.setHitBoxSize(sf::Vector2f(12.f, 12.f));
-	//p1.tSprite.setScale(0.60, 0.60);
-	p1.setPosition(sf::Vector2f(45.f, 45.f));
+	
+	// remember to change the hitbox to match the player size
+	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
+	p1.setHitBoxSize(sf::Vector2f(10.f, 13.f));
+	p1.setPosition(sf::Vector2f(60.f, 60.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
@@ -337,15 +341,12 @@ int main() {
 			setKeyPressesKBD(p1);
 			window.clear();
 
-			//if (p1.spacePressed)
-			//	int x = 1;
-
 			p1.update(dt, &tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
 			sf::Vector2i renderSize(13, 8);
 			tileMap.render(p1.curTile, window, renderSize);
-			p1.updateAnimation(&pMoveClock);
+			p1.updateAnim();
 			window.draw(p1);
 			topTileMap.render(p1.curTile, window, renderSize);
 			

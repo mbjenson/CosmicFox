@@ -19,12 +19,16 @@ void Player::update(float deltaTime, TileMap* map) {
 	switch (state) {
 		// nominal = walking or idle
 		case State::nominal:
-			if (upPressed)
+			if (upPressed) {
 				walkNorth();
+				wUpAnim();
+			}
 			if (downPressed)
 				walkSouth();
-			if (leftPressed)
+			if (leftPressed) {
 				walkWest();
+				wLeftAnim();
+			}
 			if (rightPressed) {
 				walkEast();
 				wRightAnim();
@@ -118,7 +122,6 @@ void Player::update(float deltaTime, TileMap* map) {
 }
 
 void Player::normalizeWalkVel() {
-
 	float velVector = sqrt(pow(moveDir.x, 2) + pow(moveDir.y, 2));
 	if (velVector > 1.f) {
 		moveDir.x = moveDir.x / velVector;
@@ -158,8 +161,13 @@ void Player::init() {
 	rightPressed = false;
 	dashVel = sf::Vector2f(0, 0);
 	// row num and row len
-	wRightAnimDim = sf::Vector2u(4, 1);
 	idleDownAnimDim = sf::Vector2u(8, 0);
+	wRightAnimDim = sf::Vector2u(8, 1);
+	wLeftAnimDim = sf::Vector2u(8, 2);
+	wUpAnimDim = sf::Vector2u(8, 3);
+	
+
+
 	
 
 
@@ -172,8 +180,8 @@ void Player::init() {
 // takes position (middle of player) and calculates the top and left coord of hitbox
 void Player::updateHitBox()
 {
-	hitBox.left = getPosition().x - hitBoxSize.x / 2;
-	hitBox.top = getPosition().y - hitBoxSize.y / 2;
+	hitBox.left = getPosition().x - hitBoxSize.x / 2 + 3;
+	hitBox.top = getPosition().y - hitBoxSize.y / 2 + 4;
 }
 
 void Player::walkNorth() {
@@ -215,13 +223,13 @@ void Player::setHitBoxSize(sf::Vector2f size) {
 
 // the xxAnim() functions will update the row that the animation updates from in the sprite sheet
 void Player::wLeftAnim() {
-	Animation::updateRow(wLeftAnimDim.y, wLeftAnimDim.y);
+	Player::Animation::updateRow(wLeftAnimDim.y, wLeftAnimDim.x);
 }
 void Player::wRightAnim() {
 	Player::Animation::updateRow(wRightAnimDim.y, wRightAnimDim.x);
 }
 void Player::wUpAnim() {
-	Animation::updateRow(wUpAnimDim.y, wUpAnimDim.x);
+	Player::Animation::updateRow(wUpAnimDim.y, wUpAnimDim.x);
 }
 void Player::wDownAnim() {
 	Animation::updateRow(wDownAnimDim.y, wDownAnimDim.x);
