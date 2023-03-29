@@ -24,7 +24,6 @@ public:
 	* the Direction the player is facing will be updated each frame.
 	* 
 	*/
-	//void dash();
 	
 	//main update function for the player
 	void update(float deltaTime, TileMap* map);
@@ -78,8 +77,10 @@ public:
 	sf::Vector2f getWlkVel();
 	sf::Vector2f getFinalVel();
 	sf::Vector2f getDashVel();
-	void setHitBoxSize(sf::Vector2f size);
-
+	sf::Vector2f getFacing();
+	
+	sf::Vector2f hitBoxOffset;
+	void setHitBoxSize(sf::Vector2f size, sf::Vector2f offset);
 
 private:
 
@@ -151,7 +152,11 @@ private:
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
-	sf::Vector2f lastDirection;
+	void setAnimation();
+	sf::Vector2f lastFacing;
+	void setFacing();
+	//char facing = 0b0000;
+	//char lastFacing = 0b0000;
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.
 	void setDiagBool();
@@ -177,7 +182,7 @@ private:
 	
 	void updateRotMouse();
 	// player hitbox size
-	sf::Vector2f hitBoxSize = sf::Vector2f(10, 10);
+	sf::Vector2f hitBoxSize; // = sf::Vector2f(10, 10);
 	// updates the location of the hitbox with the players current location
 	void updateHitBox();
 

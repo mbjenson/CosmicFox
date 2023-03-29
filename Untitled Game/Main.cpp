@@ -102,28 +102,19 @@ using namespace std;
 //				dissapear or bounce or stop then do damage to the enemey, 
 // 
 // TODO: make interactable tiles that be interacted with by the player
-// 
-// TODO: fix player dash so it is a function of time. and add a cooldown.
 //
 // TODO: make render function load things into stack but store main map and data in the heap for efficiency
-//
 
 
-// TODO:
-// limit the dash velocity like the walk velocity
-// add limdashvel to update
-// update the player update function so that It adds dashing to the final vel before moving the player 
 
-// TODO:
-// give animationClass an internal clock so that it can monitor its own animation updates
 
-// TODO: maybe...
+// maybe...
 // create circular hitbox for player and create collision function for circular hitbox?
-
 
 ///TODO: make topdown render wrk
 
-//ANIMATION NOTES: make fox legs the same as fur color. fix tail in walking up. 
+// NOTE: make dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
+
 
 
 
@@ -138,7 +129,7 @@ void setKeyPressesKBD(Player& player) {
 
 // takes the maps and renders everything one row at a time
 // maybe move this to a level.hpp file that handles all the maps and player and enemy date and put renderTopDown() there?
-void renderTopDown(sf::RenderWindow& win) {
+void renderTopDown(sf::RenderWindow& win, Player *player, TileMap *map1, TileMap *map2) {
 	return;
 }
 
@@ -195,9 +186,9 @@ int main() {
 		return -1;
 
 	sf::Shader sh1;
-	if (!sh1.loadFromFile("Shaders/test1.frag", sf::Shader::Fragment))
+	if (!sh1.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment))
 		return -1;
-
+	sh1.setUniform("u_resolution", sf::Vector2f(winDim.x, winDim.y));
 
 	sf::Texture blackT;
 	if (!blackT.loadFromFile("Textures/black.png"))
@@ -296,7 +287,7 @@ int main() {
 	
 	// remember to change the hitbox to match the player size
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setHitBoxSize(sf::Vector2f(10.f, 13.f));
+	p1.setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
 	p1.setPosition(sf::Vector2f(60.f, 60.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
@@ -350,6 +341,7 @@ int main() {
 			window.draw(p1);
 			topTileMap.render(p1.curTile, window, renderSize);
 			
+			
 			// TODO:
 			// ?? maybe not needed because I am going to have a 16x16 sprite anyway
 			// add new check for the tile collision that checks the center of each component of hitbox on the x and the y
@@ -394,6 +386,9 @@ int main() {
 				"\nDashVely = " + roundedString(3, p1.getDashVel().y));
 			window.draw(winText);
 
+			winText.setString("\n\n\n\n\n\n\nFacingx = " + to_string(p1.getFacing().x) +
+				"\nFacingy = " + to_string(p1.getFacing().y));
+			window.draw(winText);
 			window.display();
 		}
 	}

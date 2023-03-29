@@ -21,17 +21,19 @@ void Player::update(float deltaTime, TileMap* map) {
 		case State::nominal:
 			if (upPressed) {
 				walkNorth();
-				wUpAnim();
+				//wUpAnim();
 			}
-			if (downPressed)
+			if (downPressed) {
 				walkSouth();
+				//wDownAnim();
+			}
 			if (leftPressed) {
 				walkWest();
-				wLeftAnim();
+				//wLeftAnim();
 			}
 			if (rightPressed) {
 				walkEast();
-				wRightAnim();
+				//wRightAnim();
 			}
 			if (spacePressed) 
 				setState(State::dashing);
@@ -39,10 +41,9 @@ void Player::update(float deltaTime, TileMap* map) {
 				setState(State::dashing);
 			else
 				dashVel = sf::Vector2f(0, 0);
-			if (moveDir.x == 0 && moveDir.y == 0) {
-				idleDownAnim();
-			}
 
+			setFacing();
+			setAnimation();
 			// calculates the walking velocity and only applies it here if the state has not changed.
 			normalizeWalkVel();
 			walkVelocity += moveDir * walkSpeed * deltaTime;
@@ -121,6 +122,104 @@ void Player::update(float deltaTime, TileMap* map) {
 	
 }
 
+void Player::setAnimation() {
+	// here control the logic behind which animation is displayed.
+	// for example:
+	// if the player is moving north
+	//		then the player is moving west, the player animation will be set to what the player was originaly moving to
+
+	// if two inputs are pressed at the same time, we just pick one of them. not sure if that case will ever be possible
+	//	given how fast computers work. 
+
+	// if the last input is fully different from the current one, then we just do the new one. 
+	/*
+	// ** lastFacing will only have only 1 direction **
+	if (moveDir.x == 0, moveDir.y == 0)
+		return;
+	if (lastFacing == moveDir) {
+		// ** keep animation the same
+		return;
+	}
+	// lastFacing: (0, 1)
+	// moveDir: (-1, 1)
+	if (lastFacing.x == 0 && lastFacing.y == moveDir.y) {
+		return;
+	}
+	// lastFacing: (-1, 0)
+	// moveDir: (-1, 1)
+	if (lastFacing.y == 0 && lastFacing.x == moveDir.x) {
+		return;
+	}
+	*/
+	// at this point we can assume only one inpt has been pressed this frame
+	// to handle two inputs, we just use the y one over the x
+	
+	if (moveDir.x == 0 && moveDir.y == 0) {
+		if (lastFacing.x == 1) {
+			idleRightAnim();
+			return;
+		}
+		if (lastFacing.x == -1) {
+			idleLeftAnim();
+			return;
+		}
+		if (lastFacing.y == 1) {
+			idleDownAnim();
+			return;
+		}
+		if (lastFacing.y == -1) {
+			idleUpAnim();
+			return;
+		}
+	}
+	if (lastFacing.x == 1) {
+		wRightAnim();
+		return;
+	}
+	if (lastFacing.x == -1) {
+		wLeftAnim();
+		return;
+	}
+	if (lastFacing.y == -1) {
+		wUpAnim();
+		return;
+	}
+	if (lastFacing.y == 1) {
+		wDownAnim();
+		return;
+	}
+}
+
+void Player::setFacing() {
+	// if I am travelling north and add an eastward movement we now move east
+	if (moveDir.x == 1 && moveDir.y == 0) {
+		lastFacing.x = 1;
+		lastFacing.y = 0;
+	}
+	if (moveDir.x == -1 && moveDir.y == 0) {
+		lastFacing.x = -1;
+		lastFacing.y = 0;
+	}
+	if (moveDir.y == 1 && moveDir.x == 0) {
+		lastFacing.y = 1;
+		lastFacing.x = 0;
+	}
+	if (moveDir.y == -1 && moveDir.x == 0) {
+		lastFacing.y = -1;
+		lastFacing.x = 0;
+	}
+	// if two inputs are given we will favor the x
+	if (moveDir.x == 1 && moveDir.y != 0) {
+		lastFacing.x = 1;
+		lastFacing.y = 0;
+	}
+	if (moveDir.x == -1 && moveDir.y != 0) {
+		lastFacing.x = -1;
+		lastFacing.y = 0;
+	}
+	// use last facing if current dir is not anything
+}
+
 void Player::normalizeWalkVel() {
 	float velVector = sqrt(pow(moveDir.x, 2) + pow(moveDir.y, 2));
 	if (velVector > 1.f) {
@@ -165,23 +264,22 @@ void Player::init() {
 	wRightAnimDim = sf::Vector2u(8, 1);
 	wLeftAnimDim = sf::Vector2u(8, 2);
 	wUpAnimDim = sf::Vector2u(8, 3);
-	
-
-
-	
-
-
-
-
-	
+	wDownAnimDim = sf::Vector2u(8, 4);
+	idleLeftAnimDim = sf::Vector2u(8, 5);
+	idleRightAnimDim = sf::Vector2u(8, 6);
+	idleUpAnimDim = sf::Vector2u(6, 7);
 }
 
-
+void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
+	hitBox.width = size.x;
+	hitBox.height = size.y;
+	hitBoxOffset.x = offset.x;
+	hitBoxOffset.y = offset.y;
+}
 // takes position (middle of player) and calculates the top and left coord of hitbox
-void Player::updateHitBox()
-{
-	hitBox.left = getPosition().x - hitBoxSize.x / 2 + 3;
-	hitBox.top = getPosition().y - hitBoxSize.y / 2 + 4;
+void Player::updateHitBox() {
+	hitBox.left = getPosition().x - hitBoxSize.x / 2 + hitBoxOffset.x;
+	hitBox.top = getPosition().y - hitBoxSize.y / 2 + hitBoxOffset.y;
 }
 
 void Player::walkNorth() {
@@ -216,10 +314,7 @@ void Player::walkWest() {
 //	then, after the breif moment, a.k.a the frame number is greater than allowed for breif dash, perform a cooldown time that takes the number and does
 //	nothing to the velocity;
 
-void Player::setHitBoxSize(sf::Vector2f size) {
-	hitBox.height = size.y;
-	hitBox.width = size.x;
-}
+
 
 // the xxAnim() functions will update the row that the animation updates from in the sprite sheet
 void Player::wLeftAnim() {
@@ -232,19 +327,19 @@ void Player::wUpAnim() {
 	Player::Animation::updateRow(wUpAnimDim.y, wUpAnimDim.x);
 }
 void Player::wDownAnim() {
-	Animation::updateRow(wDownAnimDim.y, wDownAnimDim.x);
+	Player::Animation::updateRow(wDownAnimDim.y, wDownAnimDim.x);
 }
 void Player::idleDownAnim() {
 	Player::Animation::updateRow(idleDownAnimDim.y, idleDownAnimDim.x);
 }
 void Player::idleUpAnim() {
-	Animation::updateRow(idleUpAnimDim.y, idleUpAnimDim.x);
+	Player::Animation::updateRow(idleUpAnimDim.y, idleUpAnimDim.x);
 }
 void Player::idleLeftAnim() {
-	Animation::updateRow(idleLeftAnimDim.y, idleLeftAnimDim.x);
+	Player::Animation::updateRow(idleLeftAnimDim.y, idleLeftAnimDim.x);
 }
 void Player::idleRightAnim() {
-	Animation::updateRow(idleRightAnimDim.y, idleRightAnimDim.x);
+	Player::Animation::updateRow(idleRightAnimDim.y, idleRightAnimDim.x);
 }
 void Player::dashLeftAnim() {
 	Animation::updateRow(dashLeftAnimDim.y, dashLeftAnimDim.x);
@@ -258,9 +353,6 @@ void Player::dashUpAnim() {
 void Player::dashDownAnim() {
 	Animation::updateRow(dashDownAnimDim.y, dashDownAnimDim.x);
 }
-
-
-
 
 void Player::updateTrav() {
 	//sf::Vector2f rndVel(floor(wlkVel.x / 1), floor(wlkVel.y / 1));
@@ -420,6 +512,10 @@ sf::Vector2f Player::getDashVel() {
 
 int Player::getDashTimer() {
 	return dashTimer.getElapsedTime().asMilliseconds();
+}
+
+sf::Vector2f Player::getFacing() {
+	return lastFacing;
 }
 
 
