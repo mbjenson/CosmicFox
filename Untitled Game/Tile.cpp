@@ -12,8 +12,6 @@
 
 //constructor
 
-
-
 Tile::Tile(sf::Texture& _texture, bool isCollidable,
 	int rowLength, int rowNumber, float animationTime) :
 	Animation(_texture, sf::Vector2u(16, 16), rowLength, rowNumber, animationTime)

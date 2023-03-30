@@ -22,7 +22,6 @@ public:
 	* Dashing Mechanics:
 	* The dash will be performed in the direction the player is facing.
 	* the Direction the player is facing will be updated each frame.
-	* 
 	*/
 	
 	//main update function for the player
@@ -50,12 +49,12 @@ public:
 	bool leftPressed;
 	bool rightPressed;
 	bool spacePressed;
-	// players current tile on specified tilemap
-	sf::Vector2i curTile;
+	
 	void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
 	void collisionCheckTile(TileMap* map);
-
+	// players current tile on specified tilemap
+	sf::Vector2i curTile;
 	
 	// player states
 	enum class State {
@@ -69,23 +68,18 @@ public:
 	// inits many values for the player like textures, animations, bools, and other things
 	void init();
 	//void getKeyPresses(bool up, bool down, bool left, bool right, bool space, bool escape);
-	// WIP:
-	// sets the player state manually
-	// later will set the player state based on certain values
 	void setState(State _state);
 	int getDashTimer();
 	sf::Vector2f getWlkVel();
 	sf::Vector2f getFinalVel();
 	sf::Vector2f getDashVel();
 	sf::Vector2f getFacing();
-	
 	sf::Vector2f hitBoxOffset;
+
+
 	void setHitBoxSize(sf::Vector2f size, sf::Vector2f offset);
 
 private:
-
-	
-	
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
 	void wRightAnim();
@@ -117,9 +111,6 @@ private:
 	sf::Vector2u dashUpAnimDim;
 	sf::Vector2u dashDownAnimDim;
 
-
-	
-
 	/*
 	* Effects
 	* here I will code in functions that do things to the players sprite and change how it works
@@ -128,7 +119,7 @@ private:
 	*/
 	
 	/*
-	* the walking movement logic is as follows:
+	*	the walking movement logic is as follows:
 	*	The player inputs a direction on the keyboard,
 	*	that is recognized by the game and the moveDir is set
 	*	in response. 
@@ -136,6 +127,8 @@ private:
 	*	Then, the vector is normalized and walkVelocity is 
 	*   set to moveDir * walkSpeed * deltaTime.
 	*/
+	
+
 	float walkSpeed = 1.6f;
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
@@ -144,19 +137,16 @@ private:
 	//dashing specs
 	sf::Clock dashTimer;
 	
-	
-	
-	float dashSpeed = 250.f;
+	float dashSpeed = 280.f;
 	int dashCooldown = 1000;
-	int dashSpeedTime = 170;
+	int dashSpeedTime = 150;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
 	void setAnimation();
 	sf::Vector2f lastFacing;
 	void setFacing();
-	//char facing = 0b0000;
-	//char lastFacing = 0b0000;
+
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.
 	void setDiagBool();
@@ -191,11 +181,8 @@ private:
 	float playerAngle;
 
 	sf::RenderWindow* pWindow;
-	
-	//void updateRot();
-	//void updateMovementAngle();
-	//void updateMovement(float deltaTime, TileMap* map);
-
-	
 };
 
+//void updateRot();
+//void updateMovementAngle();
+//void updateMovement(float deltaTime, TileMap* map);

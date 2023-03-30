@@ -9,7 +9,7 @@ public:
 	~Animation();
 	Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int rowLength, int rowNumber, float animationTime);
 	Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int rowNumber);
-
+	
 	void updateAnimation(sf::Clock* clock);
 	void updateAnimation();
 	void updateRow(int rowNum, int rowLength);

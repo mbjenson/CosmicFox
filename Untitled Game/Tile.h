@@ -23,6 +23,7 @@ public:
 	~Tile();
 
 	bool collidable = false;
+	bool hole = false;
 	
 private:
 	

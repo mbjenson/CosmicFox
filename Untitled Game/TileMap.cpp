@@ -148,6 +148,7 @@ void TileMap::render(sf::Vector2i curTile, sf::RenderWindow& win, sf::Vector2i _
 		{
 			int tileIndex = x + y * mapSize.x;
 			if (tileIndex >= 0 && tileIndex <= (mapSize.x) * (mapSize.y))
+				//updateAnim()
 				win.draw(tileV.at(tileIndex));
 		}
 	}
@@ -168,7 +169,8 @@ void TileMap::renderRow(sf::Vector2i curTile, int whichRow, sf::Vector2i _rendSi
 	sf::IntRect rendArea;
 	//calculating the bounds of rendering
 	rendArea.left = curTile.x - _rendSize.x;
-	rendArea.top = curTile.y + whichRow;
+	// whcih row is indux
+	rendArea.top = curTile.y - _rendSize.y + whichRow;
 	rendArea.width = (_rendSize.x * 2) + 1;
 	rendArea.height = 1;
 	
@@ -181,21 +183,25 @@ void TileMap::renderRow(sf::Vector2i curTile, int whichRow, sf::Vector2i _rendSi
 	{
 		rendArea.width = rendArea.width - (_rendSize.x - ((mapSize.x - 1) - curTile.x));
 	}
-	if (curTile.y + whichRow < 0)
+	if (curTile.y - _rendSize.y + whichRow < 0)
 	{
 		return;
 	}
-	if (curTile.y + whichRow > mapSize.y - 1)
+	if (curTile.y - _rendSize.y + whichRow > mapSize.y - 1)
 	{
+		return;
+	}
+	if (whichRow > _rendSize.y * 2) {
 		return;
 	}
 
-	int rowNum = curTile.y + whichRow;
+	int rowNum = curTile.y - _rendSize.y + whichRow;
 
 	for (int x = rendArea.left; x < rendArea.left + rendArea.width; x++) {
 		int tileIndex = x + rowNum * mapSize.x;
-		if (tileIndex >= 0 && tileIndex <= (mapSize.x) * (mapSize.y))
+		if (tileIndex >= 0 && tileIndex <= (mapSize.x) * (mapSize.y)) {
 			win.draw(getTileAt(x, rowNum));
+		}
 	}
 }
 

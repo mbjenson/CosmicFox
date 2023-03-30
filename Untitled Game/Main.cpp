@@ -11,112 +11,34 @@
 #include <fstream>
 #include <math.h>
 
-
 using namespace std;
 // current goal:
-// sort out how I am going to render a tile map with different textures, collidable objects, and the likes.
-// 
-// idea:    each tile will be an sf::quad and will have a texture assigned to it.
-//			We will use a vector of quads.
-//			we will read input from the file into an array
-//			we will only render the ones that are within a certain distance of the player
-//			otherwise the game will lag immensly (culling)
 
 // implement a state system.
-//		1) game state will allow the user to play the game, pause the game
+//		1) game state will allow the user to play the game, pause the game, and show a blurred out version of visible screen in pause menu
 //		2) a main menu state that will allow the user to change the music volume, and adjust other things
 
-// IDEA:
-// this game is based in space.
-// there are floating islands connected by bridges that you travers and fight enemies on.
-// use paralax effect to make medeorties, stars, and other things move at different rates to create
-//		a sense of vast space.
-// I LIKE THIS
-
-//IDEA:
-// use boolean variables to control game state. have a menu that, if play is pressed, a bool will change
-// and when the loop checks, it will draw a map onto the window with the player and everything else.
-// If the menu is drawn it will not load the player or anything else just the menu.
-
 // have seperate event loop for menu and levels?
-
-// COMPLETE:
-//TODO: (CHECKMARK!)
-// create an animation class which handles texturesheet and updating sprite information
-// implement that into the tile and entity class so that they can be animated simply
-// TODO: (CHECKMARK!)
-// implement hit box size which can be different from the actual size of the texture. then use this
-// for collision detection. this makes the hitbox and the size of the texture exclusive.
-// TODO: (CHECKMARK!)
-// fix issue with collisions where if between two collidable tiles, if pushing on left side wall, moving up and down is
-// //		not possible without moving away from wall then moving up or down.
-// TODO: (CHECKMARK!)
-// limit the walk velocity in the different directions using the direction the player is currently facing (N, E, S, W)
-// the old function broke since I implemented collisions
 // 
-//	TODO: (CHECKMARK!)
-//	implement a system where objects can have heights. this means their bases will have hitboxes but they can be rendered above the ground.
-//	this will create a sense of depth. So example, a box will appear to have a shorter front than top because the camera
-//	is looking down from below.
-//	idea 1) *bad
-//		The hitbox for the tile can be specified by supplying a floatrect to the tile constructor.
-//		the textureDim, which will be used for rendering is already specified.
-//	idea 2)
-//		There will be another level of rendering which renders upper level things like trees, houses, and other things.
-//		Tilemap is for the ground level things, another class called (*IDK YET*) will be created and used to draw the textures
-//		on the board.
-// idea 3)
-//		simply add another slot for a texture in the tile object. Then, when the tilemap is rendered in, the tiles are rendered from top to
-//		bottom so that if the player is behind something it will appear behind it.
-// 
-// BACKBURNER:
-//	TODO: (backburner....)
-//	implement the animation class differently into the tile class, 
-//	current issue: unable to update the animations of all tiles simulataneously
-//	find a way to do this.
-//	NOTE: animating tiles would be very difficult to do for an entire board. if i need to animate a tile i can do it individually
-
-
-// TODO: 
-// find a way to animate the players rotation to the new movement direction
-//		 idea: (pretty easy and probably correct) (however, knowing my math skills probably not)
-//			use the animation class, have a desired angle that, when updated, cues an animation (or a mathematical rotation of the player)
-//			that shows the player rotating towards that angle, every frame, the game checks 
-//			if the current angle is equal to that angle and if not, the sprite will continue to rotate towards that angle, if and when
-//			that angle is updated, the new angle will be set as the desired angle.
-//			the equation will take the difference between the desired angle and current angle and multiply that by a constant value
-//			which will make the player spin faster if farther away from the desired angle and slower if closer to the desired angle
-
-// RELEVANT:
+//	RELEVANT:
 //	TODO:
 //	implement a system where objects are rendered from the top down meaning that if the player is behind something (they are cartesially
 //	above it) they will appear behind that object.
-
-//	TODO: 
-//	Shaders:
-// 
-//	TODO:
-//	create a projectile class which has a sprite
-//	implement simple physics into the class and allow the player to weild some type of projectile shooting thing
-//		NOTE: check if (projectile.getglobalbounds().intersects( a wall, an enemy, or something) and make the projectile
-//				dissapear or bounce or stop then do damage to the enemey, 
-// 
-// TODO: make interactable tiles that be interacted with by the player
+//	TODO: make interactable tiles that be interacted with by the player
 //
-// TODO: make render function load things into stack but store main map and data in the heap for efficiency
+//  TODO: make render function load things into stack but store main map and data in the heap for efficiency
 
+//	TODO: make topdown render work
+//	NOTE: First I must change how things with height are rendered into the map.
 
+// TODO: fix walkUpAnim so that cape isnt open
 
+// fix animation class so that upanimation does flicker
 
-// maybe...
-// create circular hitbox for player and create collision function for circular hitbox?
+// CURRENT: make gaps in the earth that the player can fall through for the time being instead of having tall objects
+// CURRENT: make it so that if the player is stopped, they can still dash whichever way they are facing.
 
-///TODO: make topdown render wrk
-
-// NOTE: make dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
-
-
-
+// NOTE: make sure dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
 
 
 void setKeyPressesKBD(Player& player) {
@@ -129,8 +51,15 @@ void setKeyPressesKBD(Player& player) {
 
 // takes the maps and renders everything one row at a time
 // maybe move this to a level.hpp file that handles all the maps and player and enemy date and put renderTopDown() there?
-void renderTopDown(sf::RenderWindow& win, Player *player, TileMap *map1, TileMap *map2) {
-	return;
+void renderTopDown(sf::Vector2i renderSize, sf::RenderWindow& win, TileMap *layer1, TileMap *layer2, Player *p1) {
+	// basically, all assets in the game are rendered in relation to the player to simulate a sense of depth,
+	// bottom layer is rendered first always (ground).
+	// then we draw things in row by row starting with the top row.
+	// if the player is on the row we are currently drawing in, we draw the player aswell.
+	// if they are in the canopy layer, they are rendered last.
+	for (int i = 0; i < renderSize.y * 2; i++) {
+		// this function is currently impossible with how I have the game map 
+	}
 }
 
 // takes a float and the desired places and returns a string version of the float rounded to numPlaces
@@ -200,8 +129,7 @@ int main() {
 		winDim.y / lightS.getGlobalBounds().height
 	);
 
-	//tile and player settup ===========
-	
+	//tile settup ===========
 
 	sf::Vector2i temp_mapSize(8, 8);
 	// the 2nd level tilemap
@@ -240,25 +168,26 @@ int main() {
 	
 	// the terrain tilemap
 	sf::Texture terrarin;
-	if (!terrarin.loadFromFile("Textures/tileSheet16mk1.png"))
+	if (!terrarin.loadFromFile("Textures/terrainSheetmk2.png"))
 		return -1;
 
 	int tileTypes[] = { 0, 0, 1, 0, 0, 0, 0, 0,
 						1, 1, 0, 0, 1, 0, 1, 0,
 						1, 0, 0, 0, 1, 1, 0, 1,
-						0, 0, 0, 0, 0, 0, 1, 1,
+						0, 0, 0, 6, 6, 0, 1, 1,
 						0, 0, 0, 0, 0, 0, 0, 0,
-						0, 0, 0, 0, 0, 0, 0, 0,
-						1, 1, 1, 1, 1, 1, 1, 1,
-						0, 0, 0, 0, 0, 0, 0, 0,	};
+						0, 0, 0, 6, 6, 0, 0, 0,
+						1, 1, 1, 2, 3, 0, 0, 0,
+						6, 6, 6, 6, 6, 6, 6, 6, 
+	};
 	int logGrid[] = {	
 		0, 0, 0, 0, 0, 0, 0, 0,	
-		0, 1, 1, 0, 0, 1, 1, 0, 
-		0, 1, 0, 0, 0, 0, 1, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 
-		0, 1, 0, 0, 0, 0, 1, 0,
-		0, 1, 1, 0, 0, 1, 1, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0,	};
 
 	sf::Vector2u groundTexSize(16, 16);
@@ -268,11 +197,12 @@ int main() {
 	Tile stone(terrarin, groundTexSize, 3);
 	Tile stairsR(terrarin, groundTexSize, 4);
 	Tile stairsL(terrarin, groundTexSize, 5);
-
-	Tile tiles1[] = { grass, grassStone, stoneWall, stone, stairsR, stairsL };
+	Tile under(terrarin, groundTexSize, 6);
+	
+	Tile tiles1[] = { grass, grassStone, stoneWall, stone, stairsR, stairsL, under };
 
 	sf::Vector2u temp_tileSize(16, 16);
-	TileMap tileMap(6, tiles1, temp_mapSize, tileTypes, logGrid, temp_tileSize);
+	TileMap tileMap(7, tiles1, temp_mapSize, tileTypes, logGrid, temp_tileSize);
 
 	sf::Texture grasst;
 	if (!grasst.loadFromFile("Textures/terrainSheettestone16x32.png"))
@@ -293,7 +223,6 @@ int main() {
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
 	
-	//int testFrameiterator = 0;
 	sf::Clock mainClock;
 	sf::Clock pMoveClock;	
 	sf::Clock dtClock;
@@ -305,29 +234,8 @@ int main() {
 		// Game.GameState ** change to this later using Game.hpp
 		// or not I am not sure If i need a game file tbh
 		if (gameState) {
-			
 
-			/*
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-				p1.walkNorth(dt);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-				p1.walkWest(dt);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-				p1.walkSouth(dt);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-				p1.walkEast(dt);
-			*/
-			/*
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				p1.attack();
-			*/
-			// if enough frames have passed then perform action and reset counter else do nothing
-			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			//	p1.dash(mainClock.getElapsedTime().asSeconds(), dt);
-			//}
-			
-			
-			
+			// if mouse left pressed attack with sword
 			
 			setKeyPressesKBD(p1);
 			window.clear();
@@ -335,11 +243,14 @@ int main() {
 			p1.update(dt, &tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
-			sf::Vector2i renderSize(13, 8);
+			sf::Vector2i renderSize(13, 10);
+			
+			
+			
+			
 			tileMap.render(p1.curTile, window, renderSize);
-			p1.updateAnim();
 			window.draw(p1);
-			topTileMap.render(p1.curTile, window, renderSize);
+			//topTileMap.render(p1.curTile, window, renderSize);
 			
 			
 			// TODO:

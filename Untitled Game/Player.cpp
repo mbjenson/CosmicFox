@@ -1,7 +1,5 @@
 #include "Player.h"
 
-
-
 Player::Player(	sf::Texture& texture, sf::RenderWindow& win, sf::Vector2u textureDim, 
 				int rowLength, int rowNumber, float animationTime) :
 		Entity( texture, textureDim, rowLength, rowNumber, animationTime)
@@ -21,19 +19,15 @@ void Player::update(float deltaTime, TileMap* map) {
 		case State::nominal:
 			if (upPressed) {
 				walkNorth();
-				//wUpAnim();
 			}
 			if (downPressed) {
 				walkSouth();
-				//wDownAnim();
 			}
 			if (leftPressed) {
 				walkWest();
-				//wLeftAnim();
 			}
 			if (rightPressed) {
 				walkEast();
-				//wRightAnim();
 			}
 			if (spacePressed) 
 				setState(State::dashing);
@@ -99,61 +93,24 @@ void Player::update(float deltaTime, TileMap* map) {
 				setState(State::nominal);
 			}
 			
-			
 			// if state = dashing then 
 			// have a dash clock that is local to the player class, everytime you are able to dash you update the dash class
 			// if dashtime > total dashtime as microseconds
 			// dash time = 0 and state = walking
 			
-			
-			
-
 		//case State::deactivated:
 			
 		//case State::dead:
 			
 		//case State::invulnerable:
-			
-
 	}
 	// finally, update the player's position on the map
+	updateAnim();
 	updatePlayerTile(map);
-
-	
 }
 
 void Player::setAnimation() {
-	// here control the logic behind which animation is displayed.
-	// for example:
-	// if the player is moving north
-	//		then the player is moving west, the player animation will be set to what the player was originaly moving to
-
-	// if two inputs are pressed at the same time, we just pick one of them. not sure if that case will ever be possible
-	//	given how fast computers work. 
-
-	// if the last input is fully different from the current one, then we just do the new one. 
-	/*
-	// ** lastFacing will only have only 1 direction **
-	if (moveDir.x == 0, moveDir.y == 0)
-		return;
-	if (lastFacing == moveDir) {
-		// ** keep animation the same
-		return;
-	}
-	// lastFacing: (0, 1)
-	// moveDir: (-1, 1)
-	if (lastFacing.x == 0 && lastFacing.y == moveDir.y) {
-		return;
-	}
-	// lastFacing: (-1, 0)
-	// moveDir: (-1, 1)
-	if (lastFacing.y == 0 && lastFacing.x == moveDir.x) {
-		return;
-	}
-	*/
-	// at this point we can assume only one inpt has been pressed this frame
-	// to handle two inputs, we just use the y one over the x
-	
+	// horizontal movement has priority over vertical movement
 	if (moveDir.x == 0 && moveDir.y == 0) {
 		if (lastFacing.x == 1) {
 			idleRightAnim();
@@ -276,7 +233,7 @@ void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
 	hitBoxOffset.x = offset.x;
 	hitBoxOffset.y = offset.y;
 }
-// takes position (middle of player) and calculates the top and left coord of hitbox
+// takes position (middle of player) and calculates the top and left coord of hitbox rect
 void Player::updateHitBox() {
 	hitBox.left = getPosition().x - hitBoxSize.x / 2 + hitBoxOffset.x;
 	hitBox.top = getPosition().y - hitBoxSize.y / 2 + hitBoxOffset.y;
@@ -309,12 +266,6 @@ void Player::walkWest() {
 		moveDir.x = -1;
 	}
 }
-
-// put a piecewise function in here that takes a frame number and performs an acceleration on the players velocity for a breif moment
-//	then, after the breif moment, a.k.a the frame number is greater than allowed for breif dash, perform a cooldown time that takes the number and does
-//	nothing to the velocity;
-
-
 
 // the xxAnim() functions will update the row that the animation updates from in the sprite sheet
 void Player::wLeftAnim() {
@@ -517,8 +468,6 @@ int Player::getDashTimer() {
 sf::Vector2f Player::getFacing() {
 	return lastFacing;
 }
-
-
 
 //THE FOLLOWING ARE RELATIVELY USELESS FUNCTIONS just keeping for good measure
 /*
