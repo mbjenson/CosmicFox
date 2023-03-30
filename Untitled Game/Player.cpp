@@ -5,9 +5,6 @@ Player::Player(	sf::Texture& texture, sf::RenderWindow& win, sf::Vector2u textur
 		Entity( texture, textureDim, rowLength, rowNumber, animationTime)
 {
 	pWindow = &win;
-	setOrigin(sf::Vector2f(hitBoxSize.x / 2, hitBoxSize.y / 2));
-	setPosition(sf::Vector2f(0, 0)); // starting position
-	hitBox = sf::FloatRect(getPosition().x - hitBoxSize.x / 2, getPosition().y - hitBoxSize.y / 2, hitBoxSize.x, hitBoxSize.y); // init hitbox
 }
 
 void Player::update(float deltaTime, TileMap* map) {
@@ -40,7 +37,7 @@ void Player::update(float deltaTime, TileMap* map) {
 			setAnimation();
 			// calculates the walking velocity and only applies it here if the state has not changed.
 			normalizeWalkVel();
-			walkVelocity += moveDir * walkSpeed * deltaTime;
+			walkVelocity = moveDir * walkSpeed * deltaTime;
 			
 			applyWalkFriction();
 			// * walkVelocity is now packed and ready for shipment... *
@@ -65,7 +62,15 @@ void Player::update(float deltaTime, TileMap* map) {
 			// *if player has passed cooldown
 			if (curDashTimer > dashCooldown) {
 				dashTimer.restart();
-				prepDashVel = moveDir;
+				
+				if (moveDir.x == 0 && moveDir.y == 0) {
+					prepDashVel = lastFacing;
+				}
+				else {
+					prepDashVel = moveDir;
+				}
+				
+				//prepDashVel = moveDir;
 			}
 			// *checking if the speed should be increased
 			if (curDashTimer < dashSpeedTime) {
@@ -209,6 +214,8 @@ void Player::setDiagBool() {
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
 void Player::init() {
+	setOrigin(sf::Vector2f(hitBoxSize.x / 2, hitBoxSize.y / 2));
+	hitBox = sf::FloatRect(getPosition().x - hitBoxSize.x / 2, getPosition().y - hitBoxSize.y / 2, hitBoxSize.x, hitBoxSize.y); // init hitbox
 	// trav bools
 	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
 	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;

@@ -33,13 +33,14 @@ using namespace std;
 
 // TODO: fix walkUpAnim so that cape isnt open
 
-// fix animation class so that upanimation does flicker
+// fix animation class so that upanimation does not flicker
+// fix the idle up animation so that the tail goes to side and the cape is flater
 
-// CURRENT: make gaps in the earth that the player can fall through for the time being instead of having tall objects
-// CURRENT: make it so that if the player is stopped, they can still dash whichever way they are facing.
+// TODO:: make gaps in the earth that the player can fall through for the time being instead of having tall objects
 
 // NOTE: make sure dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
 
+// TODO: make a shadow that besically gets the size of the hitbox of an entity and creates a shadow based on that.
 
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -214,14 +215,20 @@ int main() {
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk1.png"))
 		return -1;
-	
+
+	sf::Texture foxShadow;
+	if (!foxShadow.loadFromFile("Textures/shadowText.png"))
+		return -1;
+	sf::Sprite shadowSprite(foxShadow);
 	// remember to change the hitbox to match the player size
+	
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
 	p1.setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
 	p1.setPosition(sf::Vector2f(60.f, 60.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
+	
 	
 	sf::Clock mainClock;
 	sf::Clock pMoveClock;	
@@ -234,7 +241,6 @@ int main() {
 		// Game.GameState ** change to this later using Game.hpp
 		// or not I am not sure If i need a game file tbh
 		if (gameState) {
-
 			// if mouse left pressed attack with sword
 			
 			setKeyPressesKBD(p1);
@@ -245,18 +251,19 @@ int main() {
 			window.setView(camera);
 			sf::Vector2i renderSize(13, 10);
 			
-			
-			
-			
 			tileMap.render(p1.curTile, window, renderSize);
+			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x, p1.getPosition().y + 2));
+			window.draw(shadowSprite);
 			window.draw(p1);
+			
+
 			//topTileMap.render(p1.curTile, window, renderSize);
 			
 			
 			// TODO:
 			// ?? maybe not needed because I am going to have a 16x16 sprite anyway
 			// add new check for the tile collision that checks the center of each component of hitbox on the x and the y
-			/*
+			/*f
 			//1)
 			p1.updatePlayerTile(&tileMap);
 			camera.update(p1, dt);

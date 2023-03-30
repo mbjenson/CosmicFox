@@ -18,6 +18,7 @@ public:
 	void walkSouth();
 	void walkWest();
 
+	
 	/*
 	* Dashing Mechanics:
 	* The dash will be performed in the direction the player is facing.
@@ -129,7 +130,8 @@ private:
 	*/
 	
 
-	float walkSpeed = 1.6f;
+	//float walkSpeed = 1.6f;
+	float walkSpeed = 80.0f;
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
 	sf::Vector2f walkVelocity;
