@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "TileMap.h"
 #include "Sword.h"
+#include "HudBar.h"
 
 #include <fstream>
 #include <math.h>
@@ -32,16 +33,24 @@ using namespace std;
 //	TODO: make topdown render work
 //	NOTE: First I must change how things with height are rendered into the map.
 
-// TODO: fix walkUpAnim so that cape isnt open
-
-// fix animation class so that upanimation does not flicker
+// fix walkUpAnim so that cape isnt open
+// fix animation class so that upanimation does not flicker when animation is different length
 // fix the idle up animation so that the tail goes to side and the cape is flater
 
 // TODO:: make gaps in the earth that the player can fall through for the time being instead of having tall objects
 
 // NOTE: make sure dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
 
-// TODO: make a shadow that besically gets the size of the hitbox of an entity and creates a shadow based on that.
+// TODO: make a shadow that basically gets the size of the hitbox of an entity and creates a shadow based on that.
+
+// TODO: 1) rotate sword and sword hitbox and check for intersection of close enemies
+// TODO: 2) add a cirle around the player and check or enemies that are in the circle and then
+//			check if sword hit them
+
+// TODO: redo hudelement class. currently it does not work and is stupid. Make each part of the hud individually, dont need to
+//			inherit from hudelement.
+// YES: create the hud class which will take one camera and player pointer
+//		and will then render the player's hud to the screen
 
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -49,6 +58,8 @@ void setKeyPressesKBD(Player& player) {
 	player.leftPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 	player.rightPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 	player.spacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+	player.LMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+	player.RMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 }
 
 // takes the maps and renders everything one row at a time
@@ -174,14 +185,15 @@ int main() {
 	if (!terrarin.loadFromFile("Textures/terrainSheetmk2.png"))
 		return -1;
 
-	int tileTypes[] = { 0, 0, 1, 0, 0, 0, 0, 0,
-						1, 1, 0, 0, 1, 0, 1, 0,
-						1, 0, 0, 0, 1, 1, 0, 1,
-						0, 0, 0, 6, 6, 0, 1, 1,
-						0, 0, 0, 0, 0, 0, 0, 0,
-						0, 0, 0, 6, 6, 0, 0, 0,
-						1, 1, 1, 2, 3, 0, 0, 0,
-						6, 6, 6, 6, 6, 6, 6, 6, 
+	int tileTypes[] = { 
+		0, 0, 1, 0, 0, 0, 0, 0,
+		1, 1, 0, 0, 1, 0, 1, 0,
+		1, 0, 0, 0, 1, 1, 0, 1,
+		0, 0, 0, 6, 6, 0, 1, 1,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 6, 6, 0, 0, 0,
+		1, 1, 1, 2, 3, 0, 0, 0,
+		6, 6, 6, 6, 6, 6, 6, 6, 
 	};
 	int logGrid[] = {	
 		0, 0, 0, 0, 0, 0, 0, 0,	
@@ -217,23 +229,20 @@ int main() {
 		return -1;
 	sf::Sprite shadowSprite(foxShadow);
 	// remember to change the hitbox to match the player size
-	
-	sf::Texture slash;
-	if (!slash.loadFromFile("Textures/slash1.png"))
-		return -1;
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
 	p1.setPosition(sf::Vector2f(60.f, 60.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
-
-	Sword s1(p1, slash, sf::Vector2u(32, 16), 1, 0, 0.f);
-	s1.initSword();	
+	sf::Texture heart;
+	if (!heart.loadFromFile("Textures/heart.png"))
+		return -1;
 	
-	sf::Clock mainClock;
-	sf::Clock pMoveClock;	
+	
+	HudBar lifeBar(heart, sf::Vector2f(5, 5), &camera);
+	
+
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -241,10 +250,7 @@ int main() {
 		float dt = dtClock.restart().asSeconds();
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
-		// or not I am not sure If i need a game file tbh
 		if (gameState) {
-			// if mouse left pressed attack with sword
-			
 			setKeyPressesKBD(p1);
 			window.clear();
 
@@ -254,16 +260,19 @@ int main() {
 			sf::Vector2i renderSize(13, 10);
 			
 			tileMap.render(p1.curTile, window, renderSize);
-			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x, p1.getPosition().y + 2));
+			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
 			window.draw(shadowSprite);
 			window.draw(p1);
+			lifeBar.render(window, p1.health);
+			//window.draw(arrowSprite);
+			//arrowS.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2,
+			//	camera.getCenter().y - camera.getSize().y / 2));
+			//window.draw(arrowS);
 			
-			
-			s1.update();
-			s1.swing(1.f);
-			window.draw(s1.hBox);
-			window.draw(s1);
-			
+
+
+
+
 
 			//topTileMap.render(p1.curTile, window, renderSize);
 			

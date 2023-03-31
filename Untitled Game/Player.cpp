@@ -26,6 +26,13 @@ void Player::update(float deltaTime, TileMap* map) {
 			if (rightPressed) {
 				walkEast();
 			}
+			//issue: attacking only updatees when LMB pressed
+			if (LMBPressed) {
+				attacking = true;
+			}
+			if (attacking) {
+				attacking = sword.swing(*pWindow);
+			}
 			if (spacePressed) 
 				setState(State::dashing);
 			if (isDashing)
@@ -38,8 +45,7 @@ void Player::update(float deltaTime, TileMap* map) {
 			// calculates the walking velocity and only applies it here if the state has not changed.
 			normalizeWalkVel();
 			walkVelocity = moveDir * walkSpeed * deltaTime;
-			
-			applyWalkFriction();
+			//applyWalkFriction();
 			// * walkVelocity is now packed and ready for shipment... *
 			updateTrav();
 			if (state == State::nominal) {
@@ -110,9 +116,12 @@ void Player::update(float deltaTime, TileMap* map) {
 		//case State::invulnerable:
 	}
 	// finally, update the player's position on the map
+	sword.updatePos(getPosition());
 	updateAnim();
 	updatePlayerTile(map);
 }
+
+
 
 void Player::setAnimation() {
 	// horizontal movement has priority over vertical movement
@@ -214,8 +223,8 @@ void Player::setDiagBool() {
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
 void Player::init() {
-	setOrigin(sf::Vector2f(hitBoxSize.x / 2, hitBoxSize.y / 2));
-	hitBox = sf::FloatRect(getPosition().x - hitBoxSize.x / 2, getPosition().y - hitBoxSize.y / 2, hitBoxSize.x, hitBoxSize.y); // init hitbox
+	setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
+	setOrigin(sf::Vector2f(8, 8));
 	// trav bools
 	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
 	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;
@@ -232,6 +241,10 @@ void Player::init() {
 	idleLeftAnimDim = sf::Vector2u(8, 5);
 	idleRightAnimDim = sf::Vector2u(8, 6);
 	idleUpAnimDim = sf::Vector2u(6, 7);
+	//sword settup
+	swordTex.loadFromFile("Textures/slash1.png");
+	sword = Sword(swordTex, sf::Vector2u(32, 16), 1, 0, 0.f);
+	sword.initSword();
 }
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
@@ -475,6 +488,11 @@ int Player::getDashTimer() {
 sf::Vector2f Player::getFacing() {
 	return lastFacing;
 }
+
+void Player::updatePWindow(sf::RenderWindow& win) {
+	pWindow = &win;
+}
+
 
 //THE FOLLOWING ARE RELATIVELY USELESS FUNCTIONS just keeping for good measure
 /*

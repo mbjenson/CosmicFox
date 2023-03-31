@@ -11,6 +11,7 @@ public:
 	Entity(sf::Texture& texSheet, sf::Vector2u textureDim, int rowLength, int rowNumber, float animationTime);
 	Entity();
 	~Entity();
-
+	
 	sf::FloatRect hitBox;
+	int health;
 };

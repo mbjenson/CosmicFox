@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "TileMap.h"
+#include "Sword.h"
 #include <math.h>
 
 class Player : public Entity
@@ -17,8 +18,8 @@ public:
 	void walkEast();
 	void walkSouth();
 	void walkWest();
-
 	
+
 	/*
 	* Dashing Mechanics:
 	* The dash will be performed in the direction the player is facing.
@@ -50,6 +51,10 @@ public:
 	bool leftPressed;
 	bool rightPressed;
 	bool spacePressed;
+	bool LMBPressed;
+	bool RMBPressed;
+	//attacking
+	bool attacking;
 	
 	void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
@@ -77,9 +82,11 @@ public:
 	sf::Vector2f getFacing();
 	sf::Vector2f hitBoxOffset;
 
-
 	void setHitBoxSize(sf::Vector2f size, sf::Vector2f offset);
 
+	void updatePWindow(sf::RenderWindow& win);
+
+	int health = 4;
 private:
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
@@ -113,7 +120,7 @@ private:
 	sf::Vector2u dashDownAnimDim;
 
 	/*
-	* Effects
+	* Effects #include effects.hpp
 	* here I will code in functions that do things to the players sprite and change how it works
 	* like adding a flashing red effect for low health
 	* or like a flashing for invulnerability
@@ -135,19 +142,20 @@ private:
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
 	sf::Vector2f walkVelocity;
-
+	
 	//dashing specs
 	sf::Clock dashTimer;
-	
-	float dashSpeed = 280.f;
+	float dashSpeed = 275.f;
 	int dashCooldown = 1000;
-	int dashSpeedTime = 150;
+	int dashSpeedTime = 160;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
 	void setAnimation();
 	sf::Vector2f lastFacing;
 	void setFacing();
+
+	
 
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.
@@ -180,9 +188,27 @@ private:
 
 	State state;
 
-	float playerAngle;
+	Sword sword;
+	sf::Texture swordTex;
 
+	
+
+	float playerAngle;
+	// used to get information from the window the player is being drawn on
 	sf::RenderWindow* pWindow;
+	
+
+
+	//this is here so that I can draw specific things for the player like sword or shadow or effects and whatnot
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		states.transform *= getTransform();
+		if (attacking) {
+			target.draw(sword);
+			
+		}
+		target.draw(tSprite, states);
+	}
 };
 
 //void updateRot();
