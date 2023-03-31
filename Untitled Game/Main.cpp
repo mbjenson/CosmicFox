@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include "Camera.h"
 #include "TileMap.h"
+#include "Sword.h"
 
 #include <fstream>
 #include <math.h>
@@ -110,7 +111,7 @@ int main() {
 	winText.setCharacterSize(10);
 	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
-
+	/*
 	// Shader settup
 	if (!sf::Shader::isAvailable())
 		return -1;
@@ -129,6 +130,7 @@ int main() {
 		winDim.x / lightS.getGlobalBounds().width,
 		winDim.y / lightS.getGlobalBounds().height
 	);
+	*/
 
 	//tile settup ===========
 
@@ -205,13 +207,7 @@ int main() {
 	sf::Vector2u temp_tileSize(16, 16);
 	TileMap tileMap(7, tiles1, temp_mapSize, tileTypes, logGrid, temp_tileSize);
 
-	sf::Texture grasst;
-	if (!grasst.loadFromFile("Textures/terrainSheettestone16x32.png"))
-		return -1;
-
-	Tile grassT(grasst, sf::Vector2u(16, 32), 0);
-	grassT.setPosition(sf::Vector2f(0.f, 0.f));
-
+	
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk1.png"))
 		return -1;
@@ -222,13 +218,19 @@ int main() {
 	sf::Sprite shadowSprite(foxShadow);
 	// remember to change the hitbox to match the player size
 	
+	sf::Texture slash;
+	if (!slash.loadFromFile("Textures/slash1.png"))
+		return -1;
+
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
 	p1.setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
 	p1.setPosition(sf::Vector2f(60.f, 60.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
-	
+
+	Sword s1(p1, slash, sf::Vector2u(32, 16), 1, 0, 0.f);
+	s1.initSword();	
 	
 	sf::Clock mainClock;
 	sf::Clock pMoveClock;	
@@ -255,6 +257,12 @@ int main() {
 			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x, p1.getPosition().y + 2));
 			window.draw(shadowSprite);
 			window.draw(p1);
+			
+			
+			s1.update();
+			s1.swing(1.f);
+			window.draw(s1.hBox);
+			window.draw(s1);
 			
 
 			//topTileMap.render(p1.curTile, window, renderSize);

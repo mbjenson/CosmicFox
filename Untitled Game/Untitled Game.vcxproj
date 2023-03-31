@@ -183,6 +183,7 @@
     <Image Include="Textures\playerCube16.png" />
     <Image Include="Textures\playerSquare.png" />
     <Image Include="Textures\shadowText.png" />
+    <Image Include="Textures\slash1.png" />
     <Image Include="Textures\stonealpha.png" />
     <Image Include="Textures\stonealpha32.png" />
     <Image Include="Textures\stonealpha64.png" />
