@@ -9,6 +9,7 @@
 #include "TileMap.h"
 #include "Sword.h"
 #include "HudBar.h"
+#include "TileMapmk2.h"
 
 #include <fstream>
 #include <math.h>
@@ -64,13 +65,10 @@ using namespace std;
 *				around the player, only redraw the map when the player moves outside the bounds of the center chunk.
 *				this means that we only have to redraw things very occasionally instead of every frame.
 *				
-* Side quest:	reImplement the collision check in player for the new tileMapmk2
-*				currently we check weach individual tile for collision information but now
-*				we will direction check in the int* logic grid I believe because the tile map
-*				isnt just a vector of tiles that are being draw it is instead a single texture
-*				that is going to be updated depending on chunk location of player.
+* Side quest:	reImplement the collision check in player for the new tileMapmk2.
+*				go directly to the logic grid and check if the tile at that position
 * 
-* 
+*				
 */
 
 void setKeyPressesKBD(Player& player) {
@@ -143,71 +141,17 @@ int main() {
 	winText.setCharacterSize(10);
 	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
-	/*
-	// Shader settup
-	if (!sf::Shader::isAvailable())
-		return -1;
-
-	sf::Shader sh1;
-	if (!sh1.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment))
-		return -1;
-	sh1.setUniform("u_resolution", sf::Vector2f(winDim.x, winDim.y));
-
-	sf::Texture blackT;
-	if (!blackT.loadFromFile("Textures/black.png"))
-		return -1;
-	sf::Sprite lightS(blackT);
-
-	lightS.setScale(
-		winDim.x / lightS.getGlobalBounds().width,
-		winDim.y / lightS.getGlobalBounds().height
-	);
-	*/
-
-	//tile settup ===========
 
 	sf::Vector2i temp_mapSize(8, 8);
-	// the 2nd level tilemap
-	
-	sf::Texture terrain2;
-	if (!terrain2.loadFromFile("Textures/terrainSheettestone16x32.png"))
-		return -1;
-
-	int tileTypes2[] = {
-		4, 1, 1, 4, 4, 1, 1, 4,
-		4, 1, 4, 4, 4, 4, 1, 4,
-		4, 4, 4, 4, 4, 4, 4, 4,
-		4, 4, 4, 4, 4, 4, 4, 4,
-		4, 1, 4, 4, 4, 4, 1, 4,
-		4, 1, 1, 4, 4, 1, 1, 4,
-		4, 4, 4, 4, 4, 4, 4, 4,
-		4, 4, 4, 4, 4, 4, 4, 4, };
-	int logGrid2[] = {
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, };
-
-	sf::Vector2u texSize2(16, 32);
-	Tile grassCube(terrain2, texSize2 , 0);
-	Tile stoneWallCube(terrain2, texSize2, 1);
-	Tile boxCube(terrain2, texSize2, 2);
-	
-	Tile tiles2[] = { grassCube, stoneWallCube, boxCube };
-	sf::Vector2u temp_tileSpacing(16, 16);
-
-	TileMap topTileMap(3, tiles2, temp_mapSize, tileTypes2, logGrid2, temp_tileSpacing);
 	
 	// the terrain tilemap
 	sf::Texture terrarin;
 	if (!terrarin.loadFromFile("Textures/terrainSheetmk2.png"))
 		return -1;
 
-	int tileTypes[] = { 
+	
+
+	int tileTypes[] = {
 		0, 0, 1, 0, 0, 0, 0, 0,
 		1, 1, 0, 0, 1, 0, 1, 0,
 		1, 0, 0, 0, 1, 1, 0, 1,
@@ -217,7 +161,7 @@ int main() {
 		1, 1, 1, 2, 3, 0, 0, 0,
 		6, 6, 6, 6, 6, 6, 6, 6, 
 	};
-	int logGrid[] = {	
+	int logGrid[] = {
 		0, 0, 0, 0, 0, 0, 0, 0,	
 		0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 
@@ -241,7 +185,65 @@ int main() {
 	sf::Vector2u temp_tileSize(16, 16);
 	TileMap tileMap(7, tiles1, temp_mapSize, tileTypes, logGrid, temp_tileSize);
 
-	
+	// setting up the tilemapmk2
+	int tileTypes2[] = {
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	};
+
+	int logicGrid2[] = {
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	};
+
+	TileMapmk2* newMap = new TileMapmk2(tiles1, tileTypes, logicGrid2);
+	newMap->init();
+	newMap->updatePlayerChunk(sf::Vector2f(0, 0));
+
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk1.png"))
 		return -1;
@@ -257,24 +259,11 @@ int main() {
 	p1.init();
 	p1.setState(Player::State::nominal);
 	p1.updatePlayerTile(&tileMap);
-	sf::Texture heart;
-	if (!heart.loadFromFile("Textures/heart.png"))
-		return -1;
 	
-	sf::Sprite test(heart);
-	sf::RenderTexture bgTex;
-	bgTex.create(winDim.x, winDim.y);
-	bgTex.draw(test);
-	bgTex.display();
-	sf::Sprite bg(bgTex.getTexture());
-
-	HudBar lifeBar(heart, sf::Vector2f(5, 5), &camera);
-	
-	sf::Clock mainClock;
+	//sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
-		
 		float dt = dtClock.restart().asSeconds();
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
@@ -285,29 +274,17 @@ int main() {
 			p1.update(dt, &tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
-			sf::Vector2i renderSize(13, 10);
+			//sf::Vector2i renderSize(13, 10);
 			
-			tileMap.render(p1.curTile, window, renderSize);
+			//tileMap.render(p1.curTile, window, renderSize);
+			newMap->updateTexMap();
+			sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
+			window.draw(mapSprite);
 			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
 			window.draw(shadowSprite);
 			window.draw(p1);
-			lifeBar.render(window, p1.health);
-
-			bg.setPosition(p1.getPosition().x-19, p1.getPosition().y-19);
-			window.draw(bg);
 			
 
-			//window.draw(arrowSprite);
-			//arrowS.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2,
-			//	camera.getCenter().y - camera.getSize().y / 2));
-			//window.draw(arrowS);
-			
-
-
-
-
-
-			//topTileMap.render(p1.curTile, window, renderSize);
 			
 			
 			// TODO:
@@ -364,3 +341,52 @@ int main() {
 	}
 	return 0;
 }
+
+
+
+
+
+/*
+	// Shader settup
+	if (!sf::Shader::isAvailable())
+		return -1;
+
+	sf::Shader sh1;
+	if (!sh1.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment))
+		return -1;
+	sh1.setUniform("u_resolution", sf::Vector2f(winDim.x, winDim.y));
+
+	sf::Texture blackT;
+	if (!blackT.loadFromFile("Textures/black.png"))
+		return -1;
+	sf::Sprite lightS(blackT);
+
+	lightS.setScale(
+		winDim.x / lightS.getGlobalBounds().width,
+		winDim.y / lightS.getGlobalBounds().height
+	);
+	*/
+
+
+
+	/*
+		sf::Texture heart;
+		if (!heart.loadFromFile("Textures/heart.png"))
+			return -1;
+
+		sf::Sprite test(heart);
+
+		sf::RenderTexture bgTex;
+		bgTex.create(winDim.x, winDim.y);
+		bgTex.draw(test);
+		bgTex.display();
+		sf::Sprite bg(bgTex.getTexture());
+
+		HudBar lifeBar(heart, sf::Vector2f(5, 5), &camera);
+		*/
+
+
+		//lifeBar.render(window, p1.health);
+
+					//bg.setPosition(p1.getPosition().x-19, p1.getPosition().y-19);
+					//window.draw(bg);

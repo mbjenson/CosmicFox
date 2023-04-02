@@ -14,27 +14,45 @@ void TileMapmk2::updateAnimations() {
 	return;
 }
 
-void TileMapmk2::updateDraw(sf::RenderWindow& win) {
-	/*
-	* sf::IntRect drawArea(0, 0, 3, 3)
-	Firstly, check bounds for rect.
-	if curChunk.x == 0
-		drawArea.left = 0
-		drawArea.width -= 1
-	if curChunk.y == 0
-		drawArea.top = 0
-		drawArea.height -= 1
-	if curChunk.x == mapDimChunk.x - 1
-		drawArea.width -=1;
-	if curChunk.y == mapDimChunk.y - 1
-		drawArea.height -=1;
-	Take curChunk and do following conversion to world float coordinates:
-		cornerCurChunk(x, y) => (x * chunkSize * tileSize, y * chunkSize * tileSize);
-		then look at tileTypes and set it equal to 
+int TileMapmk2::getTileTypeAt(int x, int y) {
+	return tileTypes[x + y * mapDimChunks.x * chunkSize];
+}
 
 
-	*/
-	
+
+
+
+void TileMapmk2::updateTexMap() {
+	// Firstly, check bounds for render rect.
+	sf::IntRect drawArea(curChunk.x - 1, curChunk.y - 1, 3, 3);
+	if (curChunk.x == 0) {
+		drawArea.left = 0;
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == 0) {
+		drawArea.top = 0;
+		drawArea.height -= 1;
+	}
+	if (curChunk.x == mapDimChunks.x - 1) {
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == mapDimChunks.y - 1) {
+		drawArea.height -= 1;
+	}
+	//Secondly, go to top left of chunkDrawArea and convert it to world coordinates
+	//converting to tile coordinates
+	drawArea = sf::IntRect(	drawArea.left * chunkSize, drawArea.top * chunkSize,
+							drawArea.width * chunkSize, drawArea.height * chunkSize);
+
+	for (int y = 0; y < drawArea.height; y++){
+		for (int x = 0; x < drawArea.width; x++) {
+			int curTile = tileTypes[x + y * drawArea.width];
+			sf::Sprite tempSpr(*tiles[curTile].tSprite.getTexture());
+			tempSpr.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+			mapTex.draw(tempSpr);
+		}
+	}
+	mapTex.display();
 }
 
 void TileMapmk2::updatePlayerChunk(sf::Vector2f playerPos) {
@@ -45,4 +63,6 @@ sf::Vector2i TileMapmk2::getPlayerChunk() {
 	return curChunk;
 }
 
-
+sf::RenderTexture* TileMapmk2::getMapTex() {
+	return &mapTex;
+}

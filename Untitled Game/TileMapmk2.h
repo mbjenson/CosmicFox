@@ -35,7 +35,7 @@ public:
 	of actual tiles. This texture is drawn onto the renderTexture. This render texture is static and allows
 	for very fast loading of the game.
 	*/
-	void updateDraw(sf::RenderWindow& win);
+	void updateTexMap();
 
 	/*
 	Checks for the players coordinates to see if they have left the current chunk.
@@ -47,6 +47,10 @@ public:
 	void updatePlayerChunk(sf::Vector2f playerPos);
 	// Returns curChunk
 	sf::Vector2i getPlayerChunk();
+	// gets the tileType at a given location
+	int getTileTypeAt(int x, int y);
+	// get mapTex
+	sf::RenderTexture* getMapTex();
 
 private:
 

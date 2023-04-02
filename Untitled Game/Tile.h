@@ -20,7 +20,7 @@ public:
 
 	Tile(sf::Texture& _texture, sf::Vector2u _textureDim, int rowNumber);
 
-	Tile(sf::Texture& _texture, sf::Vector2u _textureDim, int rowNum);
+	//Tile(sf::Texture& _texture, sf::Vector2u _textureDim, int rowNum);
 
 	~Tile();
 
