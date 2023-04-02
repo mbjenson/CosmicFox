@@ -12,7 +12,7 @@ public:
 	/*
 	creates a new tileMap
 	*/
-	TileMapmk2(Tile* _tiles, int* _types, int* _logic);
+	TileMapmk2(int* _types, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture& _texSheet);
 
 	/*
 	Initializes the sf::renderTexture mapTex.
@@ -41,7 +41,7 @@ public:
 	Checks for the players coordinates to see if they have left the current chunk.
 	If they have, sets the current chunk that the player is within the map. 
 	*/
-	void check();
+	bool check(sf::Vector2f playerPos);
 	
 	// updates the player's current chunk
 	void updatePlayerChunk(sf::Vector2f playerPos);
@@ -54,7 +54,6 @@ public:
 
 private:
 
-	Tile* tiles;
 	int* tileTypes;
 	int* logicGrid;
 	sf::RenderTexture mapTex; // we will draw the textures for the tile map to this texture;
@@ -62,5 +61,6 @@ private:
 	int chunkSize = 8; // num tiles per chunk where (x = chunkSize, y = chunkSize)
 	sf::Vector2i curChunk; // the player's current chuck in the world.
 	sf::Vector2i mapDimChunks; // the dimensions of the world in chunks.
+	sf::Texture texSheet;
 };
 
