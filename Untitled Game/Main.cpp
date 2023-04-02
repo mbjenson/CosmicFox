@@ -37,20 +37,41 @@ using namespace std;
 // fix animation class so that upanimation does not flicker when animation is different length
 // fix the idle up animation so that the tail goes to side and the cape is flater
 
+/*
+* NOTES:
+* ->	 make sure dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
+* 
+* ->	blind jump uses a system where tiles of different types inherit from the tile class and have different attributes
+*		it then check to see if a tile is grass and the tile below it is empty space, if it is the space below it is
+*		is filled with an 'edge' tile that makes the tile look 3d. this is good for random map generation and also good
+*		for regular planned generation
+* 
+* ->	implement a way that tiles can start animating at different times
+* 
+*/
+
 // TODO:: make gaps in the earth that the player can fall through for the time being instead of having tall objects
-
-// NOTE: make sure dash only check for collision with walls. So that you can dash past enemies and dash over gaps in ground.
-
 // TODO: make a shadow that basically gets the size of the hitbox of an entity and creates a shadow based on that.
-
-// TODO: 1) rotate sword and sword hitbox and check for intersection of close enemies
-// TODO: 2) add a cirle around the player and check or enemies that are in the circle and then
+// TODO: add a cirle around the player and check or enemies that are in the circle and then
 //			check if sword hit them
-
-// TODO: redo hudelement class. currently it does not work and is stupid. Make each part of the hud individually, dont need to
-//			inherit from hudelement.
-// YES: create the hud class which will take one camera and player pointer
+// TODO: create the hud class which will take one camera and player pointer
 //		and will then render the player's hud to the screen
+
+// CURRENT TASK: 
+/* 
+* Fixing tilemap function.
+* Algorithm:	divide the tilemap up into 16x16 (or something similar) tile "chunks". Load in a 3x3 area of chunks 
+*				around the player, only redraw the map when the player moves outside the bounds of the center chunk.
+*				this means that we only have to redraw things very occasionally instead of every frame.
+*				
+* Side quest:	reImplement the collision check in player for the new tileMapmk2
+*				currently we check weach individual tile for collision information but now
+*				we will direction check in the int* logic grid I believe because the tile map
+*				isnt just a vector of tiles that are being draw it is instead a single texture
+*				that is going to be updated depending on chunk location of player.
+* 
+* 
+*/
 
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -147,6 +168,7 @@ int main() {
 
 	sf::Vector2i temp_mapSize(8, 8);
 	// the 2nd level tilemap
+	
 	sf::Texture terrain2;
 	if (!terrain2.loadFromFile("Textures/terrainSheettestone16x32.png"))
 		return -1;
@@ -239,10 +261,16 @@ int main() {
 	if (!heart.loadFromFile("Textures/heart.png"))
 		return -1;
 	
-	
+	sf::Sprite test(heart);
+	sf::RenderTexture bgTex;
+	bgTex.create(winDim.x, winDim.y);
+	bgTex.draw(test);
+	bgTex.display();
+	sf::Sprite bg(bgTex.getTexture());
+
 	HudBar lifeBar(heart, sf::Vector2f(5, 5), &camera);
 	
-
+	sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -264,6 +292,11 @@ int main() {
 			window.draw(shadowSprite);
 			window.draw(p1);
 			lifeBar.render(window, p1.health);
+
+			bg.setPosition(p1.getPosition().x-19, p1.getPosition().y-19);
+			window.draw(bg);
+			
+
 			//window.draw(arrowSprite);
 			//arrowS.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2,
 			//	camera.getCenter().y - camera.getSize().y / 2));
@@ -324,6 +357,8 @@ int main() {
 			winText.setString("\n\n\n\n\n\n\nFacingx = " + to_string(p1.getFacing().x) +
 				"\nFacingy = " + to_string(p1.getFacing().y));
 			window.draw(winText);
+
+
 			window.display();
 		}
 	}

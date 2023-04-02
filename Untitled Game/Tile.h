@@ -20,11 +20,15 @@ public:
 
 	Tile(sf::Texture& _texture, sf::Vector2u _textureDim, int rowNumber);
 
+	Tile(sf::Texture& _texture, sf::Vector2u _textureDim, int rowNum);
+
 	~Tile();
 
 	bool collidable = false;
 	bool hole = false;
-	
+	bool isAnimated = false;
+
+
 private:
 	
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

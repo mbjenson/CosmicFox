@@ -161,6 +161,7 @@
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="TileMapmk2.cpp" />
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -212,12 +213,14 @@
     <ClInclude Include="Hud.h" />
     <ClInclude Include="HudElement.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="MappingFunctions.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="TileMapmk2.h" />
     <ClInclude Include="_TileMap.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,89 +1,8 @@
 #include "TileMap.h"
 
-// create a new class that inherits from this one and create a new version of the contructor and renderer so that it loads things
-//	specific to that level
 
-/*
-//ABOSULTE PEICE OF BLABBING SHITE CONSTRUCTOR
-TileMap::TileMap(	sf::Vector2i _mapSize, int* _tileTypes, int*_logGrid,
-					sf::Texture& textureSheet, sf::Vector2u _tileSize)
-{
-	mapSize = _mapSize; //num tiles in map
-	tileTypes = _tileTypes; //array of digits that will represent each tile type
-	tileSize = _tileSize; //the pixel size of each tile eg. (32x32)
-	tileV.resize(_mapSize.x * _mapSize.y);
-	texSheet = textureSheet;
 
-	bool tempBool = false;
-	//init the tiles we will use
 
-	grass = Tile(texSheet, false, 1, 0, 0.f);
-	grassStone = Tile(texSheet, false, 1, 1, 0.f);
-	stoneWall = Tile(texSheet, false, 1, 2, 0.f);
-	stone = Tile(texSheet, false, 1, 3, 0.f);
-	stairsR = Tile(texSheet, false, 1, 4, 0.f);
-	stairsL = Tile(texSheet, false, 1, 5, 0.f);
-
-	for (int y = 0; y < mapSize.y; y++)
-	{
-		for (int x = 0; x < mapSize.x; x++)
-		{
-			if (_logGrid[x + y * mapSize.x] == 0)
-				tempBool = false;
-			if (_logGrid[x + y * mapSize.x] == 1)
-				tempBool = true;
-
-			//below code is inefficient and bad redo it later 
-			if (tileTypes[x + y * mapSize.x] == 0)
-			{
-				Tile grassC = grass;
-				grassC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				grassC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = grassC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 1)
-			{
-				Tile grassStoneC = grassStone;
-				grassStoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				grassStoneC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = grassStoneC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 2)
-			{
-				Tile stoneWallC = stoneWall;
-				stoneWallC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stoneWallC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stoneWallC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 3)
-			{
-				Tile stoneC = stone;
-				stoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stoneC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stoneC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 4)
-			{
-				Tile stairsRC = stairsR;
-				stairsRC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stairsRC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stairsRC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 5)
-			{
-				Tile stairsLC = stairsL;
-				stairsLC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stairsLC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stairsLC;
-			}
-
-		}
-	}
-	
-}
-*/
-
-// PIECE OF GOLD CONSTRUCTOR
 TileMap::TileMap(int _numTileTypes, Tile* _tilesArr, sf::Vector2i _mapSize, int* _tileTypes, int* _logGrid, sf::Vector2u _tileSize)
 {
 	mapSize = _mapSize; //num tiles in map
@@ -217,3 +136,84 @@ Tile TileMap::getTileAt(int x, int y)
 Tile TileMap::getTileWithPoints(sf::Vector2f cords) {
 	return getTileAt(int(floor(cords.x / tileSize.x)), int(floor(cords.y / tileSize.y)));
 }
+
+/*
+//ABOSULTE PEICE OF BLABBING SHITE CONSTRUCTOR
+TileMap::TileMap(	sf::Vector2i _mapSize, int* _tileTypes, int*_logGrid,
+					sf::Texture& textureSheet, sf::Vector2u _tileSize)
+{
+	mapSize = _mapSize; //num tiles in map
+	tileTypes = _tileTypes; //array of digits that will represent each tile type
+	tileSize = _tileSize; //the pixel size of each tile eg. (32x32)
+	tileV.resize(_mapSize.x * _mapSize.y);
+	texSheet = textureSheet;
+
+	bool tempBool = false;
+	//init the tiles we will use
+
+	grass = Tile(texSheet, false, 1, 0, 0.f);
+	grassStone = Tile(texSheet, false, 1, 1, 0.f);
+	stoneWall = Tile(texSheet, false, 1, 2, 0.f);
+	stone = Tile(texSheet, false, 1, 3, 0.f);
+	stairsR = Tile(texSheet, false, 1, 4, 0.f);
+	stairsL = Tile(texSheet, false, 1, 5, 0.f);
+
+	for (int y = 0; y < mapSize.y; y++)
+	{
+		for (int x = 0; x < mapSize.x; x++)
+		{
+			if (_logGrid[x + y * mapSize.x] == 0)
+				tempBool = false;
+			if (_logGrid[x + y * mapSize.x] == 1)
+				tempBool = true;
+
+			//below code is inefficient and bad redo it later
+			if (tileTypes[x + y * mapSize.x] == 0)
+			{
+				Tile grassC = grass;
+				grassC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				grassC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = grassC;
+			}
+			if (tileTypes[x + y * mapSize.x] == 1)
+			{
+				Tile grassStoneC = grassStone;
+				grassStoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				grassStoneC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = grassStoneC;
+			}
+			if (tileTypes[x + y * mapSize.x] == 2)
+			{
+				Tile stoneWallC = stoneWall;
+				stoneWallC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				stoneWallC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = stoneWallC;
+			}
+			if (tileTypes[x + y * mapSize.x] == 3)
+			{
+				Tile stoneC = stone;
+				stoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				stoneC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = stoneC;
+			}
+			if (tileTypes[x + y * mapSize.x] == 4)
+			{
+				Tile stairsRC = stairsR;
+				stairsRC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				stairsRC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = stairsRC;
+			}
+			if (tileTypes[x + y * mapSize.x] == 5)
+			{
+				Tile stairsLC = stairsL;
+				stairsLC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
+				stairsLC.collidable = tempBool;
+				tileV.at(x + y * mapSize.x) = stairsLC;
+			}
+
+		}
+	}
+
+}
+*/
+

@@ -66,6 +66,9 @@
     <ClCompile Include="HudBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TileMapmk2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -227,6 +230,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HudBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapmk2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MappingFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
