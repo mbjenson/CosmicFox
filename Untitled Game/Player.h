@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "TileMap.h"
+#include "TileMapmk2.h"
 #include "Sword.h"
 #include <math.h>
 
@@ -27,7 +28,8 @@ public:
 	*/
 	
 	//main update function for the player
-	void update(float deltaTime, TileMap* map);
+	//void update(float deltaTime, TileMap* map);
+	void update(float deltaTime, TileMapmk2* map);
 	// allowed movements
 	bool northAllowed = true;
 	bool eastAllowed = true;
@@ -58,7 +60,8 @@ public:
 	
 	void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
-	void collisionCheckTile(TileMap* map);
+	//void collisionCheckTile(TileMap* map);
+	void collisionCheckTile(TileMapmk2* map);
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	
@@ -136,9 +139,9 @@ private:
 	*   set to moveDir * walkSpeed * deltaTime.
 	*/
 	
-
-	//float walkSpeed = 1.6f;
-	float walkSpeed = 80.0f;
+	// \/ yes
+	//float walkSpeed = 80.0f;
+	float walkSpeed = 200.f;
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
 	sf::Vector2f walkVelocity;

@@ -45,12 +45,30 @@ public:
 	
 	// updates the player's current chunk
 	void updatePlayerChunk(sf::Vector2f playerPos);
-	// Returns curChunk
+
+	// get curChunk
 	sf::Vector2i getPlayerChunk();
+
+	// returns the tile logic specified in the logicGrid given a player's position
+	int getTileLogic(sf::Vector2f playerPos);
+
 	// gets the tileType at a given location
 	int getTileTypeAt(int x, int y);
+
 	// get mapTex
 	sf::RenderTexture* getMapTex();
+
+	// get mapDimensions in tiles
+	sf::Vector2i getMapDimTiles();
+
+	// get tileSize
+	int getTileSize();
+
+	// get a tile's top left corner position with floating point coordinates
+	sf::Vector2f getTilePos(sf::Vector2f coords);
+
+	// get a which tile coords are located
+	sf::Vector2i getTileWithCoords(sf::Vector2f coords);
 
 private:
 

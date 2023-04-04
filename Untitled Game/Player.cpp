@@ -6,7 +6,7 @@ Player::Player(	sf::Texture& texture, sf::RenderWindow& win, sf::Vector2u textur
 {
 	pWindow = &win;
 }
-
+/*
 void Player::update(float deltaTime, TileMap* map) {
 	//getKeyPresses();
 	
@@ -120,8 +120,119 @@ void Player::update(float deltaTime, TileMap* map) {
 	updateAnim();
 	updatePlayerTile(map);
 }
+*/
+void Player::update(float deltaTime, TileMapmk2* map) {
+	//getKeyPresses();
 
+	moveDir = sf::Vector2f(0, 0);
+	switch (state) {
+		// nominal = walking or idle
+	case State::nominal:
+		if (upPressed) {
+			walkNorth();
+		}
+		if (downPressed) {
+			walkSouth();
+		}
+		if (leftPressed) {
+			walkWest();
+		}
+		if (rightPressed) {
+			walkEast();
+		}
+		if (LMBPressed) {
+			attacking = true;
+		}
+		if (attacking) {
+			attacking = sword.swing(*pWindow);
+		}
+		if (spacePressed)
+			setState(State::dashing);
+		if (isDashing)
+			setState(State::dashing);
+		else
+			dashVel = sf::Vector2f(0, 0);
 
+		setFacing();
+		setAnimation();
+		// calculates the walking velocity and only applies it here if the state has not changed.
+		normalizeWalkVel();
+		walkVelocity = moveDir * walkSpeed * deltaTime;
+		//applyWalkFriction();
+		// * walkVelocity is now packed and ready for shipment... *
+		updateTrav();
+		if (state == State::nominal) {
+			finalVel = walkVelocity;
+			collisionCheckTile(map);
+			move(finalVel);
+			// walking or idle animations here
+			break;
+		}
+		//case State::cooldown: // cooldown from dashing or something else
+
+	case State::dashing:
+		// IF ERROR THEN CHANGE BACK:
+		// ** NOTE: replaced the dashTimer.getElapsed times with curDashTimer
+		int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
+		// protect from integer overflow
+		if (curDashTimer > 300000000) {
+			dashTimer.restart();
+		}
+		// *if player has passed cooldown
+		if (curDashTimer > dashCooldown) {
+			dashTimer.restart();
+
+			if (moveDir.x == 0 && moveDir.y == 0) {
+				prepDashVel = lastFacing;
+			}
+			else {
+				prepDashVel = moveDir;
+			}
+
+			//prepDashVel = moveDir;
+		}
+		// *checking if the speed should be increased
+		if (curDashTimer < dashSpeedTime) {
+
+			dashVel.x = prepDashVel.x * deltaTime * dashSpeed;
+			dashVel.y = prepDashVel.y * deltaTime * dashSpeed;
+			finalVel = walkVelocity + dashVel;
+			collisionCheckTile(map);
+			move(finalVel);
+			isDashing = true;
+		}
+		// if we hit a wall, dashing stops
+		if (dashVel.x == 0 && dashVel.y == 0)
+			isDashing = false;
+		// *if in dash cooldown phase
+		if (curDashTimer > dashSpeedTime && curDashTimer < dashCooldown) {
+			finalVel = walkVelocity;
+			collisionCheckTile(map);
+			move(finalVel);
+			isDashing = false;
+			setState(State::nominal);
+		}
+		else {
+			isDashing = true;
+			setState(State::nominal);
+		}
+
+		// if state = dashing then 
+		// have a dash clock that is local to the player class, everytime you are able to dash you update the dash class
+		// if dashtime > total dashtime as microseconds
+		// dash time = 0 and state = walking
+
+	//case State::deactivated:
+
+	//case State::dead:
+
+	//case State::invulnerable:
+	}
+	// finally, update the player's position on the map
+	sword.updatePos(getPosition());
+	updateAnim();
+	
+}
 
 void Player::setAnimation() {
 	// horizontal movement has priority over vertical movement
@@ -223,7 +334,8 @@ void Player::setDiagBool() {
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
 void Player::init() {
-	setHitBoxSize(sf::Vector2f(10.f, 10.f), sf::Vector2f(3.f, 6.f));
+	setHitBoxSize(sf::Vector2f(8.f, 8.f), sf::Vector2f(3.f, 6.f));
+
 	setOrigin(sf::Vector2f(8, 8));
 	// trav bools
 	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
@@ -254,9 +366,16 @@ void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
 	hitBoxOffset.y = offset.y;
 }
 // takes position (middle of player) and calculates the top and left coord of hitbox rect
+/*
 void Player::updateHitBox() {
 	hitBox.left = getPosition().x - hitBoxSize.x / 2 + hitBoxOffset.x;
 	hitBox.top = getPosition().y - hitBoxSize.y / 2 + hitBoxOffset.y;
+}
+*/
+
+void Player::updateHitBox() {
+	hitBox.left = getPosition().x - hitBox.width / 2;// + hitBoxOffset.x;
+	hitBox.top = getPosition().y - hitBox.height / 2 + hitBoxOffset.y;// +hitBoxOffset.y;
 }
 
 void Player::walkNorth() {
@@ -364,7 +483,7 @@ void Player::updatePlayerTile(TileMap* map) // update the curTile var for given 
 }
 
 // check for collision with collidable tiles in tilemap
-// NOTE: ??maybelater I will take a level object and check for collision there?
+/*
 void Player::collisionCheckTile(TileMap* map) {
 	int i = 0;
 	while (i < 2) {
@@ -452,7 +571,6 @@ void Player::collisionCheckTile(TileMap* map) {
 			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
 			finalVel.x = finalVel.x + (thisTile.getPosition().x - (tempHitBox.left + tempHitBox.width));
 		}
-
 		if (TL && BL) {
 			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top));
 			finalVel.x = finalVel.x + ((thisTile.getPosition().x + map->tileSize.x) - tempHitBox.left);
@@ -464,6 +582,112 @@ void Player::collisionCheckTile(TileMap* map) {
 		if (BL && BR) {
 			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
 			finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y);
+		}
+		i++;
+	}
+}
+*/
+void Player::collisionCheckTile(TileMapmk2* map) {
+	int i = 0;
+	while (i < 2) {
+		updateHitBox();
+		sf::FloatRect tempHitBox(hitBox.left + finalVel.x, hitBox.top + finalVel.y, hitBox.width, hitBox.height);
+		bool TL, TR, BL, BR;
+		//UPDATE CORNER BOOLS by passing in their location and checking if the tile they reside on is collidable
+
+		if (tempHitBox.left < 0 || tempHitBox.left > map->getMapDimTiles().x * map->getTileSize())
+			return;
+		if (tempHitBox.top < 0 || tempHitBox.top > map->getMapDimTiles().y * map->getTileSize())
+			return;
+		if (tempHitBox.left + tempHitBox.width < 0 || tempHitBox.left + tempHitBox.width > map->getMapDimTiles().x * map->getTileSize())
+			return;
+		if (tempHitBox.top + tempHitBox.height < 0 || tempHitBox.top + tempHitBox.height > map->getMapDimTiles().y * map->getTileSize())
+			return;
+
+		// if top left corner intersects a collidable tile.
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 1)
+			TL = true;
+		else
+			TL = false;
+		// if top right intersects a collidable tile.
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 1)
+			TR = true;
+		else
+			TR = false;
+		// if bottom left intersects a collidable tile.
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 1)
+			BL = true;
+		else
+			BL = false;
+		// if bottom right intersects a collidable tile.
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 1)
+			BR = true;
+		else
+			BR = false;
+
+		// Corner cases involve corrected the player movement by the smaller distance(between x and y) to get out of tile bounds
+		if (TL && !TR && !BL && !BR) {
+			sf::Vector2f tilePos(map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top)));
+			//Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top));
+			if ((tilePos.y + map->getTileSize()) - tempHitBox.top > (tilePos.x + map->getTileSize()) - tempHitBox.left) {
+				finalVel.x = finalVel.x + ((tilePos.x + map->getTileSize()) - tempHitBox.left);
+				moveDir.x = 0;
+			}
+			else {
+				finalVel.y = finalVel.y + ((tilePos.y + map->getTileSize()) - tempHitBox.top);
+				// NOTE: when finished, remove moveDir.n = 0, this is already done
+				moveDir.y = 0;
+			}
+		}
+		if (TR && !TL && !BL && !BR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
+			if ((tilePos.y + map->getTileSize()) - tempHitBox.top > (tempHitBox.left + tempHitBox.width) - tilePos.x) {
+				finalVel.x = finalVel.x - ((tempHitBox.left + tempHitBox.width) - tilePos.x);
+				moveDir.x = 0;
+			}
+			else {
+				finalVel.y = finalVel.y + ((tilePos.y + map->getTileSize()) - tempHitBox.top);
+				moveDir.y = 0;
+			}
+		}
+		if (BR && !TL && !BL && !TR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height));
+			if ((tempHitBox.top + tempHitBox.height) - tilePos.y > (tempHitBox.left + tempHitBox.width) - tilePos.x) {
+				finalVel.x = finalVel.x - ((tempHitBox.left + tempHitBox.width) - tilePos.x);
+				moveDir.x = 0;
+			}
+			else {
+				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
+				moveDir.y = 0;
+			}
+		}
+		if (BL && !TL && !TR && !BR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
+			if ((tempHitBox.top + tempHitBox.height) - tilePos.y > (tilePos.x + map->getTileSize()) - tempHitBox.left) {
+				finalVel.x = finalVel.x - (tempHitBox.left - (tilePos.x + map->getTileSize()));
+				moveDir.x = 0;
+			}
+			else {
+				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
+				moveDir.y = 0;
+			}
+		}
+		if (TR && BR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
+			finalVel.x = finalVel.x + (tilePos.x - (tempHitBox.left + tempHitBox.width));
+		}
+
+		if (TL && BL) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top));
+			finalVel.x = finalVel.x + ((tilePos.x + map->getTileSize()) - tempHitBox.left);
+		}
+		if (TL && TR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top));
+			finalVel.y = finalVel.y + ((tilePos.y + map->getTileSize()) - tempHitBox.top);
+		}
+		if (BL && BR) {
+			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
+			finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
 		}
 		i++;
 	}

@@ -21,7 +21,7 @@ bool TileMapmk2::check(sf::Vector2f playerPos) {
 		return true;
 	}
 }
-
+// WIP
 void TileMapmk2::updateAnimations() {
 	return;
 }
@@ -67,6 +67,13 @@ void TileMapmk2::updateTexMap() {
 	mapTex.display();
 }
 
+int TileMapmk2::getTileLogic(sf::Vector2f playerPos) {
+	// player pos / tile size = current tile
+	// then I can use that to extract the value at that index in the logic grid
+	sf::Vector2i currentTile(static_cast<int>(playerPos.x) / tileSize, static_cast<int>(playerPos.y) / tileSize);
+	return (logicGrid[currentTile.x + currentTile.y * mapDimChunks.x * chunkSize]);
+}
+
 void TileMapmk2::updatePlayerChunk(sf::Vector2f playerPos) {
 	curChunk = worldToSection(playerPos.x, playerPos.y, chunkSize * tileSize);
 }
@@ -77,4 +84,20 @@ sf::Vector2i TileMapmk2::getPlayerChunk() {
 
 sf::RenderTexture* TileMapmk2::getMapTex() {
 	return &mapTex;
+}
+
+sf::Vector2i TileMapmk2::getMapDimTiles() {
+	return mapDimChunks * chunkSize;
+}
+
+int TileMapmk2::getTileSize() {
+	return tileSize;
+}
+
+sf::Vector2i TileMapmk2::getTileWithCoords(sf::Vector2f coords) {
+	return (sf::Vector2i(static_cast<int>(coords.x) / tileSize, static_cast<int>(coords.y) / tileSize));
+}
+
+sf::Vector2f TileMapmk2::getTilePos(sf::Vector2f coords) {
+	return (sf::Vector2f(coords.x - fmod(coords.x, tileSize), coords.y - fmod(coords.y, tileSize)));
 }
