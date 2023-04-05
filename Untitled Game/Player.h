@@ -141,16 +141,20 @@ private:
 	
 	// \/ yes
 	//float walkSpeed = 80.0f;
-	float walkSpeed = 200.f;
+	//float walkSpeed = 200.f;
+	float walkSpeed = 60.0f;
+
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
 	sf::Vector2f walkVelocity;
 	
 	//dashing specs
 	sf::Clock dashTimer;
+	//float dashSpeed = 275.f;
 	float dashSpeed = 275.f;
 	int dashCooldown = 1000;
-	int dashSpeedTime = 160;
+	//int dashSpeedTime = 160;
+	int dashSpeedTime = 140;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 

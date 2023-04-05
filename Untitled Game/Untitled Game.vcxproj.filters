@@ -69,6 +69,9 @@
     <ClCompile Include="TileMapmk2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ResManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -182,6 +185,9 @@
     <Image Include="Textures\heart.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\grassLands2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -238,6 +244,9 @@
     <ClInclude Include="MappingFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\test1.frag">
@@ -249,5 +258,6 @@
     <None Include="Shaders\light_test_vert.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Assets\Levels\MapFiles\test1.csv" />
   </ItemGroup>
 </Project>

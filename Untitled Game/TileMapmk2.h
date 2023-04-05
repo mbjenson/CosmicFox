@@ -12,7 +12,7 @@ public:
 	/*
 	creates a new tileMap
 	*/
-	TileMapmk2(int* _types, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture& _texSheet);
+	TileMapmk2(int* types1, int* types2, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2);
 
 	/*
 	Initializes the sf::renderTexture mapTex.
@@ -72,13 +72,16 @@ public:
 
 private:
 
-	int* tileTypes;
+	int* layer1Types;
+	int* layer2Types;
 	int* logicGrid;
 	sf::RenderTexture mapTex; // we will draw the textures for the tile map to this texture;
 	int tileSize = 16; // num pixels per tile where (x = tileSize, y = tileSize)
-	int chunkSize = 8; // num tiles per chunk where (x = chunkSize, y = chunkSize)
+	int chunkSize = 16; // num tiles per chunk where (x = chunkSize, y = chunkSize)
 	sf::Vector2i curChunk; // the player's current chuck in the world.
 	sf::Vector2i mapDimChunks; // the dimensions of the world in chunks.
-	sf::Texture texSheet;
+	sf::Texture* layer1Texture;
+	sf::Texture* layer2Texture;
+	//sf::Texture* layer3Texture;
 };
 

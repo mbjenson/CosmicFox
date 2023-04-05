@@ -1,10 +1,13 @@
 #include "TileMapmk2.h"
 
-TileMapmk2::TileMapmk2(int* types, int* logic, sf::Vector2i _mapDimChunks, sf::Texture& _tex) {
-	tileTypes = types;
+TileMapmk2::TileMapmk2(int* types1, int* types2, int* logic, sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2) {
+	layer1Types = types1;
+	layer2Types = types2;
 	logicGrid = logic;
 	mapDimChunks = _mapDimChunks;
-	texSheet = _tex;
+	layer1Texture = layer1;
+	layer2Texture = layer2;
+	//layer3Texture = layer3;
 }
 
 void TileMapmk2::init() {
@@ -27,7 +30,7 @@ void TileMapmk2::updateAnimations() {
 }
 
 int TileMapmk2::getTileTypeAt(int x, int y) {
-	return tileTypes[x + y * mapDimChunks.x * chunkSize];
+	return layer1Types[x + y * mapDimChunks.x * chunkSize];
 }
 
 void TileMapmk2::updateTexMap() {
@@ -57,11 +60,16 @@ void TileMapmk2::updateTexMap() {
 
 	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++){
 		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
-			int curTile = tileTypes[x + y * chunkSize * mapDimChunks.x];
-			sf::Sprite tempSpr(texSheet);
-			tempSpr.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
-			tempSpr.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
-			mapTex.draw(tempSpr);
+			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
+			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
+			sf::Sprite tempSpr1(*layer1Texture);
+			tempSpr1.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
+			tempSpr1.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+			sf::Sprite tempSpr2(*layer2Texture);
+			tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tileSize, tileSize, tileSize));
+			tempSpr2.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+			mapTex.draw(tempSpr1);
+			mapTex.draw(tempSpr2);
 		}
 	}
 	mapTex.display();
