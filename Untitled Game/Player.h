@@ -100,11 +100,18 @@ private:
 	void idleDownAnim();
 	void idleLeftAnim();
 	void idleRightAnim();
-	void dashRightAnim();
-	void dashLeftAnim();
-	void dashUpAnim();
-	void dashDownAnim();
+	
 
+	void dashAnimN();
+	void dashAnimNE();
+	void dashAnimE();
+	void dashAnimSE();
+	void dashAnimS();
+	void dashAnimSW();
+	void dashAnimW();
+	void dashAnimNW();
+
+	
 	// ** update these in a player.init() function that just sets these values
 	// the animations should all have the same runtime but different row number
 	// animation dimensions (which row on spriteSheet and how long each row is).
@@ -117,10 +124,16 @@ private:
 	sf::Vector2u idleDownAnimDim;
 	sf::Vector2u idleLeftAnimDim;
 	sf::Vector2u idleRightAnimDim;
-	sf::Vector2u dashLeftAnimDim;
-	sf::Vector2u dashRightAnimDim;
-	sf::Vector2u dashUpAnimDim;
-	sf::Vector2u dashDownAnimDim;
+
+	sf::Vector2u dashAnimDimN;
+	sf::Vector2u dashAnimDimNE;
+	sf::Vector2u dashAnimDimE;
+	sf::Vector2u dashAnimDimSE;
+	sf::Vector2u dashAnimDimS;
+	sf::Vector2u dashAnimDimSW;
+	sf::Vector2u dashAnimDimW;
+	sf::Vector2u dashAnimDimNW;
+
 
 	/*
 	* Effects #include effects.hpp
@@ -140,9 +153,9 @@ private:
 	*/
 	
 	// \/ yes
-	//float walkSpeed = 80.0f;
+	float walkSpeed = 85.0f;
 	//float walkSpeed = 200.f;
-	float walkSpeed = 60.0f;
+	//float walkSpeed = 75.0f;
 
 	void normalizeWalkVel();
 	sf::Vector2f moveDir;
@@ -151,10 +164,11 @@ private:
 	//dashing specs
 	sf::Clock dashTimer;
 	//float dashSpeed = 275.f;
-	float dashSpeed = 275.f;
-	int dashCooldown = 1000;
-	//int dashSpeedTime = 160;
-	int dashSpeedTime = 140;
+	float dashSpeed = 230.f;
+	//int dashCooldown = 1000;
+	int dashCooldown = 600;
+	int dashSpeedTime = 250;
+	//int dashSpeedTime = 140;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
@@ -211,8 +225,10 @@ private:
 	{
 		states.transform *= getTransform();
 		if (attacking) {
-			target.draw(sword);
 			
+			
+			//target.draw(sword.hBox);
+			target.draw(sword);
 		}
 		target.draw(tSprite, states);
 	}

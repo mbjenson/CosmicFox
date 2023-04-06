@@ -13,13 +13,13 @@ public:
 	creates a new tileMap
 	*/
 	TileMapmk2(int* types1, int* types2, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2);
-
+	//TileMapmk2(sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2);
 	/*
 	Initializes the sf::renderTexture mapTex.
-	will initialize the animated tiles for the map.
-	Loops through the array of ints which represents the tile types and if the tile type (an int)
-	Matches one of those that are said to be animated, the tile coord value for this tile is added to
-	the animatedTile array.
+	MAYBE: will initialize the animated tiles for the map.
+		Loops through the array of ints which represents the tile types and if the tile type (an int)
+		Matches one of those that are said to be animated, the tile coord value for this tile is added to
+		the animatedTile array.
 	*/
 	void init();		
 

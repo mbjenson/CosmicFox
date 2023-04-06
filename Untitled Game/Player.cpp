@@ -230,12 +230,50 @@ void Player::update(float deltaTime, TileMapmk2* map) {
 	}
 	// finally, update the player's position on the map
 	sword.updatePos(getPosition());
+	if (attacking)
+		sword.updateAnim();
+	else
+		sword.restartAnim();
 	updateAnim();
 	
 }
 
 void Player::setAnimation() {
 	// horizontal movement has priority over vertical movement
+	if (isDashing) {
+		if (dashVel.x == 0 && dashVel.y < 0) {
+			dashAnimN();
+			return;
+		}
+		if (dashVel.x > 0 && dashVel.y < 0) {
+			dashAnimNE();
+			return;
+		}
+		if (dashVel.x > 0 && dashVel.y == 0) {
+			dashAnimE();
+			return;
+		}
+		if (dashVel.x > 0 && dashVel.y > 0) {
+			dashAnimSE();
+			return;
+		}
+		if (dashVel.x == 0 && dashVel.y > 0) {
+			dashAnimS();
+			return;
+		}
+		if (dashVel.x < 0 && dashVel.y > 0) {
+			dashAnimSW();
+			return;
+		}
+		if (dashVel.x < 0 && dashVel.y == 0) {
+			dashAnimW();
+			return;
+		}
+		if (dashVel.x < 0 && dashVel.y < 0) {
+			dashAnimNW();
+			return;
+		}
+	}
 	if (moveDir.x == 0 && moveDir.y == 0) {
 		if (lastFacing.x == 1) {
 			idleRightAnim();
@@ -254,6 +292,7 @@ void Player::setAnimation() {
 			return;
 		}
 	}
+	
 	if (lastFacing.x == 1) {
 		wRightAnim();
 		return;
@@ -352,11 +391,21 @@ void Player::init() {
 	wDownAnimDim = sf::Vector2u(8, 4);
 	idleLeftAnimDim = sf::Vector2u(8, 5);
 	idleRightAnimDim = sf::Vector2u(8, 6);
-	idleUpAnimDim = sf::Vector2u(6, 7);
+	idleUpAnimDim = sf::Vector2u(8, 7);
+	dashAnimDimNE = sf::Vector2u(8, 8);
+	dashAnimDimNW = sf::Vector2u(8, 9);
+	dashAnimDimSW = sf::Vector2u(8, 10);
+	dashAnimDimSE = sf::Vector2u(8, 11);
+	dashAnimDimE = sf::Vector2u(8, 12);
+	dashAnimDimW = sf::Vector2u(8, 13);
+	dashAnimDimS = sf::Vector2u(8, 14);
+	dashAnimDimN = sf::Vector2u(8, 15);
+
 	//sword settup
-	swordTex.loadFromFile("Textures/slash1.png");
-	sword = Sword(swordTex, sf::Vector2u(32, 16), 1, 0, 0.f);
+	swordTex.loadFromFile("Textures/slashAnim2.png");
+	sword = Sword(swordTex, sf::Vector2u(32, 16), 8, 0, 30.f);
 	sword.initSword();
+	sword.setScale(1.15f,1.0f);
 }
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
@@ -431,17 +480,36 @@ void Player::idleLeftAnim() {
 void Player::idleRightAnim() {
 	Player::Animation::updateRow(idleRightAnimDim.y, idleRightAnimDim.x);
 }
-void Player::dashLeftAnim() {
-	Animation::updateRow(dashLeftAnimDim.y, dashLeftAnimDim.x);
+void Player::dashAnimN() {
+	Player::Animation::updateRow(dashAnimDimN.y, dashAnimDimN.x);
 }
-void Player::dashRightAnim() {
-	Animation::updateRow(dashRightAnimDim.y, dashRightAnimDim.x);
+
+void Player::dashAnimNE() {
+	Player::Animation::updateRow(dashAnimDimNE.y, dashAnimDimNE.x);
 }
-void Player::dashUpAnim() {
-	Animation::updateRow(dashUpAnimDim.y, dashUpAnimDim.x);
+
+void Player::dashAnimE() {
+	Player::Animation::updateRow(dashAnimDimE.y, dashAnimDimE.x);
 }
-void Player::dashDownAnim() {
-	Animation::updateRow(dashDownAnimDim.y, dashDownAnimDim.x);
+
+void Player::dashAnimSE() {
+	Player::Animation::updateRow(dashAnimDimSE.y, dashAnimDimSE.x);
+}
+
+void Player::dashAnimS() {
+	Player::Animation::updateRow(dashAnimDimS.y, dashAnimDimS.x);
+}
+
+void Player::dashAnimSW() {
+	Player::Animation::updateRow(dashAnimDimSW.y, dashAnimDimSW.x);
+}
+
+void Player::dashAnimW() {
+	Player::Animation::updateRow(dashAnimDimW.y, dashAnimDimW.x);
+}
+
+void Player::dashAnimNW() {
+	Player::Animation::updateRow(dashAnimDimNW.y, dashAnimDimNW.x);
 }
 
 void Player::updateTrav() {

@@ -8,6 +8,13 @@
 
 using namespace std;
 
+
+/*
+	Handles loading in resources int memeory from file.
+	Loads textures, sounds, shaders, maps, and other data
+*/
+
+/*
 std::vector<std::pair<std::string, std::vector<int>>> read_csv(std::string filename) {
 
 	std::vector<std::pair<std::string, std::vector<int>>> result;
@@ -48,19 +55,50 @@ std::vector<std::pair<std::string, std::vector<int>>> read_csv(std::string filen
 	myFile.close();
 	return result;
 }
+*/
+inline void read_ints(std::string file_name, int* writeTo) {
+	// create output from file stream object
+	std::ifstream myFile(file_name);
 
-void read_ints(std::string file_name) {
-	std::vector<int> v;
-	std::string line{};
-	std::ifstream f(file_name);
-	const char delim = 0;
+	std::string line, word;
+	int i = 0;
+	
+	if (myFile.is_open()) {
+		while (!myFile.eof()) {
 
+			// get individual line
+			getline(myFile, line);
+
+			// create stringstream object from line
+			stringstream s(line);
+
+			// choose delimeter
+			char delim = ',';
+
+			while (getline(s, word, delim)) {
+				if (word == " " || word == "\n" || word == "\t")
+					continue;
+				// converte string to int
+				int num = stoi(word);
+
+				// write int to array
+				writeTo[i] = num;
+				i++;
+			}
+		}
+		// close the file
+		myFile.close();
+	}
 }
 
-/*
-class ResManager
-{
-	
-};
 
+/*
+class ResHandler {
+public:
+
+
+private:
+
+
+};
 */

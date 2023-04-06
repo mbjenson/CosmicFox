@@ -17,6 +17,7 @@ void Sword::initSword() {
 	hBox.setPoint(6, sf::Vector2f(29, 16));
 	hBox.setOrigin(sf::Vector2f(16, 24));
 	setOrigin(sf::Vector2f(16, 22));
+	//hBox.setFillColor(sf::Color::Red);
 }
 
 void Sword::updatePos(sf::Vector2f playerPos) {

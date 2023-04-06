@@ -69,7 +69,10 @@
     <ClCompile Include="TileMapmk2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResManager.cpp">
+    <ClCompile Include="ResHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,6 +191,15 @@
     <Image Include="Textures\grassLands2.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\foxSpriteSheetmk2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\slashAnim1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\slashAnim2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -244,7 +256,10 @@
     <ClInclude Include="MappingFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResManager.h">
+    <ClInclude Include="ResHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -258,6 +273,20 @@
     <None Include="Shaders\light_test_vert.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Assets\Levels\MapFiles\test1.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer2.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\Fonts\Roboto-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Levels\MapFiles\stringTest1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

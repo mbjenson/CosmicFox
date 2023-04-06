@@ -155,10 +155,11 @@
     <ClCompile Include="HudElement.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="ResManager.cpp" />
+    <ClCompile Include="ResHandler.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -180,6 +181,7 @@
     <Image Include="Textures\foxIdleDown1.png" />
     <Image Include="Textures\foxIdleDown2.png" />
     <Image Include="Textures\foxSpriteSheetmk1.png" />
+    <Image Include="Textures\foxSpriteSheetmk2.png" />
     <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png" />
     <Image Include="Textures\grass.png" />
     <Image Include="Textures\grassalpha.png" />
@@ -194,6 +196,8 @@
     <Image Include="Textures\playerSquare.png" />
     <Image Include="Textures\shadowText.png" />
     <Image Include="Textures\slash1.png" />
+    <Image Include="Textures\slashAnim1.png" />
+    <Image Include="Textures\slashAnim2.png" />
     <Image Include="Textures\stonealpha.png" />
     <Image Include="Textures\stonealpha32.png" />
     <Image Include="Textures\stonealpha64.png" />
@@ -215,11 +219,12 @@
     <ClInclude Include="Hud.h" />
     <ClInclude Include="HudElement.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MappingFunctions.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
-    <ClInclude Include="ResManager.h" />
+    <ClInclude Include="ResHandler.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
@@ -227,10 +232,18 @@
     <ClInclude Include="_TileMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Levels\MapFiles\test1.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Shaders\light_test.frag" />
     <None Include="Shaders\light_test_vert.vert" />
     <None Include="Shaders\test1.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\Fonts\Roboto-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Levels\MapFiles\stringTest1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
