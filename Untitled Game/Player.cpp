@@ -402,10 +402,10 @@ void Player::init() {
 	dashAnimDimN = sf::Vector2u(8, 15);
 
 	//sword settup
-	swordTex.loadFromFile("Textures/slashAnim2.png");
-	sword = Sword(swordTex, sf::Vector2u(32, 16), 8, 0, 30.f);
+	swordTex.loadFromFile("Textures/swordCombo1.png");
+	sword = Sword(swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
 	sword.initSword();
-	sword.setScale(1.15f,1.0f);
+	//sword.setScale(1.15f,1.0f);
 }
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {

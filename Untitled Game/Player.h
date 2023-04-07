@@ -89,6 +89,7 @@ public:
 
 	void updatePWindow(sf::RenderWindow& win);
 
+	int maxHealth = 4;
 	int health = 4;
 private:
 	//animation functions that set the row number for the animation for the player

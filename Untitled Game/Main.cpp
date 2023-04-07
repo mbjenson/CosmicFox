@@ -18,28 +18,13 @@
 //#include <thread>
 
 using namespace std;
-// current goal:
+bool DEBUG;
 
 // implement a state system.
 //		1) game state will allow the user to play the game, pause the game, and show a blurred out version of visible screen in pause menu
 //		2) a main menu state that will allow the user to change the music volume, and adjust other things
 
-// have seperate event loop for menu and levels?
 // 
-//	RELEVANT:
-//	TODO:
-//	implement a system where objects are rendered from the top down meaning that if the player is behind something (they are cartesially
-//	above it) they will appear behind that object.
-//	TODO: make interactable tiles that be interacted with by the player
-//
-//  TODO: make render function load things into stack but store main map and data in the heap for efficiency
-
-//	TODO: make topdown render work
-//	NOTE: First I must change how things with height are rendered into the map.
-
-// fix walkUpAnim so that cape isnt open
-// fix animation class so that upanimation does not flicker when animation is different length
-// fix the idle up animation so that the tail goes to side and the cape is flater
 
 /*
 * NOTES:
@@ -55,33 +40,25 @@ using namespace std;
 * 
 * ->	Move collision check to the entity class
 * 
-* ->	the Tile* array uses 3000 spiteful bites in the stack... oh my... quickly move tilemap functionality to 
-*		TileMapmk2
 * 
 */
 
-// TODO:: make gaps in the earth that the player can fall through for the time being instead of having tall objects
-// TODO: make a shadow that basically gets the size of the hitbox of an entity and creates a shadow based on that.
-// TODO: add a cirle around the player and check or enemies that are in the circle and then
-//			check if sword hit them
-// TODO: create the hud class which will take one camera and player pointer
-//		and will then render the player's hud to the screen
+// TODO:
 
-// CURRENT TASK: ** fixing collision check in player.cpp to use tileMapmk2
-/* 
-* Fixing tilemap class.
-* 
-* Algorithm:	divide the tilemap up into 16x16 (or something similar) tile "chunks". Load in a 3x3 area of chunks 
-*				around the player, only redraw the map when the player moves outside the bounds of the center chunk.
-*				this means that we only have to redraw things very occasionally instead of every frame.
-* 
-* Side quest:	Make the collision check faster by adding continue statements where extra checks are not necessary
-*		
-* ERROR:		 When I change the chunkSize, it breaks and doesnt render properly
-* 
-* Check: the speed difference between stack allocated texture and heap allocated texture
-* 
-*/
+// first:	Move the collision check function to entity class:
+//			This will require that the "finalVel" vec is moved to the entity class.
+
+//  Entity shadows
+
+//  enemies:
+//		add enemy class to game
+//		add a cirle around the playerand check or enemies that are in the circle and then
+//		check if sword hit them.
+
+// Sword combo:
+//		add to sword class a function that will allow for 3 different hboxes maybe.
+//		make it so that when you use the sword, you are slowed and move forward slightly
+//		make the sword combo 3 things long.
 
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -119,15 +96,17 @@ string roundedString(int numPlaces, float x) {
 void processEvents(sf::RenderWindow& window) {
 	sf::Event event;
 	while (window.pollEvent(event)) {
-		if (event.type == sf::Event::Closed) {
+		switch (event.type) {
+		case sf::Event::Closed:
 			window.close();
-		}
-		if (event.type == sf::Event::LostFocus) {
+		case sf::Event::LostFocus:
 			window.setFramerateLimit(5);
-		}
-		if (event.type == sf::Event::GainedFocus) {
-			// disables the limit
+		case sf::Event::GainedFocus:
 			window.setFramerateLimit(0);
+		case sf::Event::KeyReleased:
+			if (event.key.code == sf::Keyboard::G) {
+				DEBUG ^= true;
+			}
 		}
 	}
 }
@@ -138,6 +117,7 @@ int main() {
 
 	bool gameState = true;
 
+
 	sf::Vector2f winDim(2048, 1024);
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
 
@@ -146,7 +126,7 @@ int main() {
 	//camera.zoom(0.20f);
 	camera.zoom(0.24f);
 	//camera.zoom(1.f);
-	
+
 	sf::Font roboto;
 	if (!roboto.loadFromFile("Assets/Fonts/Roboto-Regular.ttf")) {
 		return -1;
@@ -156,7 +136,7 @@ int main() {
 	winText.setCharacterSize(10);
 	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
-	
+
 	// the terrain tilemap
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands2.png"))
@@ -165,12 +145,12 @@ int main() {
 	sf::Texture* terrain2 = new sf::Texture();
 	if (!terrain2->loadFromFile("Textures/grassLands2.png"))
 		return -1;
-	
+
 	// setting up the tilemapmk2
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
 		return -1;
-
+	sf::Event ev;
 	sf::Texture foxShadow;
 	if (!foxShadow.loadFromFile("Textures/shadowText.png"))
 		return -1;
@@ -180,15 +160,15 @@ int main() {
 	p1.setPosition(sf::Vector2f(150.f, 150.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
-	
-	int *logicGrid2 = new int[2304];
+
+	int* logicGrid2 = new int[2304];
 	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
 	int* tileTypes1 = new int[2304];
 	read_ints("Assets/Levels/MapFiles/Map1Layer1.csv", tileTypes1);
 	int* tileTypes2 = new int[2304];
 	read_ints("assets/Levels/MapFiles/Map1Layer2.csv", tileTypes2);
 	sf::Vector2i mapDimChunks1(3, 3);
-	
+
 	TileMapmk2* newMap = new TileMapmk2(tileTypes1, tileTypes2, logicGrid2, mapDimChunks1, terrain1, terrain2);
 	//TileMapmk2* newMap = new TileMapmk2(tileTypes1, tileTypes2, logicGrid1, mapDimChunks1, terrain1, terrain2);
 	newMap->init();
@@ -196,7 +176,7 @@ int main() {
 	newMap->updateTexMap();
 
 	int hey1 = sizeof(*newMap);
-	
+
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -206,11 +186,11 @@ int main() {
 		if (gameState) {
 			setKeyPressesKBD(p1);
 			window.clear();
-			
+
 			p1.update(dt, newMap);
 			camera.update(p1, dt);
 			window.setView(camera);
-			
+
 			if (newMap->check(p1.getPosition())) {
 				newMap->updateTexMap();
 				newMap->updatePlayerChunk(p1.getPosition());
@@ -221,34 +201,35 @@ int main() {
 			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
 			window.draw(shadowSprite);
 			window.draw(p1);
+
 			
-
-
-			string xPlayerCord = roundedString(2, p1.getPosition().x);
-			string yPlayerCord = roundedString(2, p1.getPosition().y);
-
-			winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2, camera.getCenter().y + 5 - camera.getSize().y / 2));
-			winText.setString("x = " + xPlayerCord);
-			window.draw(winText);
-
-			winText.setString("\ny = " + yPlayerCord);
-			window.draw(winText);
 			
-			winText.setString("\n\nxVel = " + roundedString(3, p1.getFinalVel().x) + "\nyVel = " + roundedString(3, p1.getFinalVel().y));
-			window.draw(winText);
+			if (DEBUG) {
 
+				string xPlayerCord = roundedString(2, p1.getPosition().x);
+				string yPlayerCord = roundedString(2, p1.getPosition().y);
 
-			winText.setString("\n\n\n\nDashTimer: " + to_string(p1.getDashTimer()));
-			window.draw(winText);
+				winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2, camera.getCenter().y + 5 - camera.getSize().y / 2));
+				winText.setString("x = " + xPlayerCord);
+				window.draw(winText);
 
-			winText.setString("\n\n\n\n\nDashVelx = " + roundedString(3, p1.getDashVel().x) +
-				"\nDashVely = " + roundedString(3, p1.getDashVel().y));
-			window.draw(winText);
+				winText.setString("\ny = " + yPlayerCord);
+				window.draw(winText);
 
-			winText.setString("\n\n\n\n\n\n\nFacingx = " + to_string(p1.getFacing().x) +
-				"\nFacingy = " + to_string(p1.getFacing().y));
-			window.draw(winText);
+				winText.setString("\n\nxVel = " + roundedString(3, p1.getFinalVel().x) + "\nyVel = " + roundedString(3, p1.getFinalVel().y));
+				window.draw(winText);
 
+				winText.setString("\n\n\n\nDashTimer: " + to_string(p1.getDashTimer()));
+				window.draw(winText);
+
+				winText.setString("\n\n\n\n\nDashVelx = " + roundedString(3, p1.getDashVel().x) +
+					"\nDashVely = " + roundedString(3, p1.getDashVel().y));
+				window.draw(winText);
+
+				winText.setString("\n\n\n\n\n\n\nFacingx = " + to_string(p1.getFacing().x) +
+					"\nFacingy = " + to_string(p1.getFacing().y));
+				window.draw(winText);
+			}
 
 			window.display();
 		}

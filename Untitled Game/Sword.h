@@ -21,7 +21,7 @@ private:
 	sf::Clock swordTimer;
 	float curAngle;
 	int cooldown = 300;
-	int swingTime = 200;
+	int swingTime = 120;
 	int damage = 1;
 	// a reference to a level here so that I can create a check function that checks if the sword is hitting any enemies
 	

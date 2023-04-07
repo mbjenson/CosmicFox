@@ -201,6 +201,7 @@
     <Image Include="Textures\stonealpha.png" />
     <Image Include="Textures\stonealpha32.png" />
     <Image Include="Textures\stonealpha64.png" />
+    <Image Include="Textures\swordCombo1.png" />
     <Image Include="Textures\terrainsheet2mk2.png" />
     <Image Include="Textures\terrainSheettestone16x32.png" />
     <Image Include="Textures\testLevelMap.png" />
