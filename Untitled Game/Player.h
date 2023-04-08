@@ -1,7 +1,6 @@
 #pragma once
 #include "Entity.h"
 #include "TileMap.h"
-#include "TileMapmk2.h"
 #include "Sword.h"
 #include <math.h>
 
@@ -29,7 +28,7 @@ public:
 	
 	//main update function for the player
 	//void update(float deltaTime, TileMap* map);
-	void update(float deltaTime, TileMapmk2* map);
+	void update(float deltaTime, TileMap* map);
 	// allowed movements
 	bool northAllowed = true;
 	bool eastAllowed = true;
@@ -58,10 +57,10 @@ public:
 	//attacking
 	bool attacking;
 	
-	void updatePlayerTile(TileMap* map); // update the curTile var for given map
+	//void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
 	//void collisionCheckTile(TileMap* map);
-	void collisionCheckTile(TileMapmk2* map);
+	void collisionCheckTile(TileMap* map);
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	
@@ -154,7 +153,7 @@ private:
 	*/
 	
 	// \/ yes
-	float walkSpeed = 85.0f;
+	float walkSpeed = 80.0f;
 	//float walkSpeed = 200.f;
 	//float walkSpeed = 75.0f;
 
@@ -165,7 +164,7 @@ private:
 	//dashing specs
 	sf::Clock dashTimer;
 	//float dashSpeed = 275.f;
-	float dashSpeed = 230.f;
+	float dashSpeed = 200.f;
 	//int dashCooldown = 1000;
 	int dashCooldown = 600;
 	int dashSpeedTime = 250;
@@ -213,6 +212,8 @@ private:
 	Sword sword;
 	sf::Texture swordTex;
 
+	sf::Sprite shadow;
+
 	
 
 	float playerAngle;
@@ -226,8 +227,6 @@ private:
 	{
 		states.transform *= getTransform();
 		if (attacking) {
-			
-			
 			//target.draw(sword.hBox);
 			target.draw(sword);
 		}

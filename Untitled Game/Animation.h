@@ -21,7 +21,7 @@ public:
 	int rowLen;
 	int rowNum;
 	sf::Vector2u tDim;
-	sf::IntRect texRect;	
+	sf::IntRect texRect;
 
 private:
 

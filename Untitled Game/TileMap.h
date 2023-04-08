@@ -1,95 +1,101 @@
 #pragma once
-#include <SFML/graphics.hpp>
-#include "Tile.h"
-/*
+#include <SFML/Graphics.hpp>
+#include "MappingFunctions.h"
 
-provide function that can render a certain number of tiles around the player.
-
-* Contains map of tiles in a grid
-* Contains a logical grid that has collisions for static objects
-* 
-* NOTE: tiles will render at a certain region around the player as to reduce graphical load.	
-* 
-*/
-
-
-
-
-class TileMap : private Tile
+// to animate tiles, we will take a pointer to an array of tiles. then, each time we update the mapTex we can
+// go into the array of isAnimated tiles and update each one,
+class TileMap
 {
 public:
-	TileMap();
-
-	TileMap(sf::Vector2i _mapSize, int* _tileTypes, int* _logGrid,
-			sf::Texture& textureSheet, sf::Vector2u _tileSize);
-
-	TileMap(int numTileTypes, Tile* _tilesArr, sf::Vector2i _mapSize, int* _tileTypes, int* _logGrid, sf::Vector2u _tileSize);
-
-	~TileMap();
-
-	void render(sf::Vector2i curTile, sf::RenderWindow& win, sf::Vector2i _rendSize);
-	void renderAll(sf::RenderWindow& win);
-	// whichRow is the coordinate of the row
-	//		if i want a row two above i input -2
-	void renderRow(sf::Vector2i curTile, int whichRow, sf::Vector2i, sf::RenderWindow& win);
-	void renderOne(sf::RenderWindow& win, int x, int y);
-
-	sf::Vector2u tileSize;
-	//visual grid
-	std::vector<Tile> tileV;
-	//logic grid
-	
-	sf::Vector2i mapSize;
-
-	Tile getTileAt(int x, int y);
-	Tile getTileWithPoints(sf::Vector2f cords);
-
-private:
-
-	int* tileTypes;	
-	sf::Texture texSheet;
-	Tile* tilesArr;
-	int numTileTypes;
-
-};
-
-
 
 	/*
-	functionality:
-		create a tilemap:
-			The tilemap will be a vector of tiles, each containing details about collisions,
-			textures, animations, lighting, etc...
-			The tile map would need to take a pointer to an array of integers that 
-			specify which types of tile we will use at each spot.
-			
-			
-	  
-		load a portion of the tilemap to screen (draw):
-			To load an entire tilemap is not good practice and results in stress on the gpu.
-			A solution to this is to only render a certain area of a designated size around the player.
-			
-			Method 1)
-					Use the deconstructor for the tile class to deconstruct any tiles that are no
-					long in range of the player. Find the indecies that are within the range of the
-					player and create new Tile obects (if necessary) and render them to screen.
-					Here we must also load the logic map to the screen, the same way wed render the tiles
-			
-			Method 2)
-					Assuming the tilemap is small enough, we can load everything into memory and only
-					draw the parts of the map that are visible to the player like we would above.
-					This is easier but requires more gpu stress. This means that every tile,
-					along with its animation/static texture, collision, vertex array, etc, will be
-					loaded into memory and only certain parts of it will be draw.
-		
-			Method 3)
-					This method is a combination of the first two. Here we will load a larger area into
-					memory, and access the things inside of that area which would be faster because
-					we wouldn't have deconstruct and construct so many tiles. It would be moderately efficient
-					in gpu usage.
-	
+	creates a new tileMap
+	*/
+	TileMap(int* types1, int* types2, int* types3, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2, sf::Texture* layer3);
+	//TileMapmk2(sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2);
+	/*
+	Initializes the sf::renderTexture mapTex.
+	MAYBE: will initialize the animated tiles for the map.
+		Loops through the array of ints which represents the tile types and if the tile type (an int)
+		Matches one of those that are said to be animated, the tile coord value for this tile is added to
+		the animatedTile array.
+	*/
+	void init();		
+
+	/*
+	loops through the animatedTiles array and updates each of those tiles animations 1 frame over.
+	I will have a universal tick rate that updates the animated tiles in the tilemap.
+	and the animated tiles will be drawn on top of their old selves when this runs.
+	*/
+	void updateAnimations();
+
+	/*
+	Loops through the *tileTypes array and grab the texture from the corresponding array
+	of actual tiles. This texture is drawn onto the renderTexture. This render texture is static and allows
+	for very fast loading of the game.
+	*/
+	void updateTexMap();
+	void updateTexMap(sf::IntRect drawArea);
+	/*
+	Checks for the players coordinates to see if they have left the current chunk.
+	If they have, sets the current chunk that the player is within the map. 
+	*/
+	bool checkForUpdate(sf::Vector2f playerPos);
+
+	/*
+	Perhaps a draw function for an 'Animated Layer' of tiles
 	*/
 	
+	
+	// updates the player's current chunk
+	void updatePlayerChunk(sf::Vector2f playerPos);
 
+	// get curChunk
+	sf::Vector2i getPlayerChunk();
 
+	// returns the tile logic specified in the logicGrid given a player's position
+	int getTileLogic(sf::Vector2f playerPos);
+
+	// gets the tileType at a given location
+	int getLayer1TypeAt(int x, int y);
+
+	// get mapTex
+	sf::RenderTexture* getMapTex();
+
+	// get mapDimensions in tiles
+	sf::Vector2i getMapDimTiles();
+
+	// get tileSize
+	int getTileSize();
+
+	// get a tile's top left corner position with floating point coordinates
+	sf::Vector2f getTilePos(sf::Vector2f coords);
+
+	// get a which tile coords are located
+	sf::Vector2i getTileWithCoords(sf::Vector2f coords);
+
+	
+
+	int* layer1Types;
+	int* layer2Types;
+	int* layer3Types;
+
+	int* logicGrid;
+	sf::RenderTexture mapTex; // we will draw the textures for the tile map to this texture;
+	int tileSize = 16; // num pixels per tile where (x = tileSize, y = tileSize)
+	int chunkSize = 16; // num tiles per chunk where (x = chunkSize, y = chunkSize)
+	sf::Vector2i curChunk; // the player's current chuck in the world.
+	sf::Vector2i mapDimChunks; // the dimensions of the world in chunks.
+	sf::Texture* layer1Texture;
+	sf::Texture* layer2Texture;
+	sf::Texture* layer3Texture;
+
+	// the different texture dimensions for the non-square textures that will be rendered.
+	sf::IntRect texDim1;
+	sf::IntRect texDim2;
+	sf::IntRect texDim3;
+	sf::IntRect texDim4;
+	sf::IntRect texDim5;
+	sf::IntRect texDim6;
+};
 

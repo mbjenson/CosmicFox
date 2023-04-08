@@ -1,219 +1,183 @@
 #include "TileMap.h"
 
-
-
-
-TileMap::TileMap(int _numTileTypes, Tile* _tilesArr, sf::Vector2i _mapSize, int* _tileTypes, int* _logGrid, sf::Vector2u _tileSize)
-{
-	mapSize = _mapSize; //num tiles in map
-	tileTypes = _tileTypes; //array of digits that will represent each tile type
-	tileSize = _tileSize; //the pixel size of each tile eg. (32x32)
-	tileV.resize(_mapSize.x * _mapSize.y);
-	tilesArr = _tilesArr;
-	numTileTypes = _numTileTypes;
-	
-	for (int y = 0; y < mapSize.y; y++)
-	{
-		for (int x = 0; x < mapSize.x; x++)
-		{
-			for (int z = 0; z < _numTileTypes; z++) {
-				if (tileTypes[x + y * mapSize.x] == z) {
-					Tile curTile = tilesArr[z];
-					curTile.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-					curTile.collidable = _logGrid[x + y * mapSize.x];
-					tileV.at(x + y * mapSize.x) = curTile;
-				}
-			}
-		}
-	}
+TileMap::TileMap(	int* types1, int* types2, int* types3, int* logic, sf::Vector2i _mapDimChunks, 
+					sf::Texture* layer1, sf::Texture* layer2, sf::Texture* layer3) {
+	layer1Types = types1;
+	layer2Types = types2;
+	layer3Types = types3;
+	logicGrid = logic;
+	mapDimChunks = _mapDimChunks;
+	layer1Texture = layer1;
+	layer2Texture = layer2;
+	layer3Texture = layer3;
+	// layer3Logic = layer3log[]
 }
 
-TileMap::~TileMap() {}
+void TileMap::init() {
+	mapTex.create(mapDimChunks.x * chunkSize * tileSize, mapDimChunks.y * chunkSize * tileSize);
 
-void TileMap::render(sf::Vector2i curTile, sf::RenderWindow& win, sf::Vector2i _rendSize)
-{
-	//curTile is updated in main and passed in
-	sf::IntRect rendArea;
-	//calculating the bounds of rendering
-	rendArea.left = curTile.x - _rendSize.x;
-	rendArea.top = curTile.y - _rendSize.y;
-	rendArea.width = (_rendSize.x * 2) + 1;
-	rendArea.height = (_rendSize.y * 2) + 1;
-
-	//issue: mixing indexes and numerical values in arithmetic
-
-	if (curTile.x - _rendSize.x < 0) 
-	{
-		rendArea.left = 0;
-		rendArea.width = rendArea.width + (curTile.x - _rendSize.x);
-	}
-	if (curTile.x + _rendSize.x > mapSize.x - 1) // -1 to mapsize to make it an index
-	{
-		rendArea.width = rendArea.width - (_rendSize.x - ((mapSize.x - 1) - curTile.x));
-	}
-	if (curTile.y - _rendSize.y < 0) 
-	{
-		rendArea.top = 0;
-		rendArea.height = rendArea.height + (curTile.y - _rendSize.y);
-	}
-	if (curTile.y + _rendSize.y > mapSize.y - 1)
-	{
-		rendArea.height = rendArea.height - (_rendSize.y - ((mapSize.y - 1) - curTile.y));
-	}
-
-	for (int y = rendArea.top; y < rendArea.top + rendArea.height; y++)
-	{
-		for (int x = rendArea.left; x < rendArea.left + rendArea.width; x++)
-		{
-			int tileIndex = x + y * mapSize.x;
-			if (tileIndex >= 0 && tileIndex <= (mapSize.x) * (mapSize.y))
-				//updateAnim()
-				win.draw(tileV.at(tileIndex));
-		}
-	}
 }
 
-void TileMap::renderAll(sf::RenderWindow& win) {
-	for (int y = 0; y < mapSize.y; y++) {
-		for (int x = 0; x < mapSize.x; x++) {
-			win.draw(getTileAt(x, y));
-		}
+bool TileMap::checkForUpdate(sf::Vector2f playerPos) {
+	sf::Vector2i newChunk(worldToSection(playerPos.x, playerPos.y, chunkSize * tileSize));
+	if (curChunk == newChunk) {
+		return false;
+	}
+	else {
+		curChunk = newChunk;
+		return true;
 	}
 }
-
-void TileMap::renderRow(sf::Vector2i curTile, int whichRow, sf::Vector2i _rendSize, sf::RenderWindow& win)
-{
-	//curTile is updated in main and passed in
-	// here pass in (1, desired horizontal render width)
-	sf::IntRect rendArea;
-	//calculating the bounds of rendering
-	rendArea.left = curTile.x - _rendSize.x;
-	// whcih row is indux
-	rendArea.top = curTile.y - _rendSize.y + whichRow;
-	rendArea.width = (_rendSize.x * 2) + 1;
-	rendArea.height = 1;
-	
-	if (curTile.x - _rendSize.x < 0)
-	{
-		rendArea.left = 0;
-		rendArea.width = rendArea.width + (curTile.x - _rendSize.x);
-	}
-	if (curTile.x + _rendSize.x > mapSize.x - 1) // -1 to mapsize to make it an index
-	{
-		rendArea.width = rendArea.width - (_rendSize.x - ((mapSize.x - 1) - curTile.x));
-	}
-	if (curTile.y - _rendSize.y + whichRow < 0)
-	{
-		return;
-	}
-	if (curTile.y - _rendSize.y + whichRow > mapSize.y - 1)
-	{
-		return;
-	}
-	if (whichRow > _rendSize.y * 2) {
-		return;
-	}
-
-	int rowNum = curTile.y - _rendSize.y + whichRow;
-
-	for (int x = rendArea.left; x < rendArea.left + rendArea.width; x++) {
-		int tileIndex = x + rowNum * mapSize.x;
-		if (tileIndex >= 0 && tileIndex <= (mapSize.x) * (mapSize.y)) {
-			win.draw(getTileAt(x, rowNum));
-		}
-	}
+// WIP
+void TileMap::updateAnimations() {
+	return;
 }
 
-void TileMap::renderOne(sf::RenderWindow& win, int x, int y) {
-	win.draw(getTileAt(x, y));
+int TileMap::getLayer1TypeAt(int x, int y) {
+	return layer1Types[x + y * mapDimChunks.x * chunkSize];
 }
-
-Tile TileMap::getTileAt(int x, int y)
-{
-	return tileV.at(x + y * mapSize.x);
-}
-
-Tile TileMap::getTileWithPoints(sf::Vector2f cords) {
-	return getTileAt(int(floor(cords.x / tileSize.x)), int(floor(cords.y / tileSize.y)));
-}
-
 /*
-//ABOSULTE PEICE OF BLABBING SHITE CONSTRUCTOR
-TileMap::TileMap(	sf::Vector2i _mapSize, int* _tileTypes, int*_logGrid,
-					sf::Texture& textureSheet, sf::Vector2u _tileSize)
-{
-	mapSize = _mapSize; //num tiles in map
-	tileTypes = _tileTypes; //array of digits that will represent each tile type
-	tileSize = _tileSize; //the pixel size of each tile eg. (32x32)
-	tileV.resize(_mapSize.x * _mapSize.y);
-	texSheet = textureSheet;
+void TileMap::drawTopLayer(sf::Vector2f playerPos) {
+	sf::IntRect drawArea(curChunk.x - 1, curChunk.y - 1, 3, 3);
+	
+	if (curChunk.x == 0) {
+		drawArea.left = 0;
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == 0) {
+		drawArea.top = 0;
+		drawArea.height -= 1;
+	}
+	if (curChunk.x == mapDimChunks.x - 1) {
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == mapDimChunks.y - 1) {
+		drawArea.height -= 1;
+	}
+	if (curChunk.x < 0 || curChunk.x > mapDimChunks.x - 1 || curChunk.y < 0 || curChunk.y > mapDimChunks.y - 1)
+		return;
 
-	bool tempBool = false;
-	//init the tiles we will use
+	drawArea = sf::IntRect(drawArea.left * chunkSize, drawArea.top * chunkSize,
+		drawArea.width * chunkSize, drawArea.height * chunkSize);
 
-	grass = Tile(texSheet, false, 1, 0, 0.f);
-	grassStone = Tile(texSheet, false, 1, 1, 0.f);
-	stoneWall = Tile(texSheet, false, 1, 2, 0.f);
-	stone = Tile(texSheet, false, 1, 3, 0.f);
-	stairsR = Tile(texSheet, false, 1, 4, 0.f);
-	stairsL = Tile(texSheet, false, 1, 5, 0.f);
+	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++) {
+		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
+			int curTile3 = layer3Types[x + y * chunkSize * mapDimChunks.x];
+			sf::Sprite tempSpr3(*layer3Texture);
+			tempSpr3.setTextureRect(sf::IntRect(0, curTile3 * tileSize * 2, tileSize, tileSize * 2));
+			tempSpr3.setPosition(sf::Vector2f(x * tileSize, (y * tileSize) - tileSize));
+			if (static_cast<int>(playerPos.x) == x && static_cast<int>(playerPos.y) == y) {
 
-	for (int y = 0; y < mapSize.y; y++)
-	{
-		for (int x = 0; x < mapSize.x; x++)
-		{
-			if (_logGrid[x + y * mapSize.x] == 0)
-				tempBool = false;
-			if (_logGrid[x + y * mapSize.x] == 1)
-				tempBool = true;
-
-			//below code is inefficient and bad redo it later
-			if (tileTypes[x + y * mapSize.x] == 0)
-			{
-				Tile grassC = grass;
-				grassC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				grassC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = grassC;
 			}
-			if (tileTypes[x + y * mapSize.x] == 1)
-			{
-				Tile grassStoneC = grassStone;
-				grassStoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				grassStoneC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = grassStoneC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 2)
-			{
-				Tile stoneWallC = stoneWall;
-				stoneWallC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stoneWallC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stoneWallC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 3)
-			{
-				Tile stoneC = stone;
-				stoneC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stoneC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stoneC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 4)
-			{
-				Tile stairsRC = stairsR;
-				stairsRC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stairsRC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stairsRC;
-			}
-			if (tileTypes[x + y * mapSize.x] == 5)
-			{
-				Tile stairsLC = stairsL;
-				stairsLC.setPosition(sf::Vector2f(tileSize.x * x, tileSize.y * y));
-				stairsLC.collidable = tempBool;
-				tileV.at(x + y * mapSize.x) = stairsLC;
-			}
-
+			mapTex.draw(tempSpr3);
 		}
 	}
-
 }
 */
 
+// depricated, now use the level.h file to draw things and whatNot
+void TileMap::updateTexMap() {
+	mapTex.clear();
+	// Firstly, check bounds for render rect.
+	sf::IntRect drawArea(curChunk.x - 1, curChunk.y - 1, 3, 3);
+	if (curChunk.x == 0) {
+		drawArea.left = 0;
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == 0) {
+		drawArea.top = 0;
+		drawArea.height -= 1;
+	}
+	if (curChunk.x == mapDimChunks.x - 1) {
+		drawArea.width -= 1;
+	}
+	if (curChunk.y == mapDimChunks.y - 1) {
+		drawArea.height -= 1;
+	}
+	if (curChunk.x < 0 || curChunk.x > mapDimChunks.x - 1 || curChunk.y < 0 || curChunk.y > mapDimChunks.y - 1)
+		return;
+	//Secondly, go to top left of chunkDrawArea and convert it to world coordinates
+	//converting to tile coordinates
+	drawArea = sf::IntRect(	drawArea.left * chunkSize, drawArea.top * chunkSize,
+							drawArea.width * chunkSize, drawArea.height * chunkSize);
+
+	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++){
+		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
+			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
+			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
+			
+
+			sf::Sprite tempSpr1(*layer1Texture);
+			tempSpr1.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
+			tempSpr1.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+
+			sf::Sprite tempSpr2(*layer2Texture);
+			tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tileSize, tileSize, tileSize));
+			tempSpr2.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+
+			
+
+			mapTex.draw(tempSpr1);
+			mapTex.draw(tempSpr2);
+			
+		}
+	}
+	mapTex.display();
+}
+
+void TileMap::updateTexMap(sf::IntRect drawArea) {
+	mapTex.clear();
+	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++) {
+		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
+			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
+			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
+
+			sf::Sprite tempSpr1(*layer1Texture);
+			tempSpr1.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
+			tempSpr1.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+
+			sf::Sprite tempSpr2(*layer2Texture);
+			tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tileSize, tileSize, tileSize));
+			tempSpr2.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
+
+			mapTex.draw(tempSpr1);
+			mapTex.draw(tempSpr2);
+		}
+	}
+	mapTex.display();
+}
+
+int TileMap::getTileLogic(sf::Vector2f playerPos) {
+	// player pos / tile size = current tile
+	// then I can use that to extract the value at that index in the logic grid
+	sf::Vector2i currentTile(static_cast<int>(playerPos.x) / tileSize, static_cast<int>(playerPos.y) / tileSize);
+	return (logicGrid[currentTile.x + currentTile.y * mapDimChunks.x * chunkSize]);
+}
+
+void TileMap::updatePlayerChunk(sf::Vector2f playerPos) {
+	curChunk = worldToSection(playerPos.x, playerPos.y, chunkSize * tileSize);
+}
+
+sf::Vector2i TileMap::getPlayerChunk() {
+	return curChunk;
+}
+
+sf::RenderTexture* TileMap::getMapTex() {
+	return &mapTex;
+}
+
+sf::Vector2i TileMap::getMapDimTiles() {
+	return mapDimChunks * chunkSize;
+}
+
+int TileMap::getTileSize() {
+	return tileSize;
+}
+
+sf::Vector2i TileMap::getTileWithCoords(sf::Vector2f coords) {
+	return (sf::Vector2i(static_cast<int>(coords.x) / tileSize, static_cast<int>(coords.y) / tileSize));
+}
+
+sf::Vector2f TileMap::getTilePos(sf::Vector2f coords) {
+	return (sf::Vector2f(coords.x - fmod(coords.x, tileSize), coords.y - fmod(coords.y, tileSize)));
+}

@@ -36,7 +36,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap.cpp">
+    <ClCompile Include="TileMapOld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
@@ -66,13 +66,19 @@
     <ClCompile Include="HudBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TileMapmk2.cpp">
+    <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractableMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GrassLandsLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,6 +209,12 @@
     <Image Include="Textures\swordCombo1.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\rockTowerSmall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Rocks1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -223,7 +235,7 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap.h">
+    <ClInclude Include="TileMapOld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -253,7 +265,7 @@
     <ClInclude Include="HudBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileMapmk2.h">
+    <ClInclude Include="TileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MappingFunctions.h">
@@ -265,6 +277,12 @@
     <ClInclude Include="MapEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InteractableMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GrassLandsLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\test1.frag">
@@ -273,14 +291,12 @@
     <None Include="Shaders\light_test.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Shaders\light_test_vert.vert">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf">

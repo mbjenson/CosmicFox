@@ -121,7 +121,7 @@ void Player::update(float deltaTime, TileMap* map) {
 	updatePlayerTile(map);
 }
 */
-void Player::update(float deltaTime, TileMapmk2* map) {
+void Player::update(float deltaTime, TileMap* map) {
 	//getKeyPresses();
 
 	moveDir = sf::Vector2f(0, 0);
@@ -400,7 +400,8 @@ void Player::init() {
 	dashAnimDimW = sf::Vector2u(8, 13);
 	dashAnimDimS = sf::Vector2u(8, 14);
 	dashAnimDimN = sf::Vector2u(8, 15);
-
+	//
+	
 	//sword settup
 	swordTex.loadFromFile("Textures/swordCombo1.png");
 	sword = Sword(swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
@@ -533,6 +534,7 @@ void Player::updateTrav() {
 }
 
 // updates player's rotation to face the mouse
+// ** deprecated **
 void Player::updateRotMouse()
 {
 	sf::Vector2i mousePixelPos = sf::Mouse::getPosition(*pWindow);
@@ -545,10 +547,7 @@ void Player::updateRotMouse()
 }
 
 // updates the player's current tile
-void Player::updatePlayerTile(TileMap* map) // update the curTile var for given map in index form
-{
-	curTile = sf::Vector2i(int(floor(getPosition().x / map->tileSize.x)), int(floor(getPosition().y / map->tileSize.y)));
-}
+
 
 // check for collision with collidable tiles in tilemap
 /*
@@ -655,7 +654,7 @@ void Player::collisionCheckTile(TileMap* map) {
 	}
 }
 */
-void Player::collisionCheckTile(TileMapmk2* map) {
+void Player::collisionCheckTile(TileMap* map) {
 	int i = 0;
 	while (i < 2) {
 		updateHitBox();

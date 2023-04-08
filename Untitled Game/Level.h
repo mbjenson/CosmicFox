@@ -1,7 +1,26 @@
 #pragma once
-class Level
+
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include "TileMap.h"
+#include "Player.h"
+
+
+/*
+	Generic level class that can be provided with player*. contains the tileMap and necessary things for a specific level
+*/
+class Level 
 {
-	// this class will contain a unique tilemap, enemies, sounds, and other things
-	// this will be loaded into the game.cpp file which will be run in main at some point
+public:
+
+	void render(sf::RenderWindow& win);
+	//int init(); declare an innit function for each Version of the level that inits all components of the Level
+	
+	TileMap* tileMap;
+	// interactable map from TileMap;
+	Player* player; // get needed infomation about player status for tileMap
+	
+	// enemy map stuff
+	// sound map stuff
 };
 

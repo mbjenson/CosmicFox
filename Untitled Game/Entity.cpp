@@ -7,3 +7,4 @@ Entity::Entity(sf::Texture& texSheet, sf::Vector2u textureDim, int rowLength, in
 {
 	
 }
+

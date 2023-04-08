@@ -150,9 +150,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GrassLandsLevel.cpp" />
     <ClCompile Include="HudBar.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="HudElement.cpp" />
+    <ClCompile Include="InteractableMap.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapEditor.cpp" />
@@ -162,8 +164,8 @@
     <ClCompile Include="ResHandler.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileMapOld.cpp" />
     <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="TileMapmk2.cpp" />
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,8 @@
     <Image Include="Textures\linkscaled.png" />
     <Image Include="Textures\playerCube16.png" />
     <Image Include="Textures\playerSquare.png" />
+    <Image Include="Textures\Rocks1.png" />
+    <Image Include="Textures\rockTowerSmall.png" />
     <Image Include="Textures\shadowText.png" />
     <Image Include="Textures\slash1.png" />
     <Image Include="Textures\slashAnim1.png" />
@@ -216,9 +220,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GrassLandsLevel.h" />
     <ClInclude Include="HudBar.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="HudElement.h" />
+    <ClInclude Include="InteractableMap.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MappingFunctions.h" />
@@ -228,16 +234,16 @@
     <ClInclude Include="ResHandler.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileMapOld.h" />
     <ClInclude Include="TileMap.h" />
-    <ClInclude Include="TileMapmk2.h" />
     <ClInclude Include="_TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Shaders\light_test.frag" />
-    <None Include="Shaders\light_test_vert.vert" />
     <None Include="Shaders\test1.frag" />
   </ItemGroup>
   <ItemGroup>

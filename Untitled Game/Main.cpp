@@ -2,15 +2,16 @@
 #include <SFML/graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
+
 #include "Player.h"
 #include "Animation.h"
 #include "Tile.h"
 #include "Camera.h"
-#include "TileMap.h"
 #include "Sword.h"
 #include "HudBar.h"
-#include "TileMapmk2.h"
+#include "TileMap.h"
 #include "ResHandler.h"
+#include "GrassLandsLevel.h"
 
 #include <fstream>
 #include <math.h>
@@ -60,6 +61,18 @@ bool DEBUG;
 //		make it so that when you use the sword, you are slowed and move forward slightly
 //		make the sword combo 3 things long.
 
+// GOOD \/
+// create a class that has a texure* and an intRect for textureRect and a hBox for hitBox size.
+// This class will allow us to have collisions and object functionily seperate from the tileMap class.
+// this class will work very similarly to the tileMap in that it will have a int[] to represent what is drawn where and
+// will read this to determine that. Except, instead of drawing to a static texture, we drawn sprites individually to the screen
+// while checking for the player and enemy position in order to properly convey things being behind other things and vise versa.
+
+// CURRENTLY:
+// 1) add a shadow sprite to the player class and add the draw target.draw(shadow) to the virtual void draw function the player.h file
+// 2) Fixing: loading chunk bug when using the level.cpp to load in the grass lands
+// 3) make grassLandsLevel an object that can load it's data in with init and can replace all cluttered code in main.cpp for the grasslands level
+
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 	player.downPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
@@ -68,19 +81,6 @@ void setKeyPressesKBD(Player& player) {
 	player.spacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 	player.LMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	player.RMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Right);
-}
-
-// takes the maps and renders everything one row at a time
-// maybe move this to a level.hpp file that handles all the maps and player and enemy date and put renderTopDown() there?
-void renderTopDown(sf::Vector2i renderSize, sf::RenderWindow& win, TileMap *layer1, TileMap *layer2, Player *p1) {
-	// basically, all assets in the game are rendered in relation to the player to simulate a sense of depth,
-	// bottom layer is rendered first always (ground).
-	// then we draw things in row by row starting with the top row.
-	// if the player is on the row we are currently drawing in, we draw the player aswell.
-	// if they are in the canopy layer, they are rendered last.
-	for (int i = 0; i < renderSize.y * 2; i++) {
-		// this function is currently impossible with how I have the game map 
-	}
 }
 
 // takes a float and the desired places and returns a string version of the float rounded to numPlaces
@@ -111,8 +111,36 @@ void processEvents(sf::RenderWindow& window) {
 	}
 }
 
+int main() {
+	sf::Vector2f winDim(2048, 1024);
+	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
 
-
+	sf::Shader shader;
+	if (!shader.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment)) {
+		return -1;
+	}
+	sf::Texture black;
+	if (!black.loadFromFile("Textures/black.png")) {
+		return -1;
+	}
+	sf::Sprite box(black);
+	
+	sf::Texture screen;
+	screen.create(winDim.x, winDim.y);
+	sf::Sprite windowS(screen);
+	sf::Clock mainClock;
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed())
+				window.close();
+		}
+		window.clear();
+		window.draw(windowS, &shader);
+		window.display();
+	}
+}
+/*
 int main() {
 
 	bool gameState = true;
@@ -146,6 +174,9 @@ int main() {
 	if (!terrain2->loadFromFile("Textures/grassLands2.png"))
 		return -1;
 
+	sf::Texture* rocks = new sf::Texture();
+	if (!rocks->loadFromFile("Textures/rocks1.png"))
+		return -1;
 	// setting up the tilemapmk2
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
@@ -167,16 +198,22 @@ int main() {
 	read_ints("Assets/Levels/MapFiles/Map1Layer1.csv", tileTypes1);
 	int* tileTypes2 = new int[2304];
 	read_ints("assets/Levels/MapFiles/Map1Layer2.csv", tileTypes2);
+	int* tileTypes3 = new int[2304];
+	read_ints("assets/Levels/MapFiles/Map1Layer3.csv", tileTypes3);
 	sf::Vector2i mapDimChunks1(3, 3);
 
-	TileMapmk2* newMap = new TileMapmk2(tileTypes1, tileTypes2, logicGrid2, mapDimChunks1, terrain1, terrain2);
+	TileMap* newMap = new TileMap(	tileTypes1, tileTypes2, tileTypes3, logicGrid2,
+									mapDimChunks1, terrain1, terrain2, rocks);
 	//TileMapmk2* newMap = new TileMapmk2(tileTypes1, tileTypes2, logicGrid1, mapDimChunks1, terrain1, terrain2);
 	newMap->init();
 	newMap->updatePlayerChunk(p1.getPosition());
 	newMap->updateTexMap();
 
+	GrassLandsLevel level1;
+	level1.init(newMap, &p1);
+	
 	int hey1 = sizeof(*newMap);
-
+	int hey2 = sizeof(Player::Animation);
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -190,19 +227,19 @@ int main() {
 			p1.update(dt, newMap);
 			camera.update(p1, dt);
 			window.setView(camera);
-
-			if (newMap->check(p1.getPosition())) {
-				newMap->updateTexMap();
-				newMap->updatePlayerChunk(p1.getPosition());
-			}
-			sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
-
-			window.draw(mapSprite);
-			shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
-			window.draw(shadowSprite);
-			window.draw(p1);
-
 			
+			//if (newMap->checkForUpdate(p1.getPosition())) {
+			//	newMap->updateTexMap();
+			//	newMap->updatePlayerChunk(p1.getPosition());
+			//}
+			//sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
+
+			//window.draw(mapSprite);
+			//shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
+			//window.draw(shadowSprite);
+			//window.draw(p1);
+			
+			level1.render(window);
 			
 			if (DEBUG) {
 
@@ -237,7 +274,7 @@ int main() {
 	return 0;
 }
 
-
+*/
 
 // TODO:
 // ?? maybe not needed because I am going to have a 16x16 sprite anyway

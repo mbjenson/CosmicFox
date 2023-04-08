@@ -3,23 +3,19 @@ precision mediump float;
 #endif
 
 uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_time;
 
-
-float circle(in vec2 _st, in float _radius){
-    vec2 dist = _st-vec2(0.5);
-	return 1.-smoothstep(_radius-(_radius*0.01),
-                         _radius+(_radius*1.5),
-                         dot(dist,dist)*6.0);
+float circleShape(vec2 position, float radius){
+	return step(radius, length(position - vec2(0.5)));
 }
 
-void main(){
-	float rad = 5.0;
-	vec2 resolution = vec2(rad, rad);
-	vec2 st = gl_FragCoord.xy/u_resolution.xy;
+void main() {
+	vec2 position = gl_FragCoord.xy / u_resolution;
 
-	vec3 color = vec3(circle(st,0.384));
+	vec3 color = vec3(0.0);
 
-	gl_FragColor = vec4( color, 0.1 );
+	float circle = circleShape(position, 0.2);
+
+	color = vec3(circle);
+
+	gl_FragColor = vec4(color, 1.0);
 }

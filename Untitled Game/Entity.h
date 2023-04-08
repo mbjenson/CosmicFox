@@ -12,6 +12,9 @@ public:
 	Entity();
 	~Entity();
 	
+	// a function that takes in the hitBox of another entity and sees if the convex shape of sword has hit it.
+	// can only check if a floatrect has intersected with the convex sword hBox so we must check it in the player/ enemy classes
+	
 	sf::FloatRect hitBox;
 	int health;
 };
