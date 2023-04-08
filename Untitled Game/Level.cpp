@@ -1,30 +1,6 @@
 #include "Level.h"
 
 void Level::render(sf::RenderWindow& win) {
-	// Firstly, check bounds for render area.
-	sf::IntRect drawArea(tileMap->curChunk.x - 1, tileMap->curChunk.y - 1, 3, 3);
-	if (tileMap->curChunk.x == 0) {
-		drawArea.left = 0;
-		drawArea.width -= 1;
-	}
-	if (tileMap->curChunk.y == 0) {
-		drawArea.top = 0;
-		drawArea.height -= 1;
-	}
-	if (tileMap->curChunk.x == tileMap->mapDimChunks.x - 1) {
-		drawArea.width -= 1;
-	}
-	if (tileMap->curChunk.y == tileMap->mapDimChunks.y - 1) {
-		drawArea.height -= 1;
-	}
-	if (tileMap->curChunk.x < 0 || tileMap->curChunk.x > tileMap->mapDimChunks.x - 1 || tileMap->curChunk.y < 0 || tileMap->curChunk.y > tileMap->mapDimChunks.y - 1)
-		return;
-
-	//secondly, go to top left of chunkDrawArea and convert it to world coordinates
-	//converting to tile coordinates
-	drawArea = sf::IntRect(drawArea.left * tileMap->chunkSize, drawArea.top * tileMap->chunkSize,
-		drawArea.width * tileMap->chunkSize, drawArea.height * tileMap->chunkSize);
-	// now, in this draw area, we draw the player, the enemies, the tiles, and other things
 
 	// UPDATING AND DRAWING
 
@@ -34,10 +10,9 @@ void Level::render(sf::RenderWindow& win) {
 	// BASE LAYER:
 	// fourth we check if we need to update base map. the base map is made up of two layers, the "floor", and the "carpet" essentially.
 	if (tileMap->checkForUpdate(player->getPosition())) {
-		tileMap->updateTexMap(drawArea);
+		tileMap->updateTexMap();
 		tileMap->updatePlayerChunk(player->getPosition());
 	}
-	
 	sf::Sprite mapSprite(tileMap->mapTex.getTexture());
 	win.draw(mapSprite);
 
@@ -47,20 +22,37 @@ void Level::render(sf::RenderWindow& win) {
 	//						objects can go in front or behind the interactable tiles.
 
 	sf::Vector2i playerPos(static_cast<int>(player->getPosition().x), static_cast<int>(player->getPosition().y));
-	for (int y = 0; y < tileMap->getMapDimTiles().y; y++) {
-		for (int x = 0; x < tileMap->getMapDimTiles().x; x++) {
+	for (int y = tileMap->curDrawArea.top; y < tileMap->curDrawArea.height + tileMap->curDrawArea.top; y++) {
+		for (int x = tileMap->curDrawArea.left; x < tileMap->curDrawArea.width + tileMap->curDrawArea.left; x++) {
+			if ((playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+				win.draw(*player);
+			}
+			/*
 			if ((playerPos.x - playerPos.x % tileMap->tileSize) / tileMap->tileSize == x && (playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y)
 				win.draw(*player);
+				*/
 			if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 0)
 				continue;
 			else {
+				sf::Sprite tempSpr(*tileMap->layer3Texture);
+				// sf::Clock animTimer;
+				// use this animTimer to check if tiles should move to the next frame in the animation
+				
+				// These are specific dimensioins for the interactable layer spriteSheet.
+				// Later change this so that these tiles can be animated
 				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 1) {
-					sf::Sprite tempSpr(*tileMap->layer3Texture);
 					tempSpr.setTextureRect(tileMap->texDim1);
-					// the '- 13' and '- 24' exist so that we draw the sprite from the bottom middle of structure up.
-					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize +13, y * tileMap->tileSize +24));
-					//tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize - 13, y * tileMap->tileSize - 24));
-
+					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - 4));
+					win.draw(tempSpr);
+				}
+				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 2) {
+					tempSpr.setTextureRect(tileMap->texDim2);
+					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - tileMap->tileSize - 2));
+					win.draw(tempSpr);
+				}
+				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 3) {
+					tempSpr.setTextureRect(tileMap->texDim3);
+					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - tileMap->tileSize));
 					win.draw(tempSpr);
 				}
 			}

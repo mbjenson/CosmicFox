@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "TileMap.h"
 #include "Player.h"
-
+#include "ResHandler.h"
 
 /*
 	Generic level class that can be provided with player*. contains the tileMap and necessary things for a specific level

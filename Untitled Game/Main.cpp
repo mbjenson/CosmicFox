@@ -52,26 +52,21 @@ bool DEBUG;
 //  Entity shadows
 
 //  enemies:
-//		add enemy class to game
-//		add a cirle around the playerand check or enemies that are in the circle and then
-//		check if sword hit them.
+//		Add enemy class to game
+//		In the level class, have a component that handles all the enemies in the game.
+//		To efficiently check enemy positions around player, an array must be used.
+//		In this array, 0 represents empty space while numbers > 0 represent different types of enemies.
+//		When I pushback the vector of entities / enemies in my game, have a way to update the array of positions.
 
 // Sword combo:
 //		add to sword class a function that will allow for 3 different hboxes maybe.
 //		make it so that when you use the sword, you are slowed and move forward slightly
 //		make the sword combo 3 things long.
 
-// GOOD \/
-// create a class that has a texure* and an intRect for textureRect and a hBox for hitBox size.
-// This class will allow us to have collisions and object functionily seperate from the tileMap class.
-// this class will work very similarly to the tileMap in that it will have a int[] to represent what is drawn where and
-// will read this to determine that. Except, instead of drawing to a static texture, we drawn sprites individually to the screen
-// while checking for the player and enemy position in order to properly convey things being behind other things and vise versa.
-
-// CURRENTLY:
-// 1) add a shadow sprite to the player class and add the draw target.draw(shadow) to the virtual void draw function the player.h file
-// 2) Fixing: loading chunk bug when using the level.cpp to load in the grass lands
-// 3) make grassLandsLevel an object that can load it's data in with init and can replace all cluttered code in main.cpp for the grasslands level
+// LightMap
+// implement a light map system that is used when rendering the screen. Draw a black rectanlge over the whole screen and apply a shader to it
+//	that cooperates with the light map.
+// Implement lighting for different objects. Check out Saved web article by Matt Greer: https://mattgreer.dev/blog/dynamic-lighting-and-shadows/
 
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -96,21 +91,21 @@ string roundedString(int numPlaces, float x) {
 void processEvents(sf::RenderWindow& window) {
 	sf::Event event;
 	while (window.pollEvent(event)) {
-		switch (event.type) {
-		case sf::Event::Closed:
+		if (event.type == sf::Event::Closed)
 			window.close();
-		case sf::Event::LostFocus:
+		if (event.type == sf::Event::LostFocus)
 			window.setFramerateLimit(5);
-		case sf::Event::GainedFocus:
+		if (event.type == sf::Event::GainedFocus)
 			window.setFramerateLimit(0);
-		case sf::Event::KeyReleased:
+		if (event.type == sf::Event::KeyReleased){
 			if (event.key.code == sf::Keyboard::G) {
 				DEBUG ^= true;
 			}
 		}
 	}
 }
-
+// this is temp main function for when I want to test other things 
+/*
 int main() {
 	sf::Vector2f winDim(2048, 1024);
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
@@ -140,18 +135,17 @@ int main() {
 		window.display();
 	}
 }
-/*
+*/
+
 int main() {
 
 	bool gameState = true;
-
 
 	sf::Vector2f winDim(2048, 1024);
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
 
 	Camera camera;
 	camera.setSize(sf::Vector2f(1280, 720));
-	//camera.zoom(0.20f);
 	camera.zoom(0.24f);
 	//camera.zoom(1.f);
 
@@ -165,6 +159,19 @@ int main() {
 	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
 
+	sf::Texture fox;
+	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
+		return -1;
+	sf::Texture foxShadow;
+	if (!foxShadow.loadFromFile("Textures/shadowText.png"))
+		return -1;
+	sf::Sprite shadowSprite(foxShadow);
+
+	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
+	p1.setPosition(sf::Vector2f(150.f, 150.f));
+	p1.init();
+	p1.setState(Player::State::nominal);
+	/*
 	// the terrain tilemap
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands2.png"))
@@ -178,19 +185,7 @@ int main() {
 	if (!rocks->loadFromFile("Textures/rocks1.png"))
 		return -1;
 	// setting up the tilemapmk2
-	sf::Texture fox;
-	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
-		return -1;
-	sf::Event ev;
-	sf::Texture foxShadow;
-	if (!foxShadow.loadFromFile("Textures/shadowText.png"))
-		return -1;
-	sf::Sprite shadowSprite(foxShadow);
-
-	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setPosition(sf::Vector2f(150.f, 150.f));
-	p1.init();
-	p1.setState(Player::State::nominal);
+	
 
 	int* logicGrid2 = new int[2304];
 	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
@@ -211,9 +206,11 @@ int main() {
 
 	GrassLandsLevel level1;
 	level1.init(newMap, &p1);
-	
-	int hey1 = sizeof(*newMap);
-	int hey2 = sizeof(Player::Animation);
+	*/
+
+	GrassLandsLevel newLevel;
+	newLevel.init(&p1);
+
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -224,7 +221,7 @@ int main() {
 			setKeyPressesKBD(p1);
 			window.clear();
 
-			p1.update(dt, newMap);
+			p1.update(dt, newLevel.tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
 			
@@ -239,7 +236,7 @@ int main() {
 			//window.draw(shadowSprite);
 			//window.draw(p1);
 			
-			level1.render(window);
+			newLevel.render(window);
 			
 			if (DEBUG) {
 
@@ -274,7 +271,7 @@ int main() {
 	return 0;
 }
 
-*/
+
 
 // TODO:
 // ?? maybe not needed because I am going to have a 16x16 sprite anyway

@@ -164,7 +164,7 @@ private:
 	//dashing specs
 	sf::Clock dashTimer;
 	//float dashSpeed = 275.f;
-	float dashSpeed = 200.f;
+	float dashSpeed = 180.f;
 	//int dashCooldown = 1000;
 	int dashCooldown = 600;
 	int dashSpeedTime = 250;
@@ -228,8 +228,14 @@ private:
 		states.transform *= getTransform();
 		if (attacking) {
 			//target.draw(sword.hBox);
+			
 			target.draw(sword);
 		}
+		//sf::RectangleShape hitBoxdraw(sf::Vector2f(8.f, 6.f));
+		//hitBoxdraw.setFillColor(sf::Color::Red);
+		//hitBoxdraw.setPosition(sf::Vector2f(hitBox.left, hitBox.top));
+		//target.draw(hitBoxdraw);
+		
 		target.draw(tSprite, states);
 	}
 };

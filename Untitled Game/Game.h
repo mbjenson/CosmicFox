@@ -21,5 +21,6 @@ public:
 private:
 
 	sf::RenderWindow GAME_WINDOW;
-	
+	Camera camera;
+
 };

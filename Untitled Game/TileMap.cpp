@@ -100,13 +100,12 @@ void TileMap::updateTexMap() {
 	//converting to tile coordinates
 	drawArea = sf::IntRect(	drawArea.left * chunkSize, drawArea.top * chunkSize,
 							drawArea.width * chunkSize, drawArea.height * chunkSize);
-
+	
 	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++){
 		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
 			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
 			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
 			
-
 			sf::Sprite tempSpr1(*layer1Texture);
 			tempSpr1.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
 			tempSpr1.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
@@ -115,13 +114,11 @@ void TileMap::updateTexMap() {
 			tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tileSize, tileSize, tileSize));
 			tempSpr2.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
 
-			
-
 			mapTex.draw(tempSpr1);
 			mapTex.draw(tempSpr2);
-			
 		}
 	}
+	curDrawArea = drawArea;
 	mapTex.display();
 }
 

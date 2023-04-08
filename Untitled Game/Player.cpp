@@ -121,6 +121,7 @@ void Player::update(float deltaTime, TileMap* map) {
 	updatePlayerTile(map);
 }
 */
+// good Update
 void Player::update(float deltaTime, TileMap* map) {
 	//getKeyPresses();
 
@@ -168,17 +169,15 @@ void Player::update(float deltaTime, TileMap* map) {
 			// walking or idle animations here
 			break;
 		}
-		//case State::cooldown: // cooldown from dashing or something else
+		//case State::cooldown: // cooldown from dashing or attacking or something else
 
 	case State::dashing:
-		// IF ERROR THEN CHANGE BACK:
-		// ** NOTE: replaced the dashTimer.getElapsed times with curDashTimer
 		int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
 		// protect from integer overflow
 		if (curDashTimer > 300000000) {
 			dashTimer.restart();
 		}
-		// *if player has passed cooldown
+		// if player has passed cooldown
 		if (curDashTimer > dashCooldown) {
 			dashTimer.restart();
 
@@ -188,8 +187,6 @@ void Player::update(float deltaTime, TileMap* map) {
 			else {
 				prepDashVel = moveDir;
 			}
-
-			//prepDashVel = moveDir;
 		}
 		// *checking if the speed should be increased
 		if (curDashTimer < dashSpeedTime) {
@@ -222,11 +219,15 @@ void Player::update(float deltaTime, TileMap* map) {
 		// if dashtime > total dashtime as microseconds
 		// dash time = 0 and state = walking
 
+	// case State::injured:
+		// effect: flashing
+
 	//case State::deactivated:
 
 	//case State::dead:
 
 	//case State::invulnerable:
+		// effect: greyed out or flashing
 	}
 	// finally, update the player's position on the map
 	sword.updatePos(getPosition());
@@ -373,7 +374,7 @@ void Player::setDiagBool() {
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
 void Player::init() {
-	setHitBoxSize(sf::Vector2f(8.f, 8.f), sf::Vector2f(3.f, 6.f));
+	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 4.f));
 
 	setOrigin(sf::Vector2f(8, 8));
 	// trav bools
@@ -407,6 +408,7 @@ void Player::init() {
 	sword = Sword(swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
 	sword.initSword();
 	//sword.setScale(1.15f,1.0f);
+
 }
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {

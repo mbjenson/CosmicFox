@@ -90,6 +90,8 @@ public:
 	sf::Texture* layer2Texture;
 	sf::Texture* layer3Texture;
 
+	sf::IntRect curDrawArea;
+
 	// the different texture dimensions for the non-square textures that will be rendered.
 	sf::IntRect texDim1;
 	sf::IntRect texDim2;
