@@ -10,8 +10,8 @@ public:
 	void render(sf::RenderWindow& win, int quantity);
 	
 private:
-	Camera* camera;
 	void update();
+	Camera* camera;
 	sf::Sprite hSprite;
 	sf::Vector2f screenPos;
 };

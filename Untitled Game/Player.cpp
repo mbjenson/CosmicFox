@@ -236,7 +236,7 @@ void Player::update(float deltaTime, TileMap* map) {
 	else
 		sword.restartAnim();
 	updateAnim();
-	
+	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 4));
 }
 
 void Player::setAnimation() {
@@ -402,10 +402,11 @@ void Player::init() {
 	dashAnimDimS = sf::Vector2u(8, 14);
 	dashAnimDimN = sf::Vector2u(8, 15);
 	//
-	
+	shadowTex.loadFromFile("Textures/playerShadow.png");
+	shadowSprite.setTexture(shadowTex);
 	//sword settup
 	swordTex.loadFromFile("Textures/swordCombo1.png");
-	sword = Sword(swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
+	sword = Sword(17, sf::Vector2f(16, 22), swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
 	sword.initSword();
 	//sword.setScale(1.15f,1.0f);
 
@@ -707,6 +708,7 @@ void Player::collisionCheckTile(TileMap* map) {
 				// NOTE: when finished, remove moveDir.n = 0, this is already done
 				moveDir.y = 0;
 			}
+			
 		}
 		if (TR && !TL && !BL && !BR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
@@ -718,6 +720,7 @@ void Player::collisionCheckTile(TileMap* map) {
 				finalVel.y = finalVel.y + ((tilePos.y + map->getTileSize()) - tempHitBox.top);
 				moveDir.y = 0;
 			}
+			
 		}
 		if (BR && !TL && !BL && !TR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height));
@@ -729,6 +732,7 @@ void Player::collisionCheckTile(TileMap* map) {
 				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
 				moveDir.y = 0;
 			}
+			
 		}
 		if (BL && !TL && !TR && !BR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
@@ -740,23 +744,27 @@ void Player::collisionCheckTile(TileMap* map) {
 				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
 				moveDir.y = 0;
 			}
+			
 		}
 		if (TR && BR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
 			finalVel.x = finalVel.x + (tilePos.x - (tempHitBox.left + tempHitBox.width));
+			
 		}
-
 		if (TL && BL) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top));
 			finalVel.x = finalVel.x + ((tilePos.x + map->getTileSize()) - tempHitBox.left);
+			
 		}
 		if (TL && TR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top));
 			finalVel.y = finalVel.y + ((tilePos.y + map->getTileSize()) - tempHitBox.top);
+			
 		}
 		if (BL && BR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
 			finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - tilePos.y);
+			
 		}
 		i++;
 	}

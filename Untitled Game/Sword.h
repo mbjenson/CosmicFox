@@ -7,10 +7,15 @@ class Sword : public Animation
 {
 	// this will contain the necessary code for a sword in the game
 public:
-	Sword(sf::Texture& texSheet, sf::Vector2u texDim, int rowLen, int rowNum, float animTime);
+	Sword(float _radius, sf::Vector2f _drawOffSet, sf::Texture& texSheet, sf::Vector2u texDim, int rowLen, int rowNum, float animTime);
 	Sword();
-	sf::ConvexShape hBox;
+	sf::CircleShape circleHBox;
+	//sf::ConvexShape hBox;
+	// this box cuts the circle hit box in half so it is properly the size of the sword swing. I cheated
+	sf::RectangleShape notBox;
 	void initSword();
+	void initSwordOld();
+	bool checkHit(sf::FloatRect);
 	// returns true if the swing is successful
 	bool swing(sf::RenderWindow& win);
 	void updatePos(sf::Vector2f playerPos);
@@ -19,10 +24,13 @@ public:
 
 private:
 	sf::Clock swordTimer;
-	float curAngle;
+	float curAngle = 0;
 	int cooldown = 300;
 	int swingTime = 120;
 	int damage = 1;
+	float radius;
+	sf::Vector2f drawOffSet;
+	bool containsPoint(sf::Vector2f point);
 	// a reference to a level here so that I can create a check function that checks if the sword is hitting any enemies
 	
 	// initialize hitbox with shape and origin, (not for game loop)    

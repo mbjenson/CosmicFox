@@ -18,14 +18,6 @@ public:
 	void walkEast();
 	void walkSouth();
 	void walkWest();
-	
-
-	/*
-	* Dashing Mechanics:
-	* The dash will be performed in the direction the player is facing.
-	* the Direction the player is facing will be updated each frame.
-	*/
-	
 	//main update function for the player
 	//void update(float deltaTime, TileMap* map);
 	void update(float deltaTime, TileMap* map);
@@ -56,7 +48,6 @@ public:
 	bool RMBPressed;
 	//attacking
 	bool attacking;
-	
 	//void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
 	//void collisionCheckTile(TileMap* map);
@@ -90,6 +81,12 @@ public:
 
 	int maxHealth = 4;
 	int health = 4;
+
+	Sword sword;
+	sf::Texture swordTex;
+	sf::Texture shadowTex;
+	sf::Sprite shadowSprite;
+	
 private:
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
@@ -209,11 +206,6 @@ private:
 
 	State state;
 
-	Sword sword;
-	sf::Texture swordTex;
-
-	sf::Sprite shadow;
-
 	
 
 	float playerAngle;
@@ -226,16 +218,16 @@ private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();
+		target.draw(shadowSprite);
 		if (attacking) {
-			//target.draw(sword.hBox);
-			
+			//target.draw(sword.circleHBox);
+			//target.draw(sword.notBox);
 			target.draw(sword);
 		}
 		//sf::RectangleShape hitBoxdraw(sf::Vector2f(8.f, 6.f));
 		//hitBoxdraw.setFillColor(sf::Color::Red);
 		//hitBoxdraw.setPosition(sf::Vector2f(hitBox.left, hitBox.top));
 		//target.draw(hitBoxdraw);
-		
 		target.draw(tSprite, states);
 	}
 };

@@ -16,7 +16,8 @@ void Level::render(sf::RenderWindow& win) {
 	sf::Sprite mapSprite(tileMap->mapTex.getTexture());
 	win.draw(mapSprite);
 
-	// INTERACTABLE/3rd LAYER:	like the lights, trees, chairs, doors and other things that go above
+	// 3rd LAYER/ Interactable:		
+	//						Like the lights, trees, chairs, doors and other things that go above
 	//						the floor that can be interacted with.
 	//						This layer also need to be drawn with the player and enemies because moving
 	//						objects can go in front or behind the interactable tiles.
@@ -27,16 +28,13 @@ void Level::render(sf::RenderWindow& win) {
 			if ((playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
 				win.draw(*player);
 			}
-			/*
-			if ((playerPos.x - playerPos.x % tileMap->tileSize) / tileMap->tileSize == x && (playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y)
-				win.draw(*player);
-				*/
 			if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 0)
 				continue;
 			else {
 				sf::Sprite tempSpr(*tileMap->layer3Texture);
-				// sf::Clock animTimer;
-				// use this animTimer to check if tiles should move to the next frame in the animation
+				// sf::Clock animTimer;???
+				// use this animTimer to check if tiles should move to the next frame in the animation???
+				// create a different class that uses sprites and Animation.h to animate different tiles
 				
 				// These are specific dimensioins for the interactable layer spriteSheet.
 				// Later change this so that these tiles can be animated

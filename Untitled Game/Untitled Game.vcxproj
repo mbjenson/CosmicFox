@@ -196,6 +196,7 @@
     <Image Include="Textures\link128.png" />
     <Image Include="Textures\linkscaled.png" />
     <Image Include="Textures\playerCube16.png" />
+    <Image Include="Textures\playerShadow.png" />
     <Image Include="Textures\playerSquare.png" />
     <Image Include="Textures\Rocks1.png" />
     <Image Include="Textures\rockTowerSmall.png" />
@@ -212,6 +213,8 @@
     <Image Include="Textures\testLevelMap.png" />
     <Image Include="Textures\testTileSheet16.png" />
     <Image Include="Textures\tileSheet16mk1.png" />
+    <Image Include="Textures\vignetteMask.png" />
+    <Image Include="Textures\vignetteShadow.png" />
     <Image Include="Textures\wall.png" />
     <Image Include="Textures\waterSpriteSheettest32.png" />
   </ItemGroup>
@@ -247,6 +250,10 @@
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Shaders\light_test.frag" />
     <None Include="Shaders\test1.frag" />
+    <None Include="Shaders\test10.frag" />
+    <None Include="Shaders\test4.frag" />
+    <None Include="Shaders\test6.frag" />
+    <None Include="Shaders\test7.frag" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf" />

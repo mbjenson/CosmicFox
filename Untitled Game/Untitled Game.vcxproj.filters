@@ -218,6 +218,15 @@
     <Image Include="Textures\Rocks1.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\playerShadow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\vignetteMask.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\vignetteShadow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -303,6 +312,10 @@
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
+    <None Include="Shaders\test4.frag" />
+    <None Include="Shaders\test6.frag" />
+    <None Include="Shaders\test7.frag" />
+    <None Include="Shaders\test10.frag" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf">

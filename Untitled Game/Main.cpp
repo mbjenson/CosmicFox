@@ -2,7 +2,7 @@
 #include <SFML/graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
-
+#include "Enemy.h"
 #include "Player.h"
 #include "Animation.h"
 #include "Tile.h"
@@ -44,6 +44,11 @@ bool DEBUG;
 * 
 */
 
+//  TODO:
+//  animate the player's shadow and update it.
+//	NOTE: use the same animation functions that are currently used for the player animations
+//  NOTE: also use the animation dimensions.
+
 // TODO:
 
 // first:	Move the collision check function to entity class:
@@ -63,7 +68,7 @@ bool DEBUG;
 //		make it so that when you use the sword, you are slowed and move forward slightly
 //		make the sword combo 3 things long.
 
-// LightMap
+// LightMap... not for this project
 // implement a light map system that is used when rendering the screen. Draw a black rectanlge over the whole screen and apply a shader to it
 //	that cooperates with the light map.
 // Implement lighting for different objects. Check out Saved web article by Matt Greer: https://mattgreer.dev/blog/dynamic-lighting-and-shadows/
@@ -140,13 +145,13 @@ int main() {
 int main() {
 
 	bool gameState = true;
-
-	sf::Vector2f winDim(2048, 1024);
+	//sf::Vector2f winDim(2560, 1440);
+	sf::Vector2f winDim(1920, 1080);
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
 
 	Camera camera;
-	camera.setSize(sf::Vector2f(1280, 720));
-	camera.zoom(0.24f);
+	camera.setSize(sf::Vector2f(1920, 1080));
+	camera.zoom(0.18f);
 	//camera.zoom(1.f);
 
 	sf::Font roboto;
@@ -162,55 +167,39 @@ int main() {
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
 		return -1;
-	sf::Texture foxShadow;
-	if (!foxShadow.loadFromFile("Textures/shadowText.png"))
+	
+	sf::Texture vignette;
+	if (!vignette.loadFromFile("Textures/vignetteShadow.png"))
 		return -1;
-	sf::Sprite shadowSprite(foxShadow);
+
+	sf::Sprite vig(vignette);
+	vig.setScale(0.8, 0.5);
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
 	p1.setPosition(sf::Vector2f(150.f, 150.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
-	/*
-	// the terrain tilemap
-	sf::Texture* terrain1 = new sf::Texture();
-	if (!terrain1->loadFromFile("Textures/grassLands2.png"))
-		return -1;
-
-	sf::Texture* terrain2 = new sf::Texture();
-	if (!terrain2->loadFromFile("Textures/grassLands2.png"))
-		return -1;
-
-	sf::Texture* rocks = new sf::Texture();
-	if (!rocks->loadFromFile("Textures/rocks1.png"))
-		return -1;
-	// setting up the tilemapmk2
-	
-
-	int* logicGrid2 = new int[2304];
-	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
-	int* tileTypes1 = new int[2304];
-	read_ints("Assets/Levels/MapFiles/Map1Layer1.csv", tileTypes1);
-	int* tileTypes2 = new int[2304];
-	read_ints("assets/Levels/MapFiles/Map1Layer2.csv", tileTypes2);
-	int* tileTypes3 = new int[2304];
-	read_ints("assets/Levels/MapFiles/Map1Layer3.csv", tileTypes3);
-	sf::Vector2i mapDimChunks1(3, 3);
-
-	TileMap* newMap = new TileMap(	tileTypes1, tileTypes2, tileTypes3, logicGrid2,
-									mapDimChunks1, terrain1, terrain2, rocks);
-	//TileMapmk2* newMap = new TileMapmk2(tileTypes1, tileTypes2, logicGrid1, mapDimChunks1, terrain1, terrain2);
-	newMap->init();
-	newMap->updatePlayerChunk(p1.getPosition());
-	newMap->updateTexMap();
-
-	GrassLandsLevel level1;
-	level1.init(newMap, &p1);
-	*/
 
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
 
+	sf::CircleShape attackRad;
+	attackRad.setRadius(100);
+	attackRad.setFillColor(sf::Color(60, 200, 200, 100));
+
+	sf::Clock stunClock;
+	bool isStunned = false;
+
+	sf::RectangleShape enemy;
+	enemy.setOrigin(sf::Vector2f(8, 8));
+	enemy.setSize(sf::Vector2f(16, 16));
+	enemy.setFillColor(sf::Color::Cyan);
+	enemy.setPosition(sf::Vector2f(300.f, 300.f));
+	
+	float enemySpeed = 15.0;
+	float enemyAttackRad = 100.f;
+
+	sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())
 	{
@@ -224,20 +213,31 @@ int main() {
 			p1.update(dt, newLevel.tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
-			
-			//if (newMap->checkForUpdate(p1.getPosition())) {
-			//	newMap->updateTexMap();
-			//	newMap->updatePlayerChunk(p1.getPosition());
-			//}
-			//sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
-
-			//window.draw(mapSprite);
-			//shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
-			//window.draw(shadowSprite);
-			//window.draw(p1);
-			
 			newLevel.render(window);
 			
+			if (p1.sword.checkHit(enemy.getGlobalBounds())) {
+				isStunned = true;
+				stunClock.restart();
+			}
+			if (stunClock.getElapsedTime().asMilliseconds() > 1000) {
+				isStunned = false;
+			}
+			sf::Vector2f distVec(p1.getPosition().x - enemy.getPosition().x, p1.getPosition().y - enemy.getPosition().y);
+			float distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
+			if (!isStunned) {
+				if (distSize < enemyAttackRad) {
+					sf::Vector2f normalMove(distVec.x / distSize, distVec.y / distSize);
+					enemy.move(sf::Vector2f(dt * normalMove.x * enemySpeed, dt * normalMove.y * enemySpeed));
+				}
+			}
+			attackRad.setPosition(sf::Vector2f(	enemy.getPosition().x - attackRad.getRadius(),
+												enemy.getPosition().y - attackRad.getRadius()));
+			window.draw(attackRad);
+			window.draw(enemy);
+			
+			vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
+			window.draw(vig);
+
 			if (DEBUG) {
 
 				string xPlayerCord = roundedString(2, p1.getPosition().x);
@@ -374,3 +374,14 @@ topTileMap.render(p1.curTile, window, renderSize);
 
 					//bg.setPosition(p1.getPosition().x-19, p1.getPosition().y-19);
 					//window.draw(bg);
+
+//if (newMap->checkForUpdate(p1.getPosition())) {
+			//	newMap->updateTexMap();
+			//	newMap->updatePlayerChunk(p1.getPosition());
+			//}
+			//sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
+
+			//window.draw(mapSprite);
+			//shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
+			//window.draw(shadowSprite);
+			//window.draw(p1);

@@ -1,11 +1,16 @@
 #include "Sword.h"
 
-Sword::Sword(sf::Texture& texSheet, sf::Vector2u texDim, int rowLen, int rowNum, float animTime) :
-	Animation(texSheet, texDim, rowLen, rowNum, animTime) {}
+Sword::Sword(float _radius, sf::Vector2f _drawOffSet, sf::Texture& texSheet, sf::Vector2u texDim, int rowLen, int rowNum, float animTime) :
+	Animation(texSheet, texDim, rowLen, rowNum, animTime) {
+	radius = _radius;
+	drawOffSet = _drawOffSet;
+}
 
 Sword::Sword() {}
 
-void Sword::initSword() {
+
+/*
+void Sword::initSwordOld() {
 	
 	hBox.setPointCount(7);
 	hBox.setPoint(0, sf::Vector2f(3, 16));
@@ -19,13 +24,70 @@ void Sword::initSword() {
 	setOrigin(sf::Vector2f(16, 22));
 	//hBox.setFillColor(sf::Color::Red);
 }
+*/
+
+void Sword::initSword() {
+	circleHBox.setRadius(radius);
+	circleHBox.setOrigin(sf::Vector2f(circleHBox.getRadius(), circleHBox.getRadius()));
+	//setOrigin(sf::Vector2f(16, 22));
+	setOrigin(drawOffSet);
+	notBox.setSize(sf::Vector2f(circleHBox.getRadius() * 4, circleHBox.getRadius() * 2));
+	notBox.setOrigin(sf::Vector2f(notBox.getSize().x / 2, -4));
+	circleHBox.setFillColor(sf::Color::Red);
+	notBox.setFillColor(sf::Color::Green);
+}
+
+bool Sword::containsPoint(sf::Vector2f point) {
+	if (
+		(point.x - circleHBox.getPosition().x) * (point.x - circleHBox.getPosition().x) +
+		(point.y - circleHBox.getPosition().y) * (point.y - circleHBox.getPosition().y)
+		<= circleHBox.getRadius() * circleHBox.getRadius()) {
+		return true;
+	}
+	return false;
+}
+
+bool Sword::checkHit(sf::FloatRect rect) {
+
+	// NOTE: if i did another game, I would use circle hit boxes for the entity hitBoxes
+
+	// if any of the corners are in the circleHBox.
+	if (containsPoint(sf::Vector2f(rect.left, rect.top)) ||
+		containsPoint(sf::Vector2f(rect.left, rect.top + rect.height)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top + rect.height)))
+	{
+		
+		int corners = 0;
+		if (notBox.getGlobalBounds().contains(sf::Vector2f(rect.left, rect.top))) {
+			corners++;
+		}
+		if (notBox.getGlobalBounds().contains(sf::Vector2f(rect.left + rect.width, rect.top))) {
+			corners++;
+		}
+		if (notBox.getGlobalBounds().contains(sf::Vector2f(rect.left, rect.top + rect.height))) {
+			corners++;
+		}
+		if (notBox.getGlobalBounds().contains(sf::Vector2f(rect.left + rect.width, rect.top + rect.height))) {
+			corners++;
+		}
+		if (corners >= 4) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+}
 
 void Sword::updatePos(sf::Vector2f playerPos) {
 	int curTime = swordTimer.getElapsedTime().asMilliseconds();
 	if (curTime > swingTime) {
 		return;
 	}
-	hBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
+	circleHBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
+	notBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
+	//hBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 	setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 }
 
@@ -52,7 +114,9 @@ void Sword::rotate(sf::RenderWindow& win) {
 	sf::Vector2f distance(mouseWorldPos.x - getPosition().x, mouseWorldPos.y - getPosition().y);
 	curAngle = (atan2(distance.y, distance.x) * 180.f) / 3.1415926535;
 	setRotation(curAngle + 90);
-	hBox.setRotation(curAngle + 90);
+	circleHBox.setRotation(curAngle + 90);
+	notBox.setRotation(curAngle + 90);
+	//hBox.setRotation(curAngle + 90);
 }
 
 bool Sword::check() {
@@ -61,8 +125,6 @@ bool Sword::check() {
 	}
 	return true;
 }
-
-
 
 
 
