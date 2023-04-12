@@ -1,22 +1,18 @@
 
 #include <SFML/graphics.hpp>
 #include <SFML/OpenGL.hpp>
-
-#include "Enemy.h"
-#include "Player.h"
-#include "Animation.h"
-#include "Tile.h"
-#include "Camera.h"
-#include "Sword.h"
-#include "HudBar.h"
-#include "TileMap.h"
-#include "ResHandler.h"
-#include "GrassLandsLevel.h"
-
 #include <fstream>
 #include <math.h>
 #include <iostream>
 //#include <thread>
+
+
+#include "Enemy.h"
+#include "Player.h"
+#include "Camera.h"
+#include "ResHandler.h"
+#include "GrassLandsLevel.h"
+#include "HudBar.h"
 
 using namespace std;
 bool DEBUG;
@@ -45,23 +41,21 @@ bool DEBUG;
 */
 
 //  TODO:
-//  animate the player's shadow and update it.
+//  animate the player's shadow and update it. if have time
 //	NOTE: use the same animation functions that are currently used for the player animations
 //  NOTE: also use the animation dimensions.
 
 // TODO:
 
-// first:	Move the collision check function to entity class:
-//			This will require that the "finalVel" vec is moved to the entity class.
+// a player will have a vector of item pointers. So only need to load in one item and if player has it, 
+//		it just points to original
 
 //  Entity shadows
 
 //  enemies:
-//		Add enemy class to game
-//		In the level class, have a component that handles all the enemies in the game.
-//		To efficiently check enemy positions around player, an array must be used.
-//		In this array, 0 represents empty space while numbers > 0 represent different types of enemies.
-//		When I pushback the vector of entities / enemies in my game, have a way to update the array of positions.
+//		In the level class, have a component that handles all the enemies in the game for updating.
+//		check for enemy hit by looping through vector of enemies and getting their positions and checking
+//		if the distance between the enemy and the player is below a threshhold, then check for collisions.
 
 // Sword combo:
 //		add to sword class a function that will allow for 3 different hboxes maybe.
@@ -180,24 +174,22 @@ int main() {
 	p1.init();
 	p1.setState(Player::State::nominal);
 
+	sf::Texture heart;
+	if (!heart.loadFromFile("Textures/heart.png")) {
+		return -1;
+	}
+
+	HudBar lifeCount(heart, sf::Vector2f(5, 5));
+
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
 
-	sf::CircleShape attackRad;
-	attackRad.setRadius(100);
-	attackRad.setFillColor(sf::Color(60, 200, 200, 100));
-
-	sf::Clock stunClock;
-	bool isStunned = false;
-
-	sf::RectangleShape enemy;
-	enemy.setOrigin(sf::Vector2f(8, 8));
-	enemy.setSize(sf::Vector2f(16, 16));
-	enemy.setFillColor(sf::Color::Cyan);
-	enemy.setPosition(sf::Vector2f(300.f, 300.f));
-	
-	float enemySpeed = 15.0;
-	float enemyAttackRad = 100.f;
+	sf::Texture enemyT;
+	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
+		return -1;
+	Enemy e1(&enemyT, sf::Vector2f(16, 16));
+	e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
+	e1.init();
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -209,34 +201,26 @@ int main() {
 		if (gameState) {
 			setKeyPressesKBD(p1);
 			window.clear();
-
+			
 			p1.update(dt, newLevel.tileMap);
 			camera.update(p1, dt);
 			window.setView(camera);
 			newLevel.render(window);
-			
-			if (p1.sword.checkHit(enemy.getGlobalBounds())) {
-				isStunned = true;
-				stunClock.restart();
-			}
-			if (stunClock.getElapsedTime().asMilliseconds() > 1000) {
-				isStunned = false;
-			}
-			sf::Vector2f distVec(p1.getPosition().x - enemy.getPosition().x, p1.getPosition().y - enemy.getPosition().y);
-			float distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
-			if (!isStunned) {
-				if (distSize < enemyAttackRad) {
-					sf::Vector2f normalMove(distVec.x / distSize, distVec.y / distSize);
-					enemy.move(sf::Vector2f(dt * normalMove.x * enemySpeed, dt * normalMove.y * enemySpeed));
+
+			if (p1.attacking) {
+				if (p1.sword.checkHit(e1.hitBox)) {
+					e1.getHit();
 				}
 			}
-			attackRad.setPosition(sf::Vector2f(	enemy.getPosition().x - attackRad.getRadius(),
-												enemy.getPosition().y - attackRad.getRadius()));
-			window.draw(attackRad);
-			window.draw(enemy);
-			
+			e1.update(dt, p1.getPosition());
+			window.draw(e1);
+
+			// VIGNETTE EFFECT:
 			vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
 			window.draw(vig);
+			
+			// HUD:
+			lifeCount.render(window, p1.health, camera.getCenter(), camera.getSize());
 
 			if (DEBUG) {
 

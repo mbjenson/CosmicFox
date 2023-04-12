@@ -170,6 +170,7 @@
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\swordSlash1.png" />
     <Image Include="Textures\animationtest.png" />
     <Image Include="Textures\animationtest2.png" />
     <Image Include="Textures\animTestIdle1.png" />

@@ -8,27 +8,10 @@ Sword::Sword(float _radius, sf::Vector2f _drawOffSet, sf::Texture& texSheet, sf:
 
 Sword::Sword() {}
 
-
-/*
-void Sword::initSwordOld() {
-	
-	hBox.setPointCount(7);
-	hBox.setPoint(0, sf::Vector2f(3, 16));
-	hBox.setPoint(1, sf::Vector2f(4, 10));
-	hBox.setPoint(2, sf::Vector2f(8, 4));
-	hBox.setPoint(3, sf::Vector2f(16, 1));
-	hBox.setPoint(4, sf::Vector2f(24, 4));
-	hBox.setPoint(5, sf::Vector2f(28, 10));
-	hBox.setPoint(6, sf::Vector2f(29, 16));
-	hBox.setOrigin(sf::Vector2f(16, 24));
-	setOrigin(sf::Vector2f(16, 22));
-	//hBox.setFillColor(sf::Color::Red);
-}
-*/
-
 void Sword::initSword() {
 	circleHBox.setRadius(radius);
-	circleHBox.setOrigin(sf::Vector2f(circleHBox.getRadius(), circleHBox.getRadius()));
+	circleHBox.setOrigin(sf::Vector2f(radius, radius));
+	
 	//setOrigin(sf::Vector2f(16, 22));
 	setOrigin(drawOffSet);
 	notBox.setSize(sf::Vector2f(circleHBox.getRadius() * 4, circleHBox.getRadius() * 2));
@@ -51,11 +34,17 @@ bool Sword::checkHit(sf::FloatRect rect) {
 
 	// NOTE: if i did another game, I would use circle hit boxes for the entity hitBoxes
 
-	// if any of the corners are in the circleHBox.
+	// if any of the corners or mid edge points are in the circleHBox.
+	
 	if (containsPoint(sf::Vector2f(rect.left, rect.top)) ||
 		containsPoint(sf::Vector2f(rect.left, rect.top + rect.height)) ||
 		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top)) ||
-		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top + rect.height)))
+		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top + rect.height)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width / 2, rect.top)) ||
+		containsPoint(sf::Vector2f(rect.left, rect.top + rect.height / 2)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width, rect.top + rect.height / 2)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width / 2, rect.top + rect.height)) ||
+		containsPoint(sf::Vector2f(rect.left + rect.width / 2, rect.top + rect.height / 2)))
 	{
 		
 		int corners = 0;
@@ -87,7 +76,6 @@ void Sword::updatePos(sf::Vector2f playerPos) {
 	}
 	circleHBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 	notBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
-	//hBox.setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 	setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 }
 
@@ -112,9 +100,9 @@ void Sword::rotate(sf::RenderWindow& win) {
 	// when first click, calculate the angle and use that for the whole swing 
 	sf::Vector2f mouseWorldPos = win.mapPixelToCoords(sf::Mouse::getPosition(win), win.getView());
 	sf::Vector2f distance(mouseWorldPos.x - getPosition().x, mouseWorldPos.y - getPosition().y);
-	curAngle = (atan2(distance.y, distance.x) * 180.f) / 3.1415926535;
+	curAngle = (atan2(distance.y, distance.x) * 180) / 3.1415926535;
 	setRotation(curAngle + 90);
-	circleHBox.setRotation(curAngle + 90);
+	circleHBox.setRotation(curAngle);
 	notBox.setRotation(curAngle + 90);
 	//hBox.setRotation(curAngle + 90);
 }

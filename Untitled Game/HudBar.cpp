@@ -1,21 +1,19 @@
 #include "HudBar.h"
 
-HudBar::HudBar(sf::Texture& iconTex, sf::Vector2f _screenPos, Camera* _camera) {
+HudBar::HudBar(sf::Texture& iconTex, sf::Vector2f _screenPos) {
 	hSprite.setTexture(iconTex);
-	camera = _camera;
 	screenPos = _screenPos;
 }
 
-void HudBar::update() {
-	hSprite.setPosition(sf::Vector2f(camera->getCenter().x - (camera->getSize().x / 2) + screenPos.x,
-		camera->getCenter().y - (camera->getSize().y / 2) + screenPos.y));
+void HudBar::update(sf::Vector2f cCenter, sf::Vector2f cSize) {
+	hSprite.setPosition(sf::Vector2f(cCenter.x - (cSize.x / 2) + screenPos.x,
+		cCenter.y - (cSize.y / 2) + screenPos.y));
 }
 
-void HudBar::render(sf::RenderWindow& win, int quantity) {
-	update();
+void HudBar::render(sf::RenderWindow& win, int quantity, sf::Vector2f cCenter, sf::Vector2f cSize) {
+	update(cCenter, cSize);
 	for (int i = 0; i < quantity; i++) {
 		win.draw(hSprite);
-		hSprite.setPosition(sf::Vector2f(hSprite.getPosition().x + hSprite.getGlobalBounds().width, hSprite.getPosition().y));
+		hSprite.setPosition(sf::Vector2f(hSprite.getPosition().x + hSprite.getGlobalBounds().width + 2, hSprite.getPosition().y));
 	}
-	
 }

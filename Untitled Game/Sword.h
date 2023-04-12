@@ -14,7 +14,6 @@ public:
 	// this box cuts the circle hit box in half so it is properly the size of the sword swing. I cheated
 	sf::RectangleShape notBox;
 	void initSword();
-	void initSwordOld();
 	bool checkHit(sf::FloatRect);
 	// returns true if the swing is successful
 	bool swing(sf::RenderWindow& win);

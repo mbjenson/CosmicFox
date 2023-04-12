@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "TileMap.h"
 #include "Sword.h"
+
 #include <math.h>
 
 class Player : public Entity
@@ -87,6 +88,8 @@ public:
 	sf::Texture shadowTex;
 	sf::Sprite shadowSprite;
 	
+	bool detectHit(sf::FloatRect badBox);
+
 private:
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
@@ -164,8 +167,8 @@ private:
 	float dashSpeed = 180.f;
 	//int dashCooldown = 1000;
 	int dashCooldown = 600;
-	int dashSpeedTime = 250;
-	//int dashSpeedTime = 140;
+	//int dashSpeedTime = 250;
+	int dashSpeedTime = 200;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
@@ -206,7 +209,8 @@ private:
 
 	State state;
 
-	
+	sf::FloatRect healthHitBox;
+	void updateHealthHitBox();
 
 	float playerAngle;
 	// used to get information from the window the player is being drawn on
@@ -220,14 +224,20 @@ private:
 		states.transform *= getTransform();
 		target.draw(shadowSprite);
 		if (attacking) {
-			//target.draw(sword.circleHBox);
-			//target.draw(sword.notBox);
+			
+			
+			
 			target.draw(sword);
 		}
 		//sf::RectangleShape hitBoxdraw(sf::Vector2f(8.f, 6.f));
 		//hitBoxdraw.setFillColor(sf::Color::Red);
 		//hitBoxdraw.setPosition(sf::Vector2f(hitBox.left, hitBox.top));
 		//target.draw(hitBoxdraw);
+		
+		//sf::RectangleShape rect(sf::Vector2f(8, 13));
+		//rect.setPosition(sf::Vector2f(getPosition().x - 4, getPosition().y - 5));
+		//target.draw(rect);
+
 		target.draw(tSprite, states);
 	}
 };

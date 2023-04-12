@@ -405,10 +405,11 @@ void Player::init() {
 	shadowTex.loadFromFile("Textures/playerShadow.png");
 	shadowSprite.setTexture(shadowTex);
 	//sword settup
-	swordTex.loadFromFile("Textures/swordCombo1.png");
-	sword = Sword(17, sf::Vector2f(16, 22), swordTex, sf::Vector2u(32, 32), 8, 0, 40.f);
+	swordTex.loadFromFile("Textures/swordSlash1.png");
+	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f);
 	sword.initSword();
-	//sword.setScale(1.15f,1.0f);
+
+	healthHitBox = sf::FloatRect(0, 0, 8, 13);
 
 }
 
@@ -429,6 +430,11 @@ void Player::updateHitBox() {
 void Player::updateHitBox() {
 	hitBox.left = getPosition().x - hitBox.width / 2;// + hitBoxOffset.x;
 	hitBox.top = getPosition().y - hitBox.height / 2 + hitBoxOffset.y;// +hitBoxOffset.y;
+}
+
+void Player::updateHealthHitBox() {
+	healthHitBox.left = getPosition().x - 4;
+	healthHitBox.top = getPosition().y - 5;
 }
 
 void Player::walkNorth() {
@@ -514,6 +520,10 @@ void Player::dashAnimW() {
 
 void Player::dashAnimNW() {
 	Player::Animation::updateRow(dashAnimDimNW.y, dashAnimDimNW.x);
+}
+
+bool Player::detectHit(sf::FloatRect badBox) {
+	return false;
 }
 
 void Player::updateTrav() {
