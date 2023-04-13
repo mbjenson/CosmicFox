@@ -13,6 +13,7 @@
 #include "ResHandler.h"
 #include "GrassLandsLevel.h"
 #include "HudBar.h"
+#include "Spirit.h"
 
 using namespace std;
 
@@ -49,12 +50,12 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 // TODO:
 
-// working on implementing the basicPlayerMovement
+// remove mapping functions.h from this project more function calls than necessary is inefficient and should be done inline if possible.
 
 // a player will have a vector of item pointers. So only need to load in one item and if player has it, 
 //		it just points to original
 
-//  Entity shadows
+//  Entity shadows... not possible
 
 //  enemies:
 //		In the level class, have a component that handles all the enemies in the game for updating.
@@ -185,6 +186,13 @@ int main() {
 
 	HudBar lifeCount(heart, sf::Vector2f(5, 5));
 
+	sf::Texture spriritT;
+	if (!spriritT.loadFromFile("Textures/spirit.png"))
+		return -1;
+	
+	Spirit spirit(spriritT, sf::Vector2u(7, 8), 5, 0, 60.f);
+	spirit.init();
+
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
 
@@ -240,7 +248,8 @@ int main() {
 			e1.update(dt, p1.getPosition(), newLevel.tileMap, &window);
 			window.draw(e1);
 			
-
+			spirit.update(p1.getPosition(), dt);
+			window.draw(spirit);
 
 			// VIGNETTE EFFECT:
 			vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));

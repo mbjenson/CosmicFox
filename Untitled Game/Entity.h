@@ -16,6 +16,6 @@ public:
 	// can only check if a floatrect has intersected with the convex sword hBox so we must check it in the player/ enemy classes
 	
 	sf::FloatRect hitBox;
-	int health;	
+	//int health;	
 
 };

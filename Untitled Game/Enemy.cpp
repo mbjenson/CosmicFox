@@ -33,16 +33,15 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 	int redZone = 40;
 
 	if (distSize < detectionRadius) {
-		
 		sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
 		sf::Vector2f normalMovement(distVec.x / distSize, distVec.y / distSize);
-		dampingFactor = 0.35;
+		dampingFactor = 0.2;
 		//sf::Vector2f playerVel(prevPlayerPos.x - playPos.x, prevPlayerPos.y - playPos.y);
 		
 		
 		
-		followVel.x -= followVel.x * 0.005;
-		followVel.y -= followVel.y * 0.005;
+		followVel.x -= followVel.x * 0.003;
+		followVel.y -= followVel.y * 0.003;
 		followVel += sf::Vector2f(dt * normalMovement.x * dampingFactor, dt * normalMovement.y * dampingFactor);
 			// apply right and left movements.
 			// * sine and cosine are some of the most useful functions in math because they are between -1 and 1 and they change in such unique ways

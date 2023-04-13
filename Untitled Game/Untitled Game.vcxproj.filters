@@ -236,6 +236,12 @@
     <Image Include="Textures\swordSlash1.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\yellowGlow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
