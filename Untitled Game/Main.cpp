@@ -15,7 +15,9 @@
 #include "HudBar.h"
 
 using namespace std;
+
 bool DEBUG;
+sf::Clock GLOBAL_GAME_CLOCK;
 
 // implement a state system.
 //		1) game state will allow the user to play the game, pause the game, and show a blurred out version of visible screen in pause menu
@@ -46,6 +48,8 @@ bool DEBUG;
 //  NOTE: also use the animation dimensions.
 
 // TODO:
+
+// working on implementing the basicPlayerMovement
 
 // a player will have a vector of item pointers. So only need to load in one item and if player has it, 
 //		it just points to original
@@ -190,6 +194,9 @@ int main() {
 	Enemy e1(&enemyT, sf::Vector2f(16, 16));
 	e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
 	e1.init();
+	e1.setPosition(250, 250);
+
+	
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -206,14 +213,34 @@ int main() {
 			camera.update(p1, dt);
 			window.setView(camera);
 			newLevel.render(window);
+			/*
+			for (int i = 0; i < eVec.size(); i++) {
+				// get distance from player
+				Enemy curEnemy = eVec.at(i);
+				float enemyDist = sqrt(pow(p1.getPosition().x - curEnemy.getPosition().x, 2)
+					+ pow(p1.getPosition().y - curEnemy.getPosition().y, 2));
+				if (p1.attacking) {
+					if (enemyDist < 30) {
 
+						// check for hit
+
+					}
+				}
+				
+				
+			}
+			*/
+			
+			
 			if (p1.attacking) {
 				if (p1.sword.checkHit(e1.hitBox)) {
 					e1.getHit();
 				}
 			}
-			e1.update(dt, p1.getPosition());
+			e1.update(dt, p1.getPosition(), newLevel.tileMap, &window);
 			window.draw(e1);
+			
+
 
 			// VIGNETTE EFFECT:
 			vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));

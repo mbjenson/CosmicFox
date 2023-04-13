@@ -163,7 +163,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResHandler.cpp" />
+    <ClCompile Include="Spirit.cpp" />
     <ClCompile Include="Sword.cpp" />
+    <ClCompile Include="SwordEnemy.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMapOld.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -238,7 +240,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResHandler.h" />
+    <ClInclude Include="Spirit.h" />
     <ClInclude Include="Sword.h" />
+    <ClInclude Include="SwordEnemy.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMapOld.h" />
     <ClInclude Include="TileMap.h" />

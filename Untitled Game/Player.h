@@ -63,7 +63,9 @@ public:
 		dashing,
 		cooldown,
 		invulnerable,
-		dead
+		dead,
+		attacking,
+		attacked,
 	};
 	// inits many values for the player like textures, animations, bools, and other things
 	void init();
@@ -89,6 +91,7 @@ public:
 	sf::Sprite shadowSprite;
 	
 	bool detectHit(sf::FloatRect badBox);
+	int healthAtLastHit;
 
 private:
 	//animation functions that set the row number for the animation for the player
@@ -153,7 +156,8 @@ private:
 	*/
 	
 	// \/ yes
-	float walkSpeed = 80.0f;
+	//float walkSpeed = 80.0f;
+	float walkSpeed = 60.f;
 	//float walkSpeed = 200.f;
 	//float walkSpeed = 75.0f;
 
@@ -166,7 +170,7 @@ private:
 	//float dashSpeed = 275.f;
 	float dashSpeed = 180.f;
 	//int dashCooldown = 1000;
-	int dashCooldown = 600;
+	int dashCooldown = 800;
 	//int dashSpeedTime = 250;
 	int dashSpeedTime = 200;
 	sf::Vector2f dashVel;
@@ -175,8 +179,12 @@ private:
 	void setAnimation();
 	sf::Vector2f lastFacing;
 	void setFacing();
+	void setFacing(sf::Vector2f);
 
 	
+	int attackMoveSpeed = 35;
+	//sf::Clock attackTimer;
+
 
 	// ** may not need this
 	// simply checks if the player is travelling diagonally and sets the bool accordingly.

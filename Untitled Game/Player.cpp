@@ -146,6 +146,22 @@ void Player::update(float deltaTime, TileMap* map) {
 		}
 		if (attacking) {
 			attacking = sword.swing(*pWindow);
+			if (sword.swordTimer.getElapsedTime().asMilliseconds() < sword.swingTime) {
+				sf::Vector2f mouseWorldPos = pWindow->mapPixelToCoords(sf::Mouse::getPosition(*pWindow), pWindow->getView());
+				sf::Vector2f distance(mouseWorldPos.x - getPosition().x, mouseWorldPos.y - getPosition().y);
+				float distSize = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+				sf::Vector2f tempNorm(distance.x / distSize, distance.y / distSize);
+				finalVel = sf::Vector2f(deltaTime * tempNorm.x * attackMoveSpeed, deltaTime * tempNorm.y * attackMoveSpeed);
+				collisionCheckTile(map);
+				setFacing(sf::Vector2f(tempNorm));
+				setAnimation();
+				move(finalVel);
+				break;
+			}
+			if (sword.swordTimer.getElapsedTime().asMilliseconds() < sword.cooldown) {
+				setAnimation();
+				break;
+			}
 		}
 		if (spacePressed)
 			setState(State::dashing);
@@ -153,6 +169,7 @@ void Player::update(float deltaTime, TileMap* map) {
 			setState(State::dashing);
 		else
 			dashVel = sf::Vector2f(0, 0);
+
 
 		setFacing();
 		setAnimation();
@@ -170,8 +187,9 @@ void Player::update(float deltaTime, TileMap* map) {
 			break;
 		}
 		//case State::cooldown: // cooldown from dashing or attacking or something else
-
+	
 	case State::dashing:
+	{
 		int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
 		// protect from integer overflow
 		if (curDashTimer > 300000000) {
@@ -213,6 +231,8 @@ void Player::update(float deltaTime, TileMap* map) {
 			isDashing = true;
 			setState(State::nominal);
 		}
+	}
+
 
 		// if state = dashing then 
 		// have a dash clock that is local to the player class, everytime you are able to dash you update the dash class
@@ -228,6 +248,10 @@ void Player::update(float deltaTime, TileMap* map) {
 
 	//case State::invulnerable:
 		// effect: greyed out or flashing
+	
+
+
+		// move slightly in the direction of swing
 	}
 	// finally, update the player's position on the map
 	sword.updatePos(getPosition());
@@ -309,6 +333,31 @@ void Player::setAnimation() {
 	if (lastFacing.y == 1) {
 		wDownAnim();
 		return;
+	}
+}
+
+void Player::setFacing(sf::Vector2f normDirVec) {
+	moveDir.x = 1;
+	if (normDirVec.y > .70) {
+		// facing up
+		
+		lastFacing.x = 0;
+		lastFacing.y = 1;
+	}
+	if (normDirVec.y < -.70) {
+		// facing down
+		lastFacing.x = 0;
+		lastFacing.y = -1;
+	}
+	if (normDirVec.x > .30) {
+		// facing right
+		lastFacing.x = 1;
+		lastFacing.y = 0;
+	}
+	if (normDirVec.x < -.30) {
+		// facing left
+		lastFacing.x = -1;
+		lastFacing.y = 0;
 	}
 }
 
@@ -406,7 +455,7 @@ void Player::init() {
 	shadowSprite.setTexture(shadowTex);
 	//sword settup
 	swordTex.loadFromFile("Textures/swordSlash1.png");
-	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f);
+	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
 	sword.initSword();
 
 	healthHitBox = sf::FloatRect(0, 0, 8, 13);
@@ -430,9 +479,6 @@ void Player::updateHitBox() {
 void Player::updateHitBox() {
 	hitBox.left = getPosition().x - hitBox.width / 2;// + hitBoxOffset.x;
 	hitBox.top = getPosition().y - hitBox.height / 2 + hitBoxOffset.y;// +hitBoxOffset.y;
-}
-
-void Player::updateHealthHitBox() {
 	healthHitBox.left = getPosition().x - 4;
 	healthHitBox.top = getPosition().y - 5;
 }
@@ -523,6 +569,10 @@ void Player::dashAnimNW() {
 }
 
 bool Player::detectHit(sf::FloatRect badBox) {
+
+	if (healthHitBox.intersects(badBox)) {
+		return true;
+	}
 	return false;
 }
 

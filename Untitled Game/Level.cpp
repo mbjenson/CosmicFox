@@ -59,5 +59,4 @@ void Level::render(sf::RenderWindow& win) {
 	// 6th CANOPY LAYER:
 		// MAYBE:
 		// last, but not least, update the canopy layer
-	
 }

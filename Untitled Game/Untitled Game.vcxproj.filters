@@ -84,6 +84,12 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Spirit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SwordEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -299,6 +305,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spirit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SwordEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

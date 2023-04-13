@@ -1,14 +1,19 @@
 #include "Sword.h"
 
-Sword::Sword(float _radius, sf::Vector2f _drawOffSet, sf::Texture& texSheet, sf::Vector2u texDim, int rowLen, int rowNum, float animTime) :
+Sword::Sword(float _radius, sf::Vector2f _drawOffSet, sf::Texture& texSheet, sf::Vector2u texDim,
+	int rowLen, int rowNum, float animTime, int _cooldown, int _swingtime, int _damage) :
 	Animation(texSheet, texDim, rowLen, rowNum, animTime) {
 	radius = _radius;
 	drawOffSet = _drawOffSet;
+	cooldown = _cooldown;
+	swingTime = _swingtime;
+	damage = _damage;
 }
 
 Sword::Sword() {}
 
 void Sword::initSword() {
+	// the shapes are used for debugging the hitbox
 	circleHBox.setRadius(radius);
 	circleHBox.setOrigin(sf::Vector2f(radius, radius));
 	
@@ -16,8 +21,8 @@ void Sword::initSword() {
 	setOrigin(drawOffSet);
 	notBox.setSize(sf::Vector2f(circleHBox.getRadius() * 4, circleHBox.getRadius() * 2));
 	notBox.setOrigin(sf::Vector2f(notBox.getSize().x / 2, -4));
-	circleHBox.setFillColor(sf::Color::Red);
 	notBox.setFillColor(sf::Color::Green);
+	circleHBox.setFillColor(sf::Color::Red);
 }
 
 bool Sword::containsPoint(sf::Vector2f point) {
@@ -79,6 +84,23 @@ void Sword::updatePos(sf::Vector2f playerPos) {
 	setPosition(sf::Vector2f(playerPos.x, playerPos.y));
 }
 
+bool Sword::swing(sf::Vector2f distance) {
+	int curTime = swordTimer.getElapsedTime().asMilliseconds();
+	if (curTime > cooldown) {
+		swordTimer.restart();
+	}
+	if (curTime >= 0 && curTime <= swingTime) {
+		// ** 20 ms margin of delay error
+		if (curTime < 10)
+			rotate(distance);
+		return true;
+	}
+	if (curTime >= swingTime && curTime <= cooldown)
+		return false;
+
+	return false;
+}
+
 bool Sword::swing(sf::RenderWindow& win) {
 	int curTime = swordTimer.getElapsedTime().asMilliseconds();
 	if (curTime > cooldown) {
@@ -94,6 +116,13 @@ bool Sword::swing(sf::RenderWindow& win) {
 		return false;
 	
 	return false;
+}
+
+void Sword::rotate(sf::Vector2f distance) {
+	float curAngle = (atan2(distance.y, distance.x) * 180.f) / 3.1415926535;
+	setRotation(curAngle + 90);
+	circleHBox.setRotation(curAngle);
+	notBox.setRotation(curAngle + 90);
 }
 
 void Sword::rotate(sf::RenderWindow& win) {
