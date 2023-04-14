@@ -19,11 +19,11 @@ int GrassLandsLevel::init(Player* p1) {
 	player = p1;
 
 	sf::Texture* terrain1 = new sf::Texture();
-	if (!terrain1->loadFromFile("Textures/grassLands2.png"))
+	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
 		return -1;
 
 	sf::Texture* terrain2 = new sf::Texture();
-	if (!terrain2->loadFromFile("Textures/grassLands2.png"))
+	if (!terrain2->loadFromFile("Textures/grassLands3.png"))
 		return -1;
 
 	sf::Texture* rocks = new sf::Texture();

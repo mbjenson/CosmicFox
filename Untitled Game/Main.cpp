@@ -50,7 +50,12 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 // TODO:
 
-// add collisionCheckTile to enemy
+// finish player death anim.
+// workout player falling function:
+	// when fall, player must be drawn behind certain things that it would usually be drawn in front of.
+	// a possible solution to this is, when the player falls, redraw the map in such a way that the player
+	// is drawn at the end of it's row but for the static tileMap. This would work and I wouldn't have to manage a lot of crap.
+
 // add player death and new draw enemy sprite
 // add a pointer to a vector of enemies into the level file
 
@@ -181,7 +186,7 @@ int main() {
 	vig.setScale(0.8, 0.5);
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setPosition(sf::Vector2f(150.f, 150.f));
+	p1.setPosition(sf::Vector2f(150.f, 400.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 

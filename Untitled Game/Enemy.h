@@ -24,8 +24,8 @@ public:
 
 	void update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win);
 	void basicMovement(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
-	void zoomAttack(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
-
+	void zoomAttack(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt); // not used
+	void collisionCheckTile(TileMap* map);
 	void getHit(int damage);
 	//int damageRecieved;
 	bool beingHit;

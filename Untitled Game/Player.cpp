@@ -185,6 +185,7 @@ void Player::update(float deltaTime, TileMap* map) {
 		if (state == State::nominal) {
 			finalVel = walkVelocity;
 			collisionCheckTile(map);
+			collisionCheckVoid(map);
 			move(finalVel);
 			// walking or idle animations here
 			break;
@@ -260,6 +261,7 @@ void Player::update(float deltaTime, TileMap* map) {
 					
 					finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
 					collisionCheckTile(map);
+					collisionCheckVoid(map);
 					move(finalVel);
 				}
 				else {
@@ -288,6 +290,10 @@ void Player::update(float deltaTime, TileMap* map) {
 		sword.restartAnim();
 	updateAnim();
 	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 4));
+	checkDeath();
+	if (FLAG_DEAD) {
+		respawn(sf::Vector2f(150.f, 150.f));
+	}
 }
 
 void Player::collisionCheckEnemy(sf::FloatRect hitBox, int damage) {
@@ -305,13 +311,12 @@ void Player::collisionCheckEnemy(sf::FloatRect hitBox, int damage) {
 
 			float distSize = sqrt(pow(hitBox.left - getPosition().x, 2) + pow(hitBox.top - getPosition().y, 2));
 			hitVec = sf::Vector2f(((hitBox.left - getPosition().x) * -1) / distSize, ((hitBox.top - getPosition().y) * -1 )/ distSize);
-
 		}
 	}
 }
 
 void Player::init() {
-	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 4.f));
+	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 6.f));
 
 	setOrigin(sf::Vector2f(8, 8));
 	// trav bools
@@ -354,6 +359,9 @@ void Player::init() {
 	beingHit = false;
 	invincible = false;
 	flashRedTime = 50;
+
+	FLAG_NOLIFE = false;
+	FLAG_FALL = false;
 
 	
 }
@@ -778,6 +786,58 @@ void Player::collisionCheckTile(TileMap* map) {
 	}
 }
 */
+
+void Player::checkDeath() {
+	if (FLAG_FALL) {
+		// perhaps the player loses some health when they fall but not all health.
+		FLAG_DEAD = true;
+		// (this func will move player down and set row to the row of fall anim)
+		// at end, it will set flag_death to true;
+	}
+	if (FLAG_NOLIFE) {
+		// 
+		FLAG_DEAD = true;
+		
+	}
+	// perform fade to black of screen
+
+}
+
+//respawn player at a location
+void Player::respawn(sf::Vector2f spawnPoint) {
+	setPosition(spawnPoint);
+	FLAG_DEAD = false;
+	FLAG_NOLIFE = false;
+	FLAG_FALL = false;
+}
+
+// checks if all 4 player corners are in the void
+void Player::collisionCheckVoid(TileMap* map) {
+	updateHitBox();
+	sf::FloatRect tempHitBox(hitBox.left + finalVel.x, hitBox.top + finalVel.y, hitBox.width, hitBox.height);
+	int numCorners = 0;
+	if (tempHitBox.left < 0 || tempHitBox.left > map->getMapDimTiles().x * map->getTileSize())
+		return;
+	if (tempHitBox.top < 0 || tempHitBox.top > map->getMapDimTiles().y * map->getTileSize())
+		return;
+	if (tempHitBox.left + tempHitBox.width < 0 || tempHitBox.left + tempHitBox.width > map->getMapDimTiles().x * map->getTileSize())
+		return;
+	if (tempHitBox.top + tempHitBox.height < 0 || tempHitBox.top + tempHitBox.height > map->getMapDimTiles().y * map->getTileSize())
+		return;
+
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 2)
+		numCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 2)
+		numCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 2)
+		numCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 2)
+		numCorners++;
+	if (numCorners >= 4) {
+		FLAG_FALL = true;
+	}
+}
+
 void Player::collisionCheckTile(TileMap* map) {
 	int i = 0;
 	while (i < 2) {

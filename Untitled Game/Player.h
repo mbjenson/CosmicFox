@@ -64,6 +64,7 @@ public:
 	//void collisionCheckTile(TileMap* map);
 	void collisionCheckTile(TileMap* map);
 	void collisionCheckEnemy(sf::FloatRect hitBox, int damage);
+	void collisionCheckVoid(TileMap* map);
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	
@@ -103,6 +104,19 @@ public:
 	
 	bool detectHit(sf::FloatRect badBox);
 	int healthAtLastHit;
+
+	void fall(); // when fall, player must be drawn behind certain things that it would usually be drawn in front of.
+				// a possible solution to this is, when the player falls, redraw the map in such a way that the player
+				// is drawn at the end of it's row but for the static tileMap. This would work and I wouldn't have to manage a lot of crap.
+
+	void checkDeath();
+	void respawn(sf::Vector2f spawnPoint);
+	// FLAGS:
+	// the player is dead. switch to true for both falling and killed
+	bool FLAG_DEAD;
+	// the player has just lost all health and death anim needs to be done
+	bool FLAG_NOLIFE;
+	bool FLAG_FALL;
 
 private:
 	//animation functions that set the row number for the animation for the player
@@ -178,15 +192,18 @@ private:
 	
 	//dashing specs
 	sf::Clock dashTimer;
-	//float dashSpeed = 275.f;
-	float dashSpeed = 180.f;
-	//int dashCooldown = 1000;
+	//1)float dashSpeed = 275.f;
+	//2) float dashSpeed = 180.f;
+	float dashSpeed = 220.f;
+	//1) int dashCooldown = 1000;
 	int dashCooldown = 800;
-	//int dashSpeedTime = 250;
-	int dashSpeedTime = 200;
+	//1)int dashSpeedTime = 250;
+	//2)int dashSpeedTime = 200;
+	int dashSpeedTime = 165;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
+	
 	void setAnimation();
 	sf::Vector2f lastFacing;
 	void setFacing();
@@ -248,10 +265,10 @@ private:
 			
 			target.draw(sword);
 		}
-		//sf::RectangleShape hitBoxdraw(sf::Vector2f(8.f, 6.f));
-		//hitBoxdraw.setFillColor(sf::Color::Red);
-		//hitBoxdraw.setPosition(sf::Vector2f(hitBox.left, hitBox.top));
-		//target.draw(hitBoxdraw);
+		sf::RectangleShape hitBoxdraw(sf::Vector2f(8.f, 6.f));
+		hitBoxdraw.setFillColor(sf::Color::Red);
+		hitBoxdraw.setPosition(sf::Vector2f(hitBox.left, hitBox.top));
+		target.draw(hitBoxdraw);
 		
 		//sf::RectangleShape rect(sf::Vector2f(8, 13));
 		//rect.setPosition(sf::Vector2f(getPosition().x - 4, getPosition().y - 5));
