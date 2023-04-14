@@ -49,10 +49,21 @@ public:
 	bool RMBPressed;
 	//attacking
 	bool attacking;
+	//attacked
+	bool beingHit;
+	sf::Clock stunClock;
+	int hitBackTime;
+	int invincibleTime;
+	int flashRedTime;
+	bool invincible;
+	sf::Vector2f hitVec;
+	float knockBackSpeed;
+
 	//void updatePlayerTile(TileMap* map); // update the curTile var for given map
 	// check for collision with a specified tilemap
 	//void collisionCheckTile(TileMap* map);
 	void collisionCheckTile(TileMap* map);
+	void collisionCheckEnemy(sf::FloatRect hitBox, int damage);
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	
@@ -83,7 +94,7 @@ public:
 	void updatePWindow(sf::RenderWindow& win);
 
 	int maxHealth = 4;
-	int health = 4;
+	int curHealth;
 
 	Sword sword;
 	sf::Texture swordTex;
@@ -114,7 +125,7 @@ private:
 	void dashAnimW();
 	void dashAnimNW();
 
-	
+	void invincibleEffect();
 	// ** update these in a player.init() function that just sets these values
 	// the animations should all have the same runtime but different row number
 	// animation dimensions (which row on spriteSheet and how long each row is).

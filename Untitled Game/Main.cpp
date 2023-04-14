@@ -50,6 +50,12 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 // TODO:
 
+// add collisionCheckTile to enemy
+// add player death and new draw enemy sprite
+// add a pointer to a vector of enemies into the level file
+
+
+
 // remove mapping functions.h from this project more function calls than necessary is inefficient and should be done inline if possible.
 
 // a player will have a vector of item pointers. So only need to load in one item and if player has it, 
@@ -199,12 +205,21 @@ int main() {
 	sf::Texture enemyT;
 	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
 		return -1;
-	Enemy e1(&enemyT, sf::Vector2f(16, 16));
-	e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
-	e1.init();
-	e1.setPosition(250, 250);
+	Enemy* e1 = new Enemy(&enemyT, sf::Vector2f(16, 16));
+	//e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
+	e1->init();
+	e1->setPosition(250, 250);
 
+	Enemy* e2 = new Enemy(&enemyT, sf::Vector2f(16, 16));
+	e2->init();
+	e2->setPosition(300, 200);
 	
+
+	std::vector<Enemy> eVec;
+	eVec.push_back(*e1);
+	eVec.push_back(*e2);
+
+	std::vector<Enemy> delQueue;
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -238,15 +253,61 @@ int main() {
 				
 			}
 			*/
-			
-			
-			if (p1.attacking) {
-				if (p1.sword.checkHit(e1.hitBox)) {
-					e1.getHit();
+			for (int i = 0; i < eVec.size(); i++) {
+				
+				if (p1.attacking) {
+					if (p1.sword.checkHit(eVec.at(i).hitBox))
+						eVec.at(i).getHit(p1.sword.damage);
+				}
+				p1.collisionCheckEnemy(eVec.at(i).hitBox, eVec.at(i).damage);
+				eVec.at(i).update(dt, p1.getPosition(), newLevel.tileMap, &window);
+				window.draw(eVec.at(i));
+				if (eVec.at(i).FLAG_DEAD)
+					eVec.erase(eVec.begin() + i);
+			}
+			/*
+			for (auto& i : eVec) {
+				if (p1.attacking) {
+					if (p1.sword.checkHit(i.hitBox))
+						i.getHit(p1.sword.damage);
+				}
+				p1.collisionCheckEnemy(i.hitBox, i.damage);
+				
+				i.update(dt, p1.getPosition(), newLevel.tileMap, &window);
+				window.draw(i);
+				if (i.FLAG_DEAD) {
+					
 				}
 			}
-			e1.update(dt, p1.getPosition(), newLevel.tileMap, &window);
-			window.draw(e1);
+			*/
+			/*
+			if (!eVec.empty()) {
+				if (p1.attacking) {
+					for (int i = 0; i < eVec.size(); i++) {
+						if (p1.sword.checkHit(eVec.at(i).hitBox))
+							eVec.at(i).getHit(p1.sword.damage);
+					}
+				}
+				for (auto &i : eVec) {
+					p1.collisionCheckEnemy(i.hitBox, i.damage);
+					if (i.curHealth <= 0) {
+						
+						delete(&i);
+						eVec.erase();
+
+						//delete &eVec.at(i);
+						break;
+					}
+					i.update(dt, p1.getPosition(), newLevel.tileMap, &window);
+					window.draw(i);
+				}
+			}
+			*/
+			
+			
+			//e1.update(dt, p1.getPosition(), newLevel.tileMap, &window);
+			
+			//window.draw(e1);
 			
 			spirit.update(p1.getPosition(), dt);
 			window.draw(spirit);
@@ -256,7 +317,7 @@ int main() {
 			window.draw(vig);
 			
 			// HUD:
-			lifeCount.render(window, p1.health, camera.getCenter(), camera.getSize());
+			lifeCount.render(window, p1.curHealth, camera.getCenter(), camera.getSize());
 
 			if (DEBUG) {
 
@@ -283,6 +344,9 @@ int main() {
 				winText.setString("\n\n\n\n\n\n\nFacingx = " + to_string(p1.getFacing().x) +
 					"\nFacingy = " + to_string(p1.getFacing().y));
 				window.draw(winText);
+
+				//winText.setString("\n\n\n\n\n\n\n\n\ne1 Health = " + to_string(e1.curHealth));
+				//window.draw(winText);
 			}
 
 			window.display();

@@ -6,28 +6,14 @@
 #include <SFML/Graphics.hpp>
 extern sf::Clock GLOBAL_GAME_CLOCK;
 
-/*
-The enemy in this game will be able to do several different things.
-It can move:
-	this means it has animation functions.
-
-It can attack:
-	It has a sword.
-
-
-
-
-
-
-
-*/
-
 class Enemy : public Entity
 {
 public:
 	Enemy(sf::Texture* spriteSheet, sf::Vector2f enemySize);
 	Enemy();
 	bool init();
+
+	void revive(sf::Vector2f);
 	
 	enum class State {
 		nominal,
@@ -40,7 +26,11 @@ public:
 	void basicMovement(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
 	void zoomAttack(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
 
-	void getHit();
+	void getHit(int damage);
+	//int damageRecieved;
+	bool beingHit;
+	
+	int damage = 1;
 	
 	sf::Vector2f moveDir;
 	sf::Vector2f finalVel;
@@ -64,9 +54,8 @@ public:
 	int curHealth;
 
 	bool stunned;
-	
 
-	int detectionRadius;
+	float detectionRadius;
 
 	sf::Vector2f enemySize;
 
@@ -78,7 +67,7 @@ public:
 	sf::Vector2f hitVector; // the normalized vector captured at the moment the enemy is hit by the player
 	//sf::Vector2f prevPlayerPos;
 	
-
+	bool FLAG_DEAD;
 	//sf::Vector2u animDim;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

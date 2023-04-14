@@ -163,12 +163,15 @@ void Player::update(float deltaTime, TileMap* map) {
 				break;
 			}
 		}
+		
 		if (spacePressed)
 			setState(State::dashing);
 		if (isDashing)
 			setState(State::dashing);
 		else
 			dashVel = sf::Vector2f(0, 0);
+		
+		
 
 
 		setFacing();
@@ -246,12 +249,36 @@ void Player::update(float deltaTime, TileMap* map) {
 
 	//case State::dead:
 
-	//case State::invulnerable:
+	case State::attacked:
+		{
+			int curStunClock = stunClock.getElapsedTime().asMilliseconds();
+			if (curStunClock < invincibleTime) {
+				if (curStunClock > flashRedTime){
+					tSprite.setColor(sf::Color::White);
+				}
+				if (curStunClock < hitBackTime) {
+					
+					finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
+					collisionCheckTile(map);
+					move(finalVel);
+				}
+				else {
+					
+					state = State::nominal;
+				}
+			}
+			else {
+				beingHit = false;
+				state = State::nominal;
+			}
+		
+		}
 		// effect: greyed out or flashing
-	
-
-
-		// move slightly in the direction of swing
+	}
+	// check invincibility
+	if (stunClock.getElapsedTime().asMilliseconds() > invincibleTime) {
+		invincible = false;
+		beingHit = false;
 	}
 	// finally, update the player's position on the map
 	sword.updatePos(getPosition());
@@ -261,6 +288,78 @@ void Player::update(float deltaTime, TileMap* map) {
 		sword.restartAnim();
 	updateAnim();
 	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 4));
+}
+
+void Player::collisionCheckEnemy(sf::FloatRect hitBox, int damage) {
+	if (!invincible) {
+		if (healthHitBox.intersects(hitBox)) {
+			if (!beingHit)
+				curHealth -= damage;
+			beingHit = true;
+			invincible = true;
+			
+			tSprite.setColor(sf::Color::Red);
+
+			stunClock.restart();
+			state = State::attacked;
+
+			float distSize = sqrt(pow(hitBox.left - getPosition().x, 2) + pow(hitBox.top - getPosition().y, 2));
+			hitVec = sf::Vector2f(((hitBox.left - getPosition().x) * -1) / distSize, ((hitBox.top - getPosition().y) * -1 )/ distSize);
+
+		}
+	}
+}
+
+void Player::init() {
+	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 4.f));
+
+	setOrigin(sf::Vector2f(8, 8));
+	// trav bools
+	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
+	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;
+	// key press bools
+	spacePressed = false; upPressed = false; downPressed = false; leftPressed = false;
+	rightPressed = false;
+	dashVel = sf::Vector2f(0, 0);
+	// row num and row len
+	idleDownAnimDim = sf::Vector2u(8, 0);
+	wRightAnimDim = sf::Vector2u(8, 1);
+	wLeftAnimDim = sf::Vector2u(8, 2);
+	wUpAnimDim = sf::Vector2u(8, 3);
+	wDownAnimDim = sf::Vector2u(8, 4);
+	idleLeftAnimDim = sf::Vector2u(8, 5);
+	idleRightAnimDim = sf::Vector2u(8, 6);
+	idleUpAnimDim = sf::Vector2u(8, 7);
+	dashAnimDimNE = sf::Vector2u(8, 8);
+	dashAnimDimNW = sf::Vector2u(8, 9);
+	dashAnimDimSW = sf::Vector2u(8, 10);
+	dashAnimDimSE = sf::Vector2u(8, 11);
+	dashAnimDimE = sf::Vector2u(8, 12);
+	dashAnimDimW = sf::Vector2u(8, 13);
+	dashAnimDimS = sf::Vector2u(8, 14);
+	dashAnimDimN = sf::Vector2u(8, 15);
+	//
+	shadowTex.loadFromFile("Textures/playerShadow.png");
+	shadowSprite.setTexture(shadowTex);
+	//sword settup
+	swordTex.loadFromFile("Textures/swordSlash1.png");
+	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
+	sword.initSword();
+
+	healthHitBox = sf::FloatRect(0, 0, 8, 13);
+	curHealth = maxHealth;
+	hitBackTime = 200;
+	knockBackSpeed = 100;
+	invincibleTime = 700;
+	beingHit = false;
+	invincible = false;
+	flashRedTime = 50;
+
+	
+}
+
+void Player::invincibleEffect() {
+	
 }
 
 void Player::setAnimation() {
@@ -422,45 +521,7 @@ void Player::setDiagBool() {
 }
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
-void Player::init() {
-	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 4.f));
 
-	setOrigin(sf::Vector2f(8, 8));
-	// trav bools
-	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
-	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;
-	// key press bools
-	spacePressed = false; upPressed = false; downPressed = false; leftPressed = false;
-	rightPressed = false;
-	dashVel = sf::Vector2f(0, 0);
-	// row num and row len
-	idleDownAnimDim = sf::Vector2u(8, 0);
-	wRightAnimDim = sf::Vector2u(8, 1);
-	wLeftAnimDim = sf::Vector2u(8, 2);
-	wUpAnimDim = sf::Vector2u(8, 3);
-	wDownAnimDim = sf::Vector2u(8, 4);
-	idleLeftAnimDim = sf::Vector2u(8, 5);
-	idleRightAnimDim = sf::Vector2u(8, 6);
-	idleUpAnimDim = sf::Vector2u(8, 7);
-	dashAnimDimNE = sf::Vector2u(8, 8);
-	dashAnimDimNW = sf::Vector2u(8, 9);
-	dashAnimDimSW = sf::Vector2u(8, 10);
-	dashAnimDimSE = sf::Vector2u(8, 11);
-	dashAnimDimE = sf::Vector2u(8, 12);
-	dashAnimDimW = sf::Vector2u(8, 13);
-	dashAnimDimS = sf::Vector2u(8, 14);
-	dashAnimDimN = sf::Vector2u(8, 15);
-	//
-	shadowTex.loadFromFile("Textures/playerShadow.png");
-	shadowSprite.setTexture(shadowTex);
-	//sword settup
-	swordTex.loadFromFile("Textures/swordSlash1.png");
-	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
-	sword.initSword();
-
-	healthHitBox = sf::FloatRect(0, 0, 8, 13);
-
-}
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
 	hitBox.width = size.x;
