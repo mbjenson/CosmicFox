@@ -17,13 +17,12 @@ public:
 
 	void render(sf::RenderWindow& win);
 	//int init(); declare an innit function for each Version of the level that inits all components of the Level
-	
+	void updateEnemies(float deltaTime, sf::Vector2f playerPos, sf::RenderWindow* window);
 	// vector of enemies for a given level;
 	// player can check for hit on all of the enemies by checking which ones are within range of each other, if
 	TileMap* tileMap;
-	// interactable map from TileMap;
 	Player* player; // get needed infomation about player status for tileMap
-	
+	std::vector<Enemy> eVec; // enemies
 	// enemy map stuff
 	// sound map stuff
 };

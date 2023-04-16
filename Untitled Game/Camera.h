@@ -6,7 +6,7 @@ class Camera : public sf::View
 {
 public:
 	using sf::View::View;
-	void update(Player& player1, float deltaTime);
+	void update(Player& player1, float deltaTime, sf::Vector2f mapSize);
 	
 	sf::Vector2f target;
 	sf::Vector2f position;

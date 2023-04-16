@@ -2,19 +2,80 @@
 
 void Level::render(sf::RenderWindow& win) {
 
-	// UPDATING AND DRAWING
+	// UPDATING AND DRAWING:
 
 	// BACKGROUND LAYER:
-	// thirdly, we need to draw the background of the map.
+	// we need to draw the background of the map.
+	
+	// handling falling player
+	// NOTE: i now realize that I cannot use the renderTexture becuase it does not take into
+	// For this, we refer to player.cpp's vector2f fallPosition and draw everything from that point of view, so to speak, while the player falls.
+	// we dont need to worry about changing how we draw entities and 3rd layer objects because they will be drawn ontop of the first two layers and if the 
+	// player is behind the first two, it will be hidden from the third.
+	// this can easily be done by updating that variable in collisionCheckVoid in player.cpp. then, we basically can draw the base layers of the map (1, 2)
+	// once and then continue to draw the third layer continuously but from the pov of fallLocation vector2f.
+	// NICE.
+	int tSize = tileMap->tileSize;
+	if (player->FLAG_FALL) {
+		sf::Vector2f fallPosition = player->fallPos;
+		sf::Vector2i intFallStart(static_cast<int>(fallPosition.x), static_cast<int>(fallPosition.y));
+		sf::Vector2f lastSafePosition = player->lastSafePos;
+		sf::IntRect fallDrawArea = tileMap->curDrawArea;
+		int cSize = tileMap->chunkSize;
+		
+		sf::Vector2i mapDimChunk = tileMap->mapDimChunks;
+		sf::Vector2i intTileStart(intFallStart.x / tSize, intFallStart.y / tSize);
+		tileMap->mapTex.clear();
+		for (int y = fallDrawArea.top; y < fallDrawArea.top + fallDrawArea.height; y++) {
+			for (int x = fallDrawArea.left; x < fallDrawArea.left + fallDrawArea.width; x++) {
+				int curTile = tileMap->layer1Types[x + y * cSize * mapDimChunk.x];
+				int curTile2 = tileMap->layer2Types[x + y * cSize * mapDimChunk.x];
+				
+				
+				sf::Sprite tempSpr1(*tileMap->layer1Texture);
+				tempSpr1.setTextureRect(sf::IntRect(0, curTile * tSize, tSize, tSize));
+				tempSpr1.setPosition(sf::Vector2f(x * tSize, y * tSize));
 
+				sf::Sprite tempSpr2(*tileMap->layer2Texture);
+				tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tSize, tSize, tSize));
+				tempSpr2.setPosition(sf::Vector2f(x * tSize, y * tSize));
+
+				tileMap->mapTex.draw(tempSpr1);
+				tileMap->mapTex.draw(tempSpr2);
+				/*
+				if (fallPosition.y < lastSafePosition.y) { // player fell facing away from camera
+					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
+						tileMap->mapTex.draw(*player);
+				}
+				*/
+				/*
+				if (fallPosition.y > lastSafePosition.y) { // player fell facing towards the camera
+					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
+						tileMap->mapTex.draw(*player);
+				}
+				else {
+					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
+						tileMap->mapTex.draw(*player);
+				}
+				*/
+				if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
+					tileMap->mapTex.draw(*player);
+			}
+		}
+		
+	}
+	else {
 	// BASE LAYER:
-	// fourth we check if we need to update base map. the base map is made up of two layers, the "floor", and the "carpet" essentially.
-	if (tileMap->checkForUpdate(player->getPosition())) {
-		tileMap->updateTexMap();
-		tileMap->updatePlayerChunk(player->getPosition());
+	// we check if we need to update base map. the base map is made up of two layers, the "floor", and the "carpet" essentially.
+		if (tileMap->checkForUpdate(player->getPosition())) {
+			tileMap->updateTexMap();
+			tileMap->updatePlayerChunk(player->getPosition());
+		}
+		
 	}
 	sf::Sprite mapSprite(tileMap->mapTex.getTexture());
 	win.draw(mapSprite);
+	
 
 	// 3rd LAYER/ Interactable:		
 	//						Like the lights, trees, chairs, doors and other things that go above
@@ -25,8 +86,16 @@ void Level::render(sf::RenderWindow& win) {
 	sf::Vector2i playerPos(static_cast<int>(player->getPosition().x), static_cast<int>(player->getPosition().y));
 	for (int y = tileMap->curDrawArea.top; y < tileMap->curDrawArea.height + tileMap->curDrawArea.top; y++) {
 		for (int x = tileMap->curDrawArea.left; x < tileMap->curDrawArea.width + tileMap->curDrawArea.left; x++) {
-			if ((playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
-				win.draw(*player);
+			for (auto &i : eVec) {
+				sf::Vector2i enemyPos(static_cast<int>(i.getPosition().x), static_cast<int>(i.getPosition().y));
+				if ((enemyPos.y - enemyPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+					win.draw(i);
+				}
+			}
+			if (!player->FLAG_FALL) {
+				if ((playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+					win.draw(*player);
+				}
 			}
 			if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 0)
 				continue;
@@ -59,4 +128,12 @@ void Level::render(sf::RenderWindow& win) {
 	// 6th CANOPY LAYER:
 		// MAYBE:
 		// last, but not least, update the canopy layer
+}
+
+void Level::updateEnemies(float dt, sf::Vector2f playerPos, sf::RenderWindow* win) {
+	for (auto& i : eVec) {
+		i.update(dt, playerPos, tileMap, win);
+	}
+	// do the general updating of the level's enemies here. 
+	// look into how I can use threads to update the areas' enemies.
 }

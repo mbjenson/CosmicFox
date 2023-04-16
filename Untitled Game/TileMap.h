@@ -41,10 +41,11 @@ public:
 	If they have, sets the current chunk that the player is within the map. 
 	*/
 	bool checkForUpdate(sf::Vector2f playerPos);
-
 	/*
 	Perhaps a draw function for an 'Animated Layer' of tiles
 	*/
+	// naught
+	
 	
 	
 	// updates the player's current chunk

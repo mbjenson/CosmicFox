@@ -330,9 +330,6 @@
     <None Include="Shaders\light_test.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Assets\Levels\MapFiles\Map1Layer2.csv">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
@@ -340,6 +337,7 @@
     <None Include="Shaders\test6.frag" />
     <None Include="Shaders\test7.frag" />
     <None Include="Shaders\test10.frag" />
+    <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf">

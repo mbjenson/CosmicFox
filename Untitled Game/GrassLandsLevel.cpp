@@ -18,6 +18,7 @@ int GrassLandsLevel::init(TileMap* map, Player* p1) {
 int GrassLandsLevel::init(Player* p1) {
 	player = p1;
 
+	// Map 1 setup:
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
 		return -1;
@@ -51,6 +52,21 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
+
+
+	// initialize enemies
+	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
+		return -1;
+	Enemy e1(&enemyT, sf::Vector2f(16.f, 16.f));
+	e1.init();
+	e1.setPosition(150.f, 60.f);
+	
+	Enemy e2(&enemyT, sf::Vector2f(16.f, 16.f));
+	e2.init();
+	e2.setPosition(200.f, 200.f);
+
+	eVec.push_back(e2);
+	eVec.push_back(e1);
 
 	return 0;
 

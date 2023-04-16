@@ -36,9 +36,10 @@ sf::Clock GLOBAL_GAME_CLOCK;
 *		is filled with an 'edge' tile that makes the tile look 3d. this is good for random map generation and also good
 *		for regular planned generation.
 * 
-* ->	Implement a way that tiles can have animations with tilemapmk2. cant use the current animation class
+* ->	? note sure if do ? Implement a way that tiles can have animations with tilemapmk2. cant use the current animation class
 * 
-* ->	Move collision check to the entity class
+* ->	keep track of the last safe tile the player was standing on so that if they fall, if their health
+*		is sufficient, they are respawned back on the last safe tile.
 * 
 * 
 */
@@ -49,6 +50,30 @@ sf::Clock GLOBAL_GAME_CLOCK;
 //  NOTE: also use the animation dimensions.
 
 // TODO:
+
+
+//CURRENT:
+// change all tileMap->xyz references to simple references a local variable
+// implement the enemy functionality into the level.cpp file.
+// implement code in the main function that checks for getting hit and whatnot into either the level or into the game.cpp file
+
+// allow travel between levels. this will involve freeing memory used by previous level. Each level can be heap allocated.
+// when the game is started, a linked list, each containing NULL level pointers will be created.
+// Once travel to a new level has been initiated, the player will despawn from current level and delete will be called on previous level.
+// **NOTE: we use delete because I am using 'new' keyword and delete() is faster than free().
+
+// wont need enemy collisionCheckVoid because we will simply check if tilemap logic is 1 || 2. then the enemy wont fall off ledge even if
+// its a void there. Its just numbers. how each class interperetes the information is up to them.
+
+// enemy has bool which controls whether or not the enemies are allowed to chase the player. this can be toggled for events like if the player
+//	falls or is dead. (check to make sure that when the player falls, the hitbox does not also fall with it. 
+
+//fix, the grass edge tiles, they are deceiving and make it look like the player can go out farther
+//		than it can
+
+// implement a pathfinding algorithm for the enemy that can run on a thread and doesn't need to finish
+// for the game loop to be completed. this algorithm will allow the enemy to not simply fall off of the ledge
+//	if the player is on other side of gap
 
 // finish player death anim.
 // workout player falling function:
@@ -161,8 +186,8 @@ int main() {
 
 	Camera camera;
 	camera.setSize(sf::Vector2f(1920, 1080));
-	camera.zoom(0.18f);
-	//camera.zoom(1.f);
+	camera.zoom(0.15f);
+	//camera.zoom(0.70f);
 
 	sf::Font roboto;
 	if (!roboto.loadFromFile("Assets/Fonts/Roboto-Regular.ttf")) {
@@ -186,7 +211,7 @@ int main() {
 	vig.setScale(0.8, 0.5);
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setPosition(sf::Vector2f(150.f, 400.f));
+	p1.setPosition(sf::Vector2f(25.f, 25.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 
@@ -206,26 +231,27 @@ int main() {
 
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
-
+	/*
 	sf::Texture enemyT;
 	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
 		return -1;
+	
 	Enemy* e1 = new Enemy(&enemyT, sf::Vector2f(16, 16));
 	//e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
 	e1->init();
-	e1->setPosition(250, 250);
+	e1->setPosition(45.f, 45.f);
 
 	Enemy* e2 = new Enemy(&enemyT, sf::Vector2f(16, 16));
 	e2->init();
-	e2->setPosition(300, 200);
+	e2->setPosition(45.f, 80.f);
 	
-
 	std::vector<Enemy> eVec;
 	eVec.push_back(*e1);
 	eVec.push_back(*e2);
 
-	std::vector<Enemy> delQueue;
-
+	//std::vector<Enemy> delQueue;
+	*/
+	camera.setCenter(p1.getPosition());
 	sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())
@@ -238,7 +264,9 @@ int main() {
 			window.clear();
 			
 			p1.update(dt, newLevel.tileMap);
-			camera.update(p1, dt);
+			camera.update(p1, dt, 
+				sf::Vector2f(	newLevel.tileMap->getMapDimTiles().x * newLevel.tileMap->tileSize, 
+								newLevel.tileMap->getMapDimTiles().y * newLevel.tileMap->tileSize));
 			window.setView(camera);
 			newLevel.render(window);
 			/*
@@ -258,18 +286,23 @@ int main() {
 				
 			}
 			*/
+			
+			
+			/*
 			for (int i = 0; i < eVec.size(); i++) {
-				
+				===== IN GAME.CPP =====
 				if (p1.attacking) {
 					if (p1.sword.checkHit(eVec.at(i).hitBox))
 						eVec.at(i).getHit(p1.sword.damage);
 				}
+				
 				p1.collisionCheckEnemy(eVec.at(i).hitBox, eVec.at(i).damage);
 				eVec.at(i).update(dt, p1.getPosition(), newLevel.tileMap, &window);
 				window.draw(eVec.at(i));
 				if (eVec.at(i).FLAG_DEAD)
 					eVec.erase(eVec.begin() + i);
 			}
+			*/
 			/*
 			for (auto& i : eVec) {
 				if (p1.attacking) {

@@ -15,6 +15,7 @@ bool Enemy::init() {
 	maxHealth = 5;
 	curHealth = maxHealth;
 	dampingFactor = 0.2;
+	curRow = 0;
 	hitBox = sf::FloatRect(0, 0, 16, 16);
 	// init weapon
 	curState = State::nominal;
@@ -25,7 +26,7 @@ bool Enemy::init() {
 }
 
 void Enemy::zoomAttack(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
-	
+	return;
 }
 
 void Enemy::collisionCheckTile(TileMap* map) {
@@ -163,7 +164,7 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 }
 
 void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win) {
-	
+	curRow = static_cast<int>(getPosition().y) / map->tileSize;
 	sf::Vector2f distVec(playerPos.x - getPosition().x, playerPos.y - getPosition().y);
 	float distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
 	playerDirNormal = sf::Vector2f(distVec.x / distSize, distVec.y / distSize);

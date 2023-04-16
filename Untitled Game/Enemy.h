@@ -36,6 +36,9 @@ public:
 	sf::Vector2f finalVel;
 	sf::Vector2f followVel;
 
+	// current row in a tileMap;
+	int curRow;
+
 	sf::Clock stunClock;
 	int hitBackSpeed = 200;
 	int hitBackTime = 90;

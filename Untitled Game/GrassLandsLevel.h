@@ -9,5 +9,8 @@ public:
 	int init(TileMap* map, Player* p1);
 
 	int init(Player* p1);
+
+	sf::Texture enemyT;
+
 };
 

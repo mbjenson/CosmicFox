@@ -123,7 +123,9 @@ void Player::update(float deltaTime, TileMap* map) {
 */
 // good Update
 void Player::update(float deltaTime, TileMap* map) {
-	//getKeyPresses();
+	// trying to use more local variables here:
+	// 1) dashTimer
+	int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
 
 	moveDir = sf::Vector2f(0, 0);
 	switch (state) {
@@ -165,14 +167,12 @@ void Player::update(float deltaTime, TileMap* map) {
 		}
 		
 		if (spacePressed)
-			setState(State::dashing);
+			if (curDashTimer > dashCooldown)
+				setState(State::dashing);
 		if (isDashing)
 			setState(State::dashing);
 		else
 			dashVel = sf::Vector2f(0, 0);
-		
-		
-
 
 		setFacing();
 		setAnimation();
@@ -194,7 +194,7 @@ void Player::update(float deltaTime, TileMap* map) {
 	
 	case State::dashing:
 	{
-		int curDashTimer = dashTimer.getElapsedTime().asMilliseconds();
+		
 		// protect from integer overflow
 		if (curDashTimer > 300000000) {
 			dashTimer.restart();
@@ -276,6 +276,9 @@ void Player::update(float deltaTime, TileMap* map) {
 		
 		}
 		// effect: greyed out or flashing
+
+	case State::dead:
+		checkDeath(deltaTime);
 	}
 	// check invincibility
 	if (stunClock.getElapsedTime().asMilliseconds() > invincibleTime) {
@@ -289,10 +292,38 @@ void Player::update(float deltaTime, TileMap* map) {
 	else
 		sword.restartAnim();
 	updateAnim();
-	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 4));
-	checkDeath();
+	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 5));
+
+	//checkDeath(deltaTime);
+}
+
+void Player::checkDeath(float dt) {
+	if (FLAG_FALL) {
+		state = State::dead;
+		finalVel = sf::Vector2f(0, 0);
+		int curTime = fallTimer.getElapsedTime().asMilliseconds();
+		if (curTime < fallTime) {
+			// set fall anim
+			move(sf::Vector2f(0, fallSpeed * dt * (curTime / 100)));
+		}
+		else {
+			FLAG_DEAD = true;
+		}
+	}
+	if (FLAG_NOLIFE) {
+		state = State::dead;
+		finalVel = sf::Vector2f(0, 0);
+		FLAG_DEAD = true;
+		//respawn(sf::Vector2f(25.f, 25.f));
+		// restart anim
+		// done = (setAnim to no life anim which, when  done will return bool)
+		// if (done)
+		//		flag_dead = true;
+		//FLAG_DEAD = true;
+	}
 	if (FLAG_DEAD) {
-		respawn(sf::Vector2f(150.f, 150.f));
+		// convert to tile coords
+		respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16)));
 	}
 }
 
@@ -301,6 +332,9 @@ void Player::collisionCheckEnemy(sf::FloatRect hitBox, int damage) {
 		if (healthHitBox.intersects(hitBox)) {
 			if (!beingHit)
 				curHealth -= damage;
+			if (curHealth <= 0) {
+				state = State::dead;
+			}
 			beingHit = true;
 			invincible = true;
 			
@@ -351,6 +385,7 @@ void Player::init() {
 	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
 	sword.initSword();
 
+	lastSafePos = sf::Vector2f(0, 0);
 	healthHitBox = sf::FloatRect(0, 0, 8, 13);
 	curHealth = maxHealth;
 	hitBackTime = 200;
@@ -787,25 +822,11 @@ void Player::collisionCheckTile(TileMap* map) {
 }
 */
 
-void Player::checkDeath() {
-	if (FLAG_FALL) {
-		// perhaps the player loses some health when they fall but not all health.
-		FLAG_DEAD = true;
-		// (this func will move player down and set row to the row of fall anim)
-		// at end, it will set flag_death to true;
-	}
-	if (FLAG_NOLIFE) {
-		// 
-		FLAG_DEAD = true;
-		
-	}
-	// perform fade to black of screen
-
-}
-
 //respawn player at a location
 void Player::respawn(sf::Vector2f spawnPoint) {
 	setPosition(spawnPoint);
+	// when player respawns we need to run the draw command to reset the mapTex
+	state = State::nominal;
 	FLAG_DEAD = false;
 	FLAG_NOLIFE = false;
 	FLAG_FALL = false;
@@ -834,8 +855,15 @@ void Player::collisionCheckVoid(TileMap* map) {
 	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 2)
 		numCorners++;
 	if (numCorners >= 4) {
+		fallTimer.restart();
+		fallPos = sf::Vector2f(tempHitBox.left, tempHitBox.top);
+		state = State::dead;
 		FLAG_FALL = true;
 	}
+	if (numCorners < 2) {
+		lastSafePos = sf::Vector2f(tempHitBox.left, tempHitBox.top);
+	}
+	
 }
 
 void Player::collisionCheckTile(TileMap* map) {

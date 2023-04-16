@@ -75,7 +75,8 @@ void TileMap::drawTopLayer(sf::Vector2f playerPos) {
 }
 */
 
-// depricated, now use the level.h file to draw things and whatNot
+
+
 void TileMap::updateTexMap() {
 	mapTex.clear();
 	// Firstly, check bounds for render rect.
@@ -143,6 +144,7 @@ void TileMap::updateTexMap(sf::IntRect drawArea) {
 	}
 	mapTex.display();
 }
+
 
 int TileMap::getTileLogic(sf::Vector2f playerPos) {
 	// player pos / tile size = current tile
