@@ -827,6 +827,8 @@ void Player::respawn(sf::Vector2f spawnPoint) {
 	setPosition(spawnPoint);
 	// when player respawns we need to run the draw command to reset the mapTex
 	state = State::nominal;
+	isDashing = false;
+	tSprite.setColor(sf::Color::White);
 	FLAG_DEAD = false;
 	FLAG_NOLIFE = false;
 	FLAG_FALL = false;

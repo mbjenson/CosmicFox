@@ -54,9 +54,10 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 
 //CURRENT:
+// ERROR: if dash across open space and hit enemy, you continue dashing toward enemy from across gap until dead.
 // change all tileMap->xyz references to simple references a local variable
-// implement the enemy functionality into the level.cpp file.
-// implement code in the main function that checks for getting hit and whatnot into either the level or into the game.cpp file
+
+// make it so enemies push each other apart
 
 // allow travel between levels. this will involve freeing memory used by previous level. Each level can be heap allocated.
 // when the game is started, a linked list, each containing NULL level pointers will be created.
@@ -258,6 +259,7 @@ int main() {
 	//std::vector<Enemy> delQueue;
 	*/
 	camera.setCenter(p1.getPosition());
+
 	sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())

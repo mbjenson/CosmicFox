@@ -151,7 +151,7 @@ void Enemy::collisionCheckTile(TileMap* map) {
 void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
 
 	if (distSize < detectionRadius) {
-		sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
+		//sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
 		sf::Vector2f normalMovement(distVec.x / distSize, distVec.y / distSize);
 		followVel.x -= followVel.x * 0.003;
 		followVel.y -= followVel.y * 0.003;
@@ -225,6 +225,7 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 
 	// collision checks
 	collisionCheckTile(map);
+	// CollisionCheckEnemy is done in level file
 	// final vel
 	move(finalVel);
 	//prevPlayerPos = playerPos;

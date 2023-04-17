@@ -81,22 +81,23 @@ void Level::render(sf::RenderWindow& win) {
 	//						the floor that can be interacted with.
 	//						This layer also need to be drawn with the player and enemies because moving
 	//						objects can go in front or behind the interactable tiles.
-
+	sf::Vector2i mapDTiles = tileMap->getMapDimTiles();
+	sf::IntRect thisDrawArea = tileMap->curDrawArea;
 	sf::Vector2i playerPos(static_cast<int>(player->getPosition().x), static_cast<int>(player->getPosition().y));
-	for (int y = tileMap->curDrawArea.top; y < tileMap->curDrawArea.height + tileMap->curDrawArea.top; y++) {
-		for (int x = tileMap->curDrawArea.left; x < tileMap->curDrawArea.width + tileMap->curDrawArea.left; x++) {
+	for (int y = thisDrawArea.top; y < thisDrawArea.height + thisDrawArea.top; y++) {
+		for (int x = thisDrawArea.left; x < thisDrawArea.width + thisDrawArea.left; x++) {
 			for (auto &i : eVec) {
 				sf::Vector2i enemyPos(static_cast<int>(i.getPosition().x), static_cast<int>(i.getPosition().y));
-				if ((enemyPos.y - enemyPos.y % tSize) / tSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+				if ((enemyPos.y - enemyPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(i);
 				}
 			}
 			if (!player->FLAG_FALL) {
-				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(*player);
 				}
 			}
-			if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 0)
+			if (tileMap->layer3Types[x + y * mapDTiles.x] == 0)
 				continue;
 			else {
 				sf::Sprite tempSpr(*tileMap->layer3Texture);
@@ -106,17 +107,17 @@ void Level::render(sf::RenderWindow& win) {
 				
 				// These are specific dimensioins for the interactable layer spriteSheet.
 				// Later change this so that these tiles can be animated
-				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 1) {
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 1) {
 					tempSpr.setTextureRect(tileMap->texDim1);
 					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - 4));
 					win.draw(tempSpr);
 				}
-				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 2) {
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 2) {
 					tempSpr.setTextureRect(tileMap->texDim2);
 					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize - 2));
 					win.draw(tempSpr);
 				}
-				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 3) {
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 3) {
 					tempSpr.setTextureRect(tileMap->texDim3);
 					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize));
 					win.draw(tempSpr);
