@@ -1,6 +1,7 @@
 
 #include <SFML/graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Audio.hpp>
 #include <fstream>
 #include <math.h>
 #include <iostream>
@@ -231,6 +232,11 @@ int main() {
 
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
+
+	sf::Music music;
+	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
+		return -1;
+	music.play();
 	/*
 	sf::Texture enemyT;
 	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
@@ -268,6 +274,8 @@ int main() {
 				sf::Vector2f(	newLevel.tileMap->getMapDimTiles().x * newLevel.tileMap->tileSize, 
 								newLevel.tileMap->getMapDimTiles().y * newLevel.tileMap->tileSize));
 			window.setView(camera);
+			
+			newLevel.updateEnemies(dt, &window);
 			newLevel.render(window);
 			/*
 			for (int i = 0; i < eVec.size(); i++) {
@@ -290,7 +298,7 @@ int main() {
 			
 			/*
 			for (int i = 0; i < eVec.size(); i++) {
-				===== IN GAME.CPP =====
+				
 				if (p1.attacking) {
 					if (p1.sword.checkHit(eVec.at(i).hitBox))
 						eVec.at(i).getHit(p1.sword.damage);
@@ -383,7 +391,7 @@ int main() {
 					"\nFacingy = " + to_string(p1.getFacing().y));
 				window.draw(winText);
 
-				//winText.setString("\n\n\n\n\n\n\n\n\ne1 Health = " + to_string(e1.curHealth));
+				//winText.setString("\n\n\n\n\n\n\n\n\nsizeof enemy vector = " + to_string(sizeof(newLevel.eVec)));
 				//window.draw(winText);
 			}
 

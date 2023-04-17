@@ -41,8 +41,11 @@ public:
 
 	sf::Clock stunClock;
 	int hitBackSpeed = 200;
+	//int hitBackTime = 90;
 	int hitBackTime = 90;
-	int totalHitTime = 200;
+	//int totalHitTime = 200;
+	int totalHitTime = 120;
+
 	
 	float dampingFactor = 0.2;
 	int moveSpeed = 55;
@@ -66,6 +69,7 @@ public:
 	int loseHealthCooldown = 50;
 	sf::Clock loseHealthTimer;
 	
+	float distSize;
 	sf::Vector2f playerDirNormal; // the normalized vector to the player
 	sf::Vector2f hitVector; // the normalized vector captured at the moment the enemy is hit by the player
 	//sf::Vector2f prevPlayerPos;

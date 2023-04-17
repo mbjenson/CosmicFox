@@ -17,6 +17,7 @@ bool Enemy::init() {
 	dampingFactor = 0.2;
 	curRow = 0;
 	hitBox = sf::FloatRect(0, 0, 16, 16);
+	distSize = 0.f; 
 	// init weapon
 	curState = State::nominal;
 	beingHit = false;
@@ -48,22 +49,26 @@ void Enemy::collisionCheckTile(TileMap* map) {
 			return;
 
 		// if top left corner intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 1)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 1 ||
+			map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 2)
 			TL = true;
 		else
 			TL = false;
 		// if top right intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 1)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 1 || 
+			map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 2)
 			TR = true;
 		else
 			TR = false;
 		// if bottom left intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 1)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 1 ||
+			map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 2)
 			BL = true;
 		else
 			BL = false;
 		// if bottom right intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 1)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 1 ||
+			map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 2)
 			BR = true;
 		else
 			BR = false;
@@ -163,10 +168,12 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 		// move two sqares, change facing, do other random things
 }
 
+
+
 void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win) {
 	curRow = static_cast<int>(getPosition().y) / map->tileSize;
 	sf::Vector2f distVec(playerPos.x - getPosition().x, playerPos.y - getPosition().y);
-	float distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
+	//distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
 	playerDirNormal = sf::Vector2f(distVec.x / distSize, distVec.y / distSize);
 
 	switch (curState) {

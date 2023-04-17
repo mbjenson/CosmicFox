@@ -53,7 +53,7 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
 
-
+	
 	// initialize enemies
 	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
 		return -1;
@@ -67,7 +67,7 @@ int GrassLandsLevel::init(Player* p1) {
 
 	eVec.push_back(e2);
 	eVec.push_back(e1);
-
+	
 	return 0;
 
 }

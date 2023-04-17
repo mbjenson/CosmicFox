@@ -269,6 +269,9 @@
   <ItemGroup>
     <Text Include="Assets\Levels\MapFiles\stringTest1.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sounds\gameAmbience1.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

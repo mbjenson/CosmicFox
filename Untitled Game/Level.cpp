@@ -75,7 +75,6 @@ void Level::render(sf::RenderWindow& win) {
 	}
 	sf::Sprite mapSprite(tileMap->mapTex.getTexture());
 	win.draw(mapSprite);
-	
 
 	// 3rd LAYER/ Interactable:		
 	//						Like the lights, trees, chairs, doors and other things that go above
@@ -88,12 +87,12 @@ void Level::render(sf::RenderWindow& win) {
 		for (int x = tileMap->curDrawArea.left; x < tileMap->curDrawArea.width + tileMap->curDrawArea.left; x++) {
 			for (auto &i : eVec) {
 				sf::Vector2i enemyPos(static_cast<int>(i.getPosition().x), static_cast<int>(i.getPosition().y));
-				if ((enemyPos.y - enemyPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+				if ((enemyPos.y - enemyPos.y % tSize) / tSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
 					win.draw(i);
 				}
 			}
 			if (!player->FLAG_FALL) {
-				if ((playerPos.y - playerPos.y % tileMap->tileSize) / tileMap->tileSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
+				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (tileMap->curDrawArea.width + tileMap->curDrawArea.left - 1)) {
 					win.draw(*player);
 				}
 			}
@@ -109,17 +108,17 @@ void Level::render(sf::RenderWindow& win) {
 				// Later change this so that these tiles can be animated
 				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 1) {
 					tempSpr.setTextureRect(tileMap->texDim1);
-					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - 4));
+					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - 4));
 					win.draw(tempSpr);
 				}
 				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 2) {
 					tempSpr.setTextureRect(tileMap->texDim2);
-					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - tileMap->tileSize - 2));
+					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize - 2));
 					win.draw(tempSpr);
 				}
 				if (tileMap->layer3Types[x + y * tileMap->getMapDimTiles().x] == 3) {
 					tempSpr.setTextureRect(tileMap->texDim3);
-					tempSpr.setPosition(sf::Vector2f(x * tileMap->tileSize, y * tileMap->tileSize - tileMap->tileSize));
+					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize));
 					win.draw(tempSpr);
 				}
 			}
@@ -130,10 +129,56 @@ void Level::render(sf::RenderWindow& win) {
 		// last, but not least, update the canopy layer
 }
 
-void Level::updateEnemies(float dt, sf::Vector2f playerPos, sf::RenderWindow* win) {
-	for (auto& i : eVec) {
-		i.update(dt, playerPos, tileMap, win);
+void Level::updateEnemies(float dt, sf::RenderWindow* win) {
+	// maybe a for each loop is much faster, I am only using for loop because I want to be able to erase the enemies if necessary
+	int i = 0;
+	for (auto& e : eVec) {
+
+		// always update the player distance size here so that it is properly handled
+		e.distSize = sqrt(pow(player->getPosition().x - e.getPosition().x, 2)
+			+ pow(player->getPosition().y - e.getPosition().y, 2));
+		if (e.distSize > enemyRenderDistance) {
+			i++;
+			continue;
+		}
+		else {
+			if (player->attacking) {
+				if (player->sword.checkHit(e.hitBox)) {
+					e.getHit(player->sword.damage);
+				}
+			}
+			if (e.distSize < enemyPlayerCollisionCheckDistance)
+				player->collisionCheckEnemy(e.hitBox, e.damage);
+			e.update(dt, player->getPosition(), tileMap, win);
+			if (e.FLAG_DEAD) {
+				eVec.erase(eVec.begin() + i);
+			}
+			i++;
+		}
 	}
+	/*
+	for (int i = 0; i < eVec.size(); i++) {
+		// always update the player distance size here so that it is properly handled
+		eVec.at(i).distSize = sqrt(pow(player->getPosition().x - eVec.at(i).getPosition().x, 2)
+			+ pow(player->getPosition().y - eVec.at(i).getPosition().x, 2));
+		// check if the enemy in within a certain distance of player ya know?
+		if (eVec.at(i).distSize < enemyRenderDistance) {
+			continue;
+		}
+		eVec.at(i).update(dt, player->getPosition(), tileMap, win);
+		if (eVec.at(i).FLAG_DEAD) {
+			eVec.erase(eVec.begin() + i);
+		}
+	}
+	*/
+	/*
+	for (auto& i : eVec) {
+		i.update(dt, player->getPosition(), tileMap, win);
+		if (i.FLAG_DEAD) {
+			eVec.erase()
+		}
+	}
+	*/
 	// do the general updating of the level's enemies here. 
 	// look into how I can use threads to update the areas' enemies.
 }
