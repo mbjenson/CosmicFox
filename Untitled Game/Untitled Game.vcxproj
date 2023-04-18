@@ -172,6 +172,8 @@
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\darkMask.png" />
+    <Image Include="Textures\earth.png" />
     <Image Include="Textures\grassLands3.png" />
     <Image Include="Textures\spirit.png" />
     <Image Include="Textures\swordSlash1.png" />

@@ -245,6 +245,12 @@
     <Image Include="Textures\grassLands3.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\earth.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\darkMask.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">

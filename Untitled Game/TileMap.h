@@ -46,7 +46,7 @@ public:
 	*/
 	// naught
 	
-	
+	void updateBG(sf::Vector2f cameraCenter);
 	
 	// updates the player's current chunk
 	void updatePlayerChunk(sf::Vector2f playerPos);
@@ -90,6 +90,8 @@ public:
 	sf::Texture* layer1Texture;
 	sf::Texture* layer2Texture;
 	sf::Texture* layer3Texture;
+	sf::Texture bgTex;
+	sf::Sprite bg;
 
 	sf::IntRect curDrawArea;
 

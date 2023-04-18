@@ -865,6 +865,7 @@ void Player::collisionCheckVoid(TileMap* map) {
 	if (numCorners < 2) {
 		lastSafePos = sf::Vector2f(tempHitBox.left, tempHitBox.top);
 	}
+	voidCorners = numCorners;
 	
 }
 

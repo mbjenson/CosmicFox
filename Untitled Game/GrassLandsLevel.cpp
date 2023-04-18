@@ -31,16 +31,16 @@ int GrassLandsLevel::init(Player* p1) {
 	if (!rocks->loadFromFile("Textures/rocks1.png"))
 		return -1;
 
-	int* logicGrid2 = new int[2304];
+	int* logicGrid2 = new int[3840];
 	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
-	int* tileTypes1 = new int[2304];
+	int* tileTypes1 = new int[3840];
 	read_ints("Assets/Levels/MapFiles/Map1Layer1.csv", tileTypes1);
-	int* tileTypes2 = new int[2304];
+	int* tileTypes2 = new int[3840];
 	read_ints("assets/Levels/MapFiles/Map1Layer2.csv", tileTypes2);
-	int* tileTypes3 = new int[2304];
+	int* tileTypes3 = new int[3840];
 	read_ints("assets/Levels/MapFiles/Map1Layer3.csv", tileTypes3);
 
-	sf::Vector2i mapDimChunks1(3, 3);
+	sf::Vector2i mapDimChunks1(3, 5);
 
 	tileMap = new TileMap(tileTypes1, tileTypes2, tileTypes3, logicGrid2,
 		mapDimChunks1, terrain1, terrain2, rocks);
@@ -49,11 +49,15 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
 	tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
 
+	if (!tileMap->bgTex.loadFromFile("Textures/earth.png"))
+		return -1;
+
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
 
 	
+
 	// initialize enemies
 	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
 		return -1;

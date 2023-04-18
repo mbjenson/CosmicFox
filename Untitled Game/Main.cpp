@@ -42,7 +42,7 @@ sf::Clock GLOBAL_GAME_CLOCK;
 * ->	keep track of the last safe tile the player was standing on so that if they fall, if their health
 *		is sufficient, they are respawned back on the last safe tile.
 * 
-* 
+*  -> SPACE FOX!;
 */
 
 //  TODO:
@@ -50,12 +50,14 @@ sf::Clock GLOBAL_GAME_CLOCK;
 //	NOTE: use the same animation functions that are currently used for the player animations
 //  NOTE: also use the animation dimensions.
 
+// MAP IDEA:
+// bigg pillars walk between, royal city things. flat maps with holes. epic royal ocean/empirical tilemap. white marbel.
+// two big pillars the player walks between with trees and whatnot.
+
 // TODO:
 
 
 //CURRENT:
-// ERROR: if dash across open space and hit enemy, you continue dashing toward enemy from across gap until dead.
-// change all tileMap->xyz references to simple references a local variable
 
 // make it so enemies push each other apart
 
@@ -147,24 +149,41 @@ void processEvents(sf::RenderWindow& window) {
 	}
 }
 // this is temp main function for when I want to test other things 
-/*
+
 int main() {
-	sf::Vector2f winDim(2048, 1024);
+	sf::Vector2f winDim(1920, 1080);
+
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
 
-	sf::Shader shader;
-	if (!shader.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment)) {
-		return -1;
-	}
-	sf::Texture black;
-	if (!black.loadFromFile("Textures/black.png")) {
-		return -1;
-	}
-	sf::Sprite box(black);
 	
-	sf::Texture screen;
-	screen.create(winDim.x, winDim.y);
-	sf::Sprite windowS(screen);
+	//sf::Texture black;
+	//if (!black.loadFromFile("Textures/black.png")) {
+	//	return -1;
+	//}
+	//sf::Sprite box(black);
+	
+	sf::Texture bgT;
+	if (!bgT.loadFromFile("Textures/earth.png"))
+		return -1;
+	sf::Sprite bg(bgT);
+	
+	
+	
+	sf::Texture tex;
+	tex.create(winDim.x, winDim.x);
+	sf::Sprite spr(tex);
+	
+	sf::Vector2f topLeft(0, 0);
+	sf::Vector2f playerPos(400.f, 200.f);
+		//distance from top left of screen
+	
+
+	sf::Shader shader;
+	if (!shader.loadFromFile("Shaders/test6.frag", sf::Shader::Fragment))
+		return -1;
+	
+	shader.setUniform("u_resolution", sf::Vector2f(tex.getSize().x, tex.getSize().y));
+	shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
 	sf::Clock mainClock;
 	while (window.isOpen()) {
 		sf::Event event;
@@ -172,13 +191,21 @@ int main() {
 			if (event.type == sf::Event::Closed())
 				window.close();
 		}
+		sf::Vector2f center(topLeft.x + sf::Mouse::getPosition().x, topLeft.y + sf::Mouse::getPosition().y);
+		shader.setUniform("circleCenter", sf::Vector2f(center));
+
 		window.clear();
-		window.draw(windowS, &shader);
+		
+		window.draw(bg);
+		window.draw(spr, &shader);
+		
+
 		window.display();
 	}
 }
-*/
 
+
+/*
 int main() {
 
 	bool gameState = true;
@@ -237,28 +264,16 @@ int main() {
 	sf::Music music;
 	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 		return -1;
-	music.play();
-	/*
-	sf::Texture enemyT;
-	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
-		return -1;
-	
-	Enemy* e1 = new Enemy(&enemyT, sf::Vector2f(16, 16));
-	//e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
-	e1->init();
-	e1->setPosition(45.f, 45.f);
+	//music.play();
+	music.setVolume(50.f);
 
-	Enemy* e2 = new Enemy(&enemyT, sf::Vector2f(16, 16));
-	e2->init();
-	e2->setPosition(45.f, 80.f);
+	//sf:: black;
+	//black.create(64, 64);
+	//black.getPixel();
 	
-	std::vector<Enemy> eVec;
-	eVec.push_back(*e1);
-	eVec.push_back(*e2);
-
-	//std::vector<Enemy> delQueue;
-	*/
 	camera.setCenter(p1.getPosition());
+
+	sf::BlendMode none;
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -268,9 +283,12 @@ int main() {
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
 		if (gameState) {
+			// update bg position
+			newLevel.tileMap->updateBG(camera.getCenter());
 			setKeyPressesKBD(p1);
 			window.clear();
-			
+			// using renderState (blend mode) we can blend the background texture with the foreground texture
+			window.draw(newLevel.tileMap->bg, sf::RenderStates(none));
 			p1.update(dt, newLevel.tileMap);
 			camera.update(p1, dt, 
 				sf::Vector2f(	newLevel.tileMap->getMapDimTiles().x * newLevel.tileMap->tileSize, 
@@ -279,83 +297,6 @@ int main() {
 			
 			newLevel.updateEnemies(dt, &window);
 			newLevel.render(window);
-			/*
-			for (int i = 0; i < eVec.size(); i++) {
-				// get distance from player
-				Enemy curEnemy = eVec.at(i);
-				float enemyDist = sqrt(pow(p1.getPosition().x - curEnemy.getPosition().x, 2)
-					+ pow(p1.getPosition().y - curEnemy.getPosition().y, 2));
-				if (p1.attacking) {
-					if (enemyDist < 30) {
-
-						// check for hit
-
-					}
-				}
-				
-				
-			}
-			*/
-			
-			
-			/*
-			for (int i = 0; i < eVec.size(); i++) {
-				
-				if (p1.attacking) {
-					if (p1.sword.checkHit(eVec.at(i).hitBox))
-						eVec.at(i).getHit(p1.sword.damage);
-				}
-				
-				p1.collisionCheckEnemy(eVec.at(i).hitBox, eVec.at(i).damage);
-				eVec.at(i).update(dt, p1.getPosition(), newLevel.tileMap, &window);
-				window.draw(eVec.at(i));
-				if (eVec.at(i).FLAG_DEAD)
-					eVec.erase(eVec.begin() + i);
-			}
-			*/
-			/*
-			for (auto& i : eVec) {
-				if (p1.attacking) {
-					if (p1.sword.checkHit(i.hitBox))
-						i.getHit(p1.sword.damage);
-				}
-				p1.collisionCheckEnemy(i.hitBox, i.damage);
-				
-				i.update(dt, p1.getPosition(), newLevel.tileMap, &window);
-				window.draw(i);
-				if (i.FLAG_DEAD) {
-					
-				}
-			}
-			*/
-			/*
-			if (!eVec.empty()) {
-				if (p1.attacking) {
-					for (int i = 0; i < eVec.size(); i++) {
-						if (p1.sword.checkHit(eVec.at(i).hitBox))
-							eVec.at(i).getHit(p1.sword.damage);
-					}
-				}
-				for (auto &i : eVec) {
-					p1.collisionCheckEnemy(i.hitBox, i.damage);
-					if (i.curHealth <= 0) {
-						
-						delete(&i);
-						eVec.erase();
-
-						//delete &eVec.at(i);
-						break;
-					}
-					i.update(dt, p1.getPosition(), newLevel.tileMap, &window);
-					window.draw(i);
-				}
-			}
-			*/
-			
-			
-			//e1.update(dt, p1.getPosition(), newLevel.tileMap, &window);
-			
-			//window.draw(e1);
 			
 			spirit.update(p1.getPosition(), dt);
 			window.draw(spirit);
@@ -403,7 +344,29 @@ int main() {
 	return 0;
 }
 
+*/
 
+
+/*
+	sf::Texture enemyT;
+	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
+		return -1;
+
+	Enemy* e1 = new Enemy(&enemyT, sf::Vector2f(16, 16));
+	//e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
+	e1->init();
+	e1->setPosition(45.f, 45.f);
+
+	Enemy* e2 = new Enemy(&enemyT, sf::Vector2f(16, 16));
+	e2->init();
+	e2->setPosition(45.f, 80.f);
+
+	std::vector<Enemy> eVec;
+	eVec.push_back(*e1);
+	eVec.push_back(*e2);
+
+	//std::vector<Enemy> delQueue;
+	*/
 
 // TODO:
 // ?? maybe not needed because I am going to have a 16x16 sprite anyway

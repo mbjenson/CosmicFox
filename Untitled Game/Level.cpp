@@ -5,6 +5,7 @@ void Level::render(sf::RenderWindow& win) {
 	// UPDATING AND DRAWING:
 
 	// BACKGROUND LAYER:
+	
 	// we need to draw the background of the map.
 	
 	// handling falling player
@@ -25,7 +26,8 @@ void Level::render(sf::RenderWindow& win) {
 		
 		sf::Vector2i mapDimChunk = tileMap->mapDimChunks;
 		sf::Vector2i intTileStart(intFallStart.x / tSize, intFallStart.y / tSize);
-		tileMap->mapTex.clear();
+		tileMap->mapTex.clear(sf::Color::Transparent);
+		//tileMap->mapTex.draw(tileMap->bg);
 		for (int y = fallDrawArea.top; y < fallDrawArea.top + fallDrawArea.height; y++) {
 			for (int x = fallDrawArea.left; x < fallDrawArea.left + fallDrawArea.width; x++) {
 				int curTile = tileMap->layer1Types[x + y * cSize * mapDimChunk.x];
@@ -132,14 +134,13 @@ void Level::render(sf::RenderWindow& win) {
 
 void Level::updateEnemies(float dt, sf::RenderWindow* win) {
 	// maybe a for each loop is much faster, I am only using for loop because I want to be able to erase the enemies if necessary
-	int i = 0;
+	
 	for (auto& e : eVec) {
 
 		// always update the player distance size here so that it is properly handled
 		e.distSize = sqrt(pow(player->getPosition().x - e.getPosition().x, 2)
 			+ pow(player->getPosition().y - e.getPosition().y, 2));
 		if (e.distSize > enemyRenderDistance) {
-			i++;
 			continue;
 		}
 		else {
@@ -151,10 +152,11 @@ void Level::updateEnemies(float dt, sf::RenderWindow* win) {
 			if (e.distSize < enemyPlayerCollisionCheckDistance)
 				player->collisionCheckEnemy(e.hitBox, e.damage);
 			e.update(dt, player->getPosition(), tileMap, win);
-			if (e.FLAG_DEAD) {
-				eVec.erase(eVec.begin() + i);
-			}
-			i++;
+		}
+	}
+	for (int i = 0; i < eVec.size(); i++) {
+		if (eVec.at(i).FLAG_DEAD) {
+			eVec.erase(eVec.begin() + i);
 		}
 	}
 	/*

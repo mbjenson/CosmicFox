@@ -65,6 +65,7 @@ public:
 	void collisionCheckTile(TileMap* map);
 	void collisionCheckEnemy(sf::FloatRect hitBox, int damage);
 	void collisionCheckVoid(TileMap* map);
+	int voidCorners;
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;
 	
@@ -263,10 +264,13 @@ private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();
-		target.draw(shadowSprite);
+		
+		if (voidCorners < 2)
+			target.draw(shadowSprite);
 		if (attacking) {
 			target.draw(sword);
 		}
+
 		//sf::RectangleShape lastSafe(sf::Vector2f(3.f, 3.f));
 		//lastSafe.setPosition(lastSafePos);
 		//lastSafe.setFillColor(sf::Color::Red);

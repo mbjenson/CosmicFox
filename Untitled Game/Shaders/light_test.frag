@@ -3,6 +3,7 @@ precision mediump float;
 #endif
 
 uniform vec2 u_resolution;
+uniform sampler2D currentTexture;
 
 float circleShape(vec2 position, float radius){
 	return step(radius, length(position - vec2(0.5)));
@@ -10,12 +11,13 @@ float circleShape(vec2 position, float radius){
 
 void main() {
 	vec2 position = gl_FragCoord.xy / u_resolution;
+	
 
 	vec3 color = vec3(0.0);
-
+	
 	float circle = circleShape(position, 0.2);
+	vec3 curCol = texture2D(currentTexture, gl_TexCoord[0].xy);
+	
 
-	color = vec3(circle);
-
-	gl_FragColor = vec4(color, 1.0);
+	gl_FragColor = vec4(curCol, circle);
 }

@@ -13,9 +13,16 @@ TileMap::TileMap(	int* types1, int* types2, int* types3, int* logic, sf::Vector2
 	// layer3Logic = layer3log[]
 }
 
+void TileMap::updateBG(sf::Vector2f cameraCenter) {
+	bg.setPosition(cameraCenter.x - cameraCenter.x * 0.1, cameraCenter.y - cameraCenter.y * 0.1);
+}
+
 void TileMap::init() {
 	mapTex.create(mapDimChunks.x * chunkSize * tileSize, mapDimChunks.y * chunkSize * tileSize);
-
+	bg.setTexture(bgTex);
+	bg.setScale(0.5f, 0.5f);
+	//bg.setColor(sf::Color(0, 0, 0, 100));
+	bg.setOrigin(bgTex.getSize().x / 2, bgTex.getSize().y / 2);
 }
 
 bool TileMap::checkForUpdate(sf::Vector2f playerPos) {
@@ -28,7 +35,7 @@ bool TileMap::checkForUpdate(sf::Vector2f playerPos) {
 		return true;
 	}
 }
-// WIP
+
 void TileMap::updateAnimations() {
 	return;
 }
@@ -78,7 +85,11 @@ void TileMap::drawTopLayer(sf::Vector2f playerPos) {
 
 
 void TileMap::updateTexMap() {
-	mapTex.clear();
+
+	mapTex.clear(sf::Color::Transparent);
+
+	//mapTex.draw(bg);
+	
 	// Firstly, check bounds for render rect.
 	sf::IntRect drawArea(curChunk.x - 1, curChunk.y - 1, 3, 3);
 	if (curChunk.x == 0) {
@@ -104,6 +115,7 @@ void TileMap::updateTexMap() {
 	
 	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++){
 		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
+
 			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
 			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
 			
@@ -122,9 +134,16 @@ void TileMap::updateTexMap() {
 	curDrawArea = drawArea;
 	mapTex.display();
 }
-
+/*
 void TileMap::updateTexMap(sf::IntRect drawArea) {
+	
+	
 	mapTex.clear();
+	
+	mapTex.draw(bg);
+	
+	mapTex.display();
+	
 	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++) {
 		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
 			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
@@ -144,7 +163,7 @@ void TileMap::updateTexMap(sf::IntRect drawArea) {
 	}
 	mapTex.display();
 }
-
+*/
 
 int TileMap::getTileLogic(sf::Vector2f playerPos) {
 	// player pos / tile size = current tile

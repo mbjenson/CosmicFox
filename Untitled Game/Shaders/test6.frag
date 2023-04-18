@@ -2,14 +2,25 @@
 precision mediump float;
 #endif
 
+uniform vec2 u_resolution;
+uniform vec2 circleCenter;
+
 uniform sampler2D currentTexture;
-uniform float time;
+
+float circle(in vec2 _st, in float _radius, vec2 _circleCenter){
+    vec2 dist = _st-vec2(_circleCenter.x, 1.f - _circleCenter.y);
+	return 0.+smoothstep(_radius-(_radius*0.8),
+                         _radius+(_radius*0.8),
+                         dot(dist,dist)*4.0);
+}
 
 void main() {
-    vec2 coord = gl_TexCoord[0].xy;
-    coord.x += sin(radians(500*time + coord.y * 500)) * 0.02;
-    coord.y += cos(radians(500*time + coord.x * 250)) * 0.03;
-    vec4 pixel_color = texture2D(currentTexture, coord);
-
-    gl_FragColor = pixel_color;
+	vec2 position = gl_FragCoord.xy / u_resolution;
+	vec2 centerNorm = circleCenter.xy / u_resolution;
+	float radius = 0.3;
+	
+	float circ = circle(position, radius, centerNorm);
+	vec3 curCol = texture2D(currentTexture, gl_TexCoord[0].xy);
+	
+	gl_FragColor = vec4(curCol, circ);
 }
