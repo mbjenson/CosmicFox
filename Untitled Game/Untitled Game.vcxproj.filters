@@ -90,6 +90,12 @@
     <ClCompile Include="SwordEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DungeonLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -251,6 +257,9 @@
     <Image Include="Textures\darkMask.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\enemySpriteSheetmk1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -326,6 +335,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SwordEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DungeonLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

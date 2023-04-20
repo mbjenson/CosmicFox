@@ -8,7 +8,8 @@
 //#include <thread>
 
 
-#include "Enemy.h"
+//#include "Enemy.h"
+
 #include "Player.h"
 #include "Camera.h"
 #include "ResHandler.h"
@@ -58,6 +59,8 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 
 //CURRENT:
+
+// give levels the option to provide a shader to the player for player to be draw with
 
 // make it so enemies push each other apart
 
@@ -150,6 +153,7 @@ void processEvents(sf::RenderWindow& window) {
 }
 // this is temp main function for when I want to test other things 
 
+/*
 int main() {
 	sf::Vector2f winDim(1920, 1080);
 
@@ -191,7 +195,7 @@ int main() {
 			if (event.type == sf::Event::Closed())
 				window.close();
 		}
-		sf::Vector2f center(topLeft.x + sf::Mouse::getPosition().x, topLeft.y + sf::Mouse::getPosition().y);
+		sf::Vector2f center(topLeft.x + sf::Mouse::getPosition().x + 250, topLeft.y + sf::Mouse::getPosition().y + 400);
 		shader.setUniform("circleCenter", sf::Vector2f(center));
 
 		window.clear();
@@ -203,9 +207,9 @@ int main() {
 		window.display();
 	}
 }
+*/
 
 
-/*
 int main() {
 
 	bool gameState = true;
@@ -261,19 +265,17 @@ int main() {
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
 
-	sf::Music music;
-	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
-		return -1;
+	//sf::Music music;
+	//if (!music.openFromFile("Sounds/gameAmbience1.wav"))
+	//	return -1;
 	//music.play();
-	music.setVolume(50.f);
+	//music.setVolume(50.f);
 
-	//sf:: black;
-	//black.create(64, 64);
-	//black.getPixel();
-	
 	camera.setCenter(p1.getPosition());
 
 	sf::BlendMode none;
+
+	
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -287,6 +289,8 @@ int main() {
 			newLevel.tileMap->updateBG(camera.getCenter());
 			setKeyPressesKBD(p1);
 			window.clear();
+
+			
 			// using renderState (blend mode) we can blend the background texture with the foreground texture
 			window.draw(newLevel.tileMap->bg, sf::RenderStates(none));
 			p1.update(dt, newLevel.tileMap);
@@ -307,6 +311,8 @@ int main() {
 			
 			// HUD:
 			lifeCount.render(window, p1.curHealth, camera.getCenter(), camera.getSize());
+			
+			
 
 			if (DEBUG) {
 
@@ -344,7 +350,7 @@ int main() {
 	return 0;
 }
 
-*/
+
 
 
 /*

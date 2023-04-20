@@ -2,18 +2,21 @@
 
 #include "Entity.h"
 #include "TileMap.h"
-#include "Sword.h"
 #include <SFML/Graphics.hpp>
+
 extern sf::Clock GLOBAL_GAME_CLOCK;
 
 class Enemy : public Entity
 {
 public:
-	Enemy(sf::Texture* spriteSheet, sf::Vector2f enemySize);
+	//Enemy(sf::Texture* spriteSheet, sf::Vector2f enemySize);
+	Enemy(sf::Texture* spriteSheet, sf::Vector2u texDim, int rowlength, int rowNumber, float animDuration);
 	Enemy();
 	bool init();
 
 	void revive(sf::Vector2f);
+
+	void setAnimations();
 	
 	enum class State {
 		nominal,
@@ -74,14 +77,20 @@ public:
 	sf::Vector2f hitVector; // the normalized vector captured at the moment the enemy is hit by the player
 	//sf::Vector2f prevPlayerPos;
 	
+	sf::Clock attackClock;
+	sf::Vector2f playerDirDashStart;
+
 	bool FLAG_DEAD;
 	//sf::Vector2u animDim;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();
-
+		
+		
+		
 		target.draw(tSprite, states);
 	}
+	
 };
 

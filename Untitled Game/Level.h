@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "ResHandler.h"
 
+
 /*
 	Generic level class that can be provided with player*. contains the tileMap and necessary things for a specific level
 */
@@ -24,6 +25,8 @@ public:
 	TileMap* tileMap;
 	
 	Player* player; // get needed infomation about player status for tileMap
+	sf::Shader levelShader;
+	
 	std::vector<Enemy> eVec; // enemies
 	float enemyRenderDistance = 300.f;
 	float enemyPlayerCollisionCheckDistance = 40.f;

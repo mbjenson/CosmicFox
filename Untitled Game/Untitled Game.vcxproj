@@ -148,9 +148,11 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DungeonLevel.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GhostEnemy.cpp" />
     <ClCompile Include="GrassLandsLevel.cpp" />
     <ClCompile Include="HudBar.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -174,6 +176,7 @@
   <ItemGroup>
     <Image Include="Textures\darkMask.png" />
     <Image Include="Textures\earth.png" />
+    <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
     <Image Include="Textures\spirit.png" />
     <Image Include="Textures\swordSlash1.png" />
@@ -230,9 +233,11 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DungeonLevel.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GhostEnemy.h" />
     <ClInclude Include="GrassLandsLevel.h" />
     <ClInclude Include="HudBar.h" />
     <ClInclude Include="Hud.h" />

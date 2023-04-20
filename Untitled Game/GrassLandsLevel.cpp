@@ -59,18 +59,28 @@ int GrassLandsLevel::init(Player* p1) {
 	
 
 	// initialize enemies
-	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
+	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))
 		return -1;
-	Enemy e1(&enemyT, sf::Vector2f(16.f, 16.f));
+
+	GhostEnemy g1(&ghostTex, sf::Vector2u(24, 24), 1, 0, 0.f);
+	g1.initGhost();
+	eVec.push_back(g1);
+	g1.setPosition(200.f, 200.f);
+	
+	//g1.init();
+	//g1.setPosition(sf::Vector2f(200.f, 200.f));
+	/*
+	sf::Vector2i enemyTexDim(24, 24);
+	Enemy e1(&enemyT, sf::Vector2f(16.f, 16.f), enemyTexDim, 1, 0, 0.f);
 	e1.init();
 	e1.setPosition(150.f, 60.f);
 	
 	Enemy e2(&enemyT, sf::Vector2f(16.f, 16.f));
 	e2.init();
 	e2.setPosition(200.f, 200.f);
-
-	eVec.push_back(e2);
-	eVec.push_back(e1);
+	*/
+	//eVec.push_back(g1);
+	
 	
 	return 0;
 

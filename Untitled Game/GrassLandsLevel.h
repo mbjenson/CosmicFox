@@ -1,5 +1,7 @@
 #pragma once
 #include "Level.h"
+#include "GhostEnemy.h"
+
 
 class GrassLandsLevel : public Level
 {
@@ -10,7 +12,6 @@ public:
 
 	int init(Player* p1);
 
-	sf::Texture enemyT;
-
+	sf::Texture ghostTex;
 };
 

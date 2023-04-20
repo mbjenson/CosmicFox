@@ -93,6 +93,7 @@ void Level::render(sf::RenderWindow& win) {
 				if ((enemyPos.y - enemyPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(i);
 				}
+				
 			}
 			if (!player->FLAG_FALL) {
 				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {

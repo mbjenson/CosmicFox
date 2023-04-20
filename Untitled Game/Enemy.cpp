@@ -1,13 +1,25 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Texture* spriteSheet, sf::Vector2f _enemySize) {
+/*
+Enemy::Enemy(sf::Texture* spriteSheet, sf::Vector2f _TexDim) {
+
 	tSprite.setTexture(*spriteSheet);
-	enemySize = _enemySize;
+	tSprite.setTextureRect(sf::IntRect(0, 0, _TexDim.x, _TexDim.y));
 	//tSprite.setTextureRect()
 
 };
+*/
+
+Enemy::Enemy(sf::Texture* spriteSheet, sf::Vector2u texDim, int _rowLength, int _rowNum, float _animTime) : 
+	Entity( *spriteSheet, texDim, _rowLength, _rowNum, _animTime )
+{
+	
+}
+
+
 
 bool Enemy::init() {
+
 	FLAG_DEAD = false;
 	setOrigin(sf::Vector2f(enemySize.x / 2, enemySize.y / 2));
 	detectionRadius = 125.f;
@@ -49,26 +61,22 @@ void Enemy::collisionCheckTile(TileMap* map) {
 			return;
 
 		// if top left corner intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 1 ||
-			map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 2)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 1)
 			TL = true;
 		else
 			TL = false;
 		// if top right intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 1 || 
-			map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 2)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 1)
 			TR = true;
 		else
 			TR = false;
 		// if bottom left intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 1 ||
-			map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 2)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 1)
 			BL = true;
 		else
 			BL = false;
 		// if bottom right intersects a collidable tile.
-		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 1 ||
-			map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 2)
+		if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 1)
 			BR = true;
 		else
 			BR = false;
@@ -148,8 +156,10 @@ void Enemy::collisionCheckTile(TileMap* map) {
 	}
 }
 
-void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
-
+/*
+// these function must be done like this in order to 
+void basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
+	
 	if (distSize < detectionRadius) {
 		//sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
 		sf::Vector2f normalMovement(distVec.x / distSize, distVec.y / distSize);
@@ -166,7 +176,9 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 		// perform random idle movements;
 		//int choice = rand();
 		// move two sqares, change facing, do other random things
+		
 }
+*/
 
 
 
@@ -222,14 +234,17 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 	// update Sword:
 	
 	// update Animations:
-
+	setAnimations();
 	// collision checks
 	collisionCheckTile(map);
 	// CollisionCheckEnemy is done in level file
 	// final vel
 	move(finalVel);
 	//prevPlayerPos = playerPos;
+	updateAnim();
 }
+
+
 
 void Enemy::getHit(int damage) {
 	if (curHealth <= 0)
