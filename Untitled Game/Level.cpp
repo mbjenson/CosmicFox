@@ -16,6 +16,7 @@ void Level::render(sf::RenderWindow& win) {
 	// this can easily be done by updating that variable in collisionCheckVoid in player.cpp. then, we basically can draw the base layers of the map (1, 2)
 	// once and then continue to draw the third layer continuously but from the pov of fallLocation vector2f.
 	// NICE.
+	
 	int tSize = tileMap->tileSize;
 	if (player->FLAG_FALL) {
 		sf::Vector2f fallPosition = player->fallPos;

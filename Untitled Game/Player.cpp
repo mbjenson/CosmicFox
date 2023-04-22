@@ -235,6 +235,7 @@ void Player::update(float deltaTime, TileMap* map) {
 			isDashing = true;
 			setState(State::nominal);
 		}
+		//break;
 	}
 
 
@@ -251,34 +252,39 @@ void Player::update(float deltaTime, TileMap* map) {
 	//case State::dead:
 
 	case State::attacked:
-		{
-			int curStunClock = stunClock.getElapsedTime().asMilliseconds();
-			if (curStunClock < invincibleTime) {
-				if (curStunClock > flashRedTime){
-					tSprite.setColor(sf::Color::White);
-				}
-				if (curStunClock < hitBackTime) {
+	{
+		if (curHealth <= 0) {
+			FLAG_NOLIFE = true;
+		}
+		int curStunClock = stunClock.getElapsedTime().asMilliseconds();
+		if (curStunClock < invincibleTime) {
+			if (curStunClock > flashRedTime){
+				tSprite.setColor(sf::Color::White);
+			}
+			if (curStunClock < hitBackTime) {
 					
-					finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
-					collisionCheckTile(map);
-					collisionCheckVoid(map);
-					move(finalVel);
-				}
-				else {
-					
-					state = State::nominal;
-				}
+				finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
+				collisionCheckTile(map);
+				collisionCheckVoid(map);
+				move(finalVel);
 			}
 			else {
-				beingHit = false;
+					
 				state = State::nominal;
 			}
-		
 		}
+		else {
+			beingHit = false;
+			state = State::nominal;
+		}
+		
+	}
 		// effect: greyed out or flashing
 
 	case State::dead:
+	{
 		checkDeath(deltaTime);
+	}
 	}
 	// check invincibility
 	if (stunClock.getElapsedTime().asMilliseconds() > invincibleTime) {
@@ -299,6 +305,10 @@ void Player::update(float deltaTime, TileMap* map) {
 
 void Player::checkDeath(float dt) {
 	if (FLAG_FALL) {
+		if (!falling) {
+			curHealth -= 1;
+		}
+		falling = true;
 		state = State::dead;
 		finalVel = sf::Vector2f(0, 0);
 		int curTime = fallTimer.getElapsedTime().asMilliseconds();
@@ -307,23 +317,31 @@ void Player::checkDeath(float dt) {
 			move(sf::Vector2f(0, fallSpeed * dt * (curTime / 100)));
 		}
 		else {
-			FLAG_DEAD = true;
+			if (curHealth <= 0) {
+				FLAG_NOLIFE = true;
+			}
+			else {
+				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16)));
+			}
+
 		}
+	}
+	else {
+		falling = false;
 	}
 	if (FLAG_NOLIFE) {
 		state = State::dead;
 		finalVel = sf::Vector2f(0, 0);
 		FLAG_DEAD = true;
-		//respawn(sf::Vector2f(25.f, 25.f));
-		// restart anim
-		// done = (setAnim to no life anim which, when  done will return bool)
-		// if (done)
-		//		flag_dead = true;
-		//FLAG_DEAD = true;
+
+		respawn(sf::Vector2f(25.f, 25.f));
+		curHealth = maxHealth;
+		
 	}
 	if (FLAG_DEAD) {
 		// convert to tile coords
-		respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16)));
+		respawn(sf::Vector2f(25.f, 25.f));
+		curHealth = maxHealth;
 	}
 }
 
@@ -390,7 +408,7 @@ void Player::init() {
 	curHealth = maxHealth;
 	hitBackTime = 200;
 	knockBackSpeed = 100;
-	invincibleTime = 700;
+	invincibleTime = 1000;
 	beingHit = false;
 	invincible = false;
 	flashRedTime = 50;
@@ -398,6 +416,7 @@ void Player::init() {
 	FLAG_NOLIFE = false;
 	FLAG_FALL = false;
 
+	setFacing(sf::Vector2f(0, 1.f));
 	
 }
 

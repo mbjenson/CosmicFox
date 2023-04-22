@@ -96,6 +96,12 @@
     <ClCompile Include="GhostEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DashMeter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -260,6 +266,15 @@
     <Image Include="Textures\enemySpriteSheetmk1.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\quitButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\playerButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\CosmicFox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -341,6 +356,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GhostEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DashMeter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

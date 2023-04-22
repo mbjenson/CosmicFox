@@ -148,6 +148,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DashMeter.cpp" />
     <ClCompile Include="DungeonLevel.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResHandler.cpp" />
@@ -174,10 +176,13 @@
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\CosmicFox.png" />
     <Image Include="Textures\darkMask.png" />
     <Image Include="Textures\earth.png" />
     <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
+    <Image Include="Textures\playerButton.png" />
+    <Image Include="Textures\quitButton.png" />
     <Image Include="Textures\spirit.png" />
     <Image Include="Textures\swordSlash1.png" />
     <Image Include="Textures\animationtest.png" />
@@ -233,6 +238,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DashMeter.h" />
     <ClInclude Include="DungeonLevel.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
@@ -247,6 +253,7 @@
     <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MappingFunctions.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="PauseButton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResHandler.h" />

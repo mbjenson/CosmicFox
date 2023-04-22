@@ -14,7 +14,7 @@ public:
 	Enemy();
 	bool init();
 
-	void revive(sf::Vector2f);
+	void revive();
 
 	void setAnimations();
 	
@@ -30,6 +30,7 @@ public:
 	void zoomAttack(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt); // not used
 	void collisionCheckTile(TileMap* map);
 	void getHit(int damage);
+	void setSpawn(sf::Vector2f);
 	//int damageRecieved;
 	bool beingHit;
 	
@@ -48,7 +49,7 @@ public:
 	int hitBackTime = 90;
 	//int totalHitTime = 200;
 	int totalHitTime = 120;
-
+	sf::Vector2f spawnpoint;
 	
 	float dampingFactor = 0.2;
 	int moveSpeed = 55;

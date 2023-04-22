@@ -5,6 +5,8 @@
 
 #include <math.h>
 
+extern sf::Clock GLOBAL_GAME_CLOCK;
+
 class Player : public Entity
 {
 public:
@@ -202,10 +204,12 @@ private:
 	//3) float dashSpeed = 220.f
 	float dashSpeed = 240.f;
 	//1) int dashCooldown = 1000;
-	int dashCooldown = 800;
+	int dashCooldown = 1400;
+
+	bool falling;
 	//1)int dashSpeedTime = 250;
-	//2)int dashSpeedTime = 200;
-	int dashSpeedTime = 165;
+	int dashSpeedTime = 200;
+	//int dashSpeedTime = 165;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
 
@@ -258,7 +262,7 @@ private:
 	// used to get information from the window the player is being drawn on
 	sf::RenderWindow* pWindow;
 	
-
+	
 
 	//this is here so that I can draw specific things for the player like sword or shadow or effects and whatnot
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

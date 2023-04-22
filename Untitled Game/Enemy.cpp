@@ -180,7 +180,9 @@ void basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, f
 }
 */
 
-
+void Enemy::setSpawn(sf::Vector2f _spawnpoint) {
+	spawnpoint = _spawnpoint;
+}
 
 void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win) {
 	curRow = static_cast<int>(getPosition().y) / map->tileSize;
@@ -259,8 +261,8 @@ void Enemy::getHit(int damage) {
 	hitVector = sf::Vector2f(playerDirNormal.x * -1, playerDirNormal.y * -1);
 }
 
-void Enemy::revive(sf::Vector2f position) {
+void Enemy::revive() {
 	FLAG_DEAD = true;
-	setPosition(position);
+	setPosition(spawnpoint);
 }
 

@@ -7,14 +7,14 @@
 #include <iostream>
 //#include <thread>
 
-
-//#include "Enemy.h"
-
+#include "PauseButton.h"
+#include "Menu.h"
 #include "Player.h"
 #include "Camera.h"
 #include "ResHandler.h"
 #include "GrassLandsLevel.h"
 #include "HudBar.h"
+#include "DashMeter.h"
 #include "Spirit.h"
 
 using namespace std;
@@ -44,6 +44,7 @@ sf::Clock GLOBAL_GAME_CLOCK;
 *		is sufficient, they are respawned back on the last safe tile.
 * 
 *  -> SPACE FOX!;
+*  -> COSMIC FOX!;
 */
 
 //  TODO:
@@ -212,10 +213,15 @@ int main() {
 
 int main() {
 
-	bool gameState = true;
-	//sf::Vector2f winDim(2560, 1440);
-	sf::Vector2f winDim(1920, 1080);
-	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
+	bool gameState = false;
+	bool menuState = true;
+	sf::Vector2f winDim(2560, 1440);
+	//sf::Vector2f winDim(1920, 1080);
+	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Fullscreen);
+	
+	sf::View menuView;
+	menuView.setCenter(951, 540);
+	menuView.setSize(1920, 1080);
 
 	Camera camera;
 	camera.setSize(sf::Vector2f(1920, 1080));
@@ -253,7 +259,9 @@ int main() {
 		return -1;
 	}
 
-	HudBar lifeCount(heart, sf::Vector2f(5, 5));
+	HudBar lifeCount(heart, sf::Vector2f(5, 5), p1.maxHealth, sf::Vector2u(9, 9));
+	
+	DashMeter dashmeter;
 
 	sf::Texture spriritT;
 	if (!spriritT.loadFromFile("Textures/spirit.png"))
@@ -265,6 +273,11 @@ int main() {
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
 
+	
+	
+	
+
+	
 	//sf::Music music;
 	//if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 	//	return -1;
@@ -275,6 +288,11 @@ int main() {
 
 	sf::BlendMode none;
 
+	Menu mainMenu;
+	mainMenu.init();
+
+	PauseButton pauseB;
+	pauseB.init();
 	
 
 	sf::Clock mainClock;
@@ -284,7 +302,23 @@ int main() {
 		float dt = dtClock.restart().asSeconds();
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
+		if (menuState) {
+			window.setView(menuView);
+			window.clear();
+			int result = mainMenu.update(window);
+			if (result == 1) {
+				gameState = true;
+				menuState = false;
+			}
+			if (result == 2) {
+				// quit game.
+				
+				window.close();
+			}
+			window.display();
+		}
 		if (gameState) {
+			
 			// update bg position
 			newLevel.tileMap->updateBG(camera.getCenter());
 			setKeyPressesKBD(p1);
@@ -310,10 +344,18 @@ int main() {
 			window.draw(vig);
 			
 			// HUD:
-			lifeCount.render(window, p1.curHealth, camera.getCenter(), camera.getSize());
-			
-			
+			lifeCount.render(window, p1.curHealth, sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
 
+			dashmeter.render(window, p1.getDashTimer(), sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
+
+			int pause = pauseB.update(window);
+			if (pause) {
+				gameState = false;
+				menuState = true;
+			}
+				
+			//window.draw(lifeCount.hSprite);
+			
 			if (DEBUG) {
 
 				string xPlayerCord = roundedString(2, p1.getPosition().x);
@@ -340,8 +382,8 @@ int main() {
 					"\nFacingy = " + to_string(p1.getFacing().y));
 				window.draw(winText);
 
-				//winText.setString("\n\n\n\n\n\n\n\n\nsizeof enemy vector = " + to_string(sizeof(newLevel.eVec)));
-				//window.draw(winText);
+				winText.setString("\n\n\n\n\n\n\n\n\nGlobal Game Clock = " + to_string(GLOBAL_GAME_CLOCK.getElapsedTime().asMilliseconds()));
+				window.draw(winText);
 			}
 
 			window.display();

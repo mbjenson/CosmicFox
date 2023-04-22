@@ -64,8 +64,10 @@ int GrassLandsLevel::init(Player* p1) {
 
 	GhostEnemy g1(&ghostTex, sf::Vector2u(24, 24), 1, 0, 0.f);
 	g1.initGhost();
+	g1.setSpawn(sf::Vector2f(200.f, 200.f));
+	g1.setPosition(g1.spawnpoint);
 	eVec.push_back(g1);
-	g1.setPosition(200.f, 200.f);
+	
 	
 	//g1.init();
 	//g1.setPosition(sf::Vector2f(200.f, 200.f));
