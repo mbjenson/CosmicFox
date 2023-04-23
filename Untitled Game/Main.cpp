@@ -62,7 +62,11 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 //CURRENT:
 
-// work on collision Check new level
+// have player start in small grassy area with crashed (or just landed) rocket, here he will enter into the cave, in cave he will enter out into main area...
+
+// change music thing: for gameAmbience (currently used as main menu music), remove one of the first repetitions of first bar; it is very boring.
+
+// work on collision Check new level in player.cpp
 
 // experiment with stack allocating the textures if it gets too slow
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 /*
 * This contains all the necessary code to open a menu in the game
 * includes code for buttons and other things like that 
@@ -21,5 +22,8 @@ public:
 
 	sf::Texture bgTex;
 	sf::Sprite bg;
+	
+	sf::Music music;
+
 };
 

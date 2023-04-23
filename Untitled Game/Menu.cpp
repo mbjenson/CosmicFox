@@ -29,6 +29,15 @@ int Menu::init() {
 	quitB.setScale(sf::Vector2f(15.f, 15.f));
 	quitB.setPosition(sf::Vector2f(1050.f, 700.f));
 	
+	//sf::Music music;
+	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
+		return -1;
+	music.setPlayingOffset(sf::seconds(5.f));
+	music.play();
+	//music.play();
+	//music.setVolume(50.f);
+
+
 	return 0;
 }
 
@@ -38,6 +47,7 @@ int Menu::update(sf::RenderWindow& win) {
 	
 	if (playB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			music.stop();
 			return 1;
 		}
 		playB.setTextureRect(sf::IntRect(0, 14, 30, 14));
@@ -47,6 +57,7 @@ int Menu::update(sf::RenderWindow& win) {
 	}
 	if (quitB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			music.stop();
 			return 2;
 		}
 		quitB.setTextureRect(sf::IntRect(0, 14, 30, 14));

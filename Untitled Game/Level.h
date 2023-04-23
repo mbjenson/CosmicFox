@@ -36,6 +36,7 @@ public:
 	sf::Texture mapMaskTex;
 	sf::Sprite mapMask;
 
+	
 	// enemy map stuff
 	// sound map stuff
 };

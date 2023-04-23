@@ -309,6 +309,7 @@ int Player::collisionCheckNewLevel(TileMap* map) {
 	// the levels act as a linked list, each containing the level that comes after it. This way
 	// we can easily traverse through the levels. 
 	// 
+	return 0;
 }
 
 void Player::checkDeath(float dt) {
