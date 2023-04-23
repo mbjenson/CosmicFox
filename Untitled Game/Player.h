@@ -67,6 +67,7 @@ public:
 	void collisionCheckTile(TileMap* map);
 	void collisionCheckEnemy(sf::FloatRect hitBox, int damage);
 	void collisionCheckVoid(TileMap* map);
+	int collisionCheckNewLevel(TileMap* map);
 	int voidCorners;
 	// players current tile on specified tilemap
 	sf::Vector2i curTile;

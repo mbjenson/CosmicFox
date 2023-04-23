@@ -159,6 +159,7 @@
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="HudElement.cpp" />
     <ClCompile Include="InteractableMap.cpp" />
+    <ClCompile Include="IntroLevel.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapEditor.cpp" />
@@ -181,6 +182,7 @@
     <Image Include="Textures\earth.png" />
     <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
+    <Image Include="Textures\planet.png" />
     <Image Include="Textures\playerButton.png" />
     <Image Include="Textures\quitButton.png" />
     <Image Include="Textures\spirit.png" />
@@ -249,6 +251,7 @@
     <ClInclude Include="Hud.h" />
     <ClInclude Include="HudElement.h" />
     <ClInclude Include="InteractableMap.h" />
+    <ClInclude Include="IntroLevel.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MappingFunctions.h" />
@@ -266,6 +269,10 @@
     <ClInclude Include="_TileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Levels\MapFiles\Intro_Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Layer3.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Logic.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />

@@ -16,6 +16,7 @@
 #include "HudBar.h"
 #include "DashMeter.h"
 #include "Spirit.h"
+#include "IntroLevel.h"
 
 using namespace std;
 
@@ -60,6 +61,12 @@ sf::Clock GLOBAL_GAME_CLOCK;
 
 
 //CURRENT:
+
+// work on collision Check new level
+
+// experiment with stack allocating the textures if it gets too slow
+
+// create a way that sounds can be present in the game, like walking sounds, dashing, dying, sword slash, etc
 
 // give levels the option to provide a shader to the player for player to be draw with
 
@@ -250,7 +257,7 @@ int main() {
 	vig.setScale(0.8, 0.5);
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setPosition(sf::Vector2f(25.f, 25.f));
+	p1.setPosition(sf::Vector2f(100.f, 100.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
 
@@ -272,12 +279,15 @@ int main() {
 
 	GrassLandsLevel newLevel;
 	newLevel.init(&p1);
+	
+	IntroLevel introL;
+	introL.init(&p1);
+
+	Level* curLevel;
+	curLevel = &introL;
 
 	
-	
-	
-
-	
+	//p1.setPosition(sf::Vector2f(25.f, 25.f));
 	//sf::Music music;
 	//if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 	//	return -1;
@@ -320,21 +330,24 @@ int main() {
 		if (gameState) {
 			
 			// update bg position
-			newLevel.tileMap->updateBG(camera.getCenter());
+			//newLevel.tileMap->updateBG(camera.getCenter());
+			curLevel->tileMap->updateBG(camera.getCenter());
 			setKeyPressesKBD(p1);
 			window.clear();
 
-			
+			sf::Vector2f tempVec(p1.getPosition().x, p1.getPosition().y - 100.f);
+			if (curLevel->usingShader)
+				curLevel->shader.setUniform("circleCenter", sf::Vector2f(window.mapCoordsToPixel(tempVec)));
 			// using renderState (blend mode) we can blend the background texture with the foreground texture
-			window.draw(newLevel.tileMap->bg, sf::RenderStates(none));
-			p1.update(dt, newLevel.tileMap);
+			window.draw(curLevel->tileMap->bg, sf::RenderStates(none));
+			p1.update(dt, curLevel->tileMap);
 			camera.update(p1, dt, 
-				sf::Vector2f(	newLevel.tileMap->getMapDimTiles().x * newLevel.tileMap->tileSize, 
-								newLevel.tileMap->getMapDimTiles().y * newLevel.tileMap->tileSize));
+				sf::Vector2f(	curLevel->tileMap->getMapDimTiles().x * curLevel->tileMap->tileSize, 
+								curLevel->tileMap->getMapDimTiles().y * curLevel->tileMap->tileSize));
 			window.setView(camera);
 			
-			newLevel.updateEnemies(dt, &window);
-			newLevel.render(window);
+			curLevel->updateEnemies(dt, &window);
+			curLevel->render(window);
 			
 			spirit.update(p1.getPosition(), dt);
 			window.draw(spirit);
@@ -383,6 +396,9 @@ int main() {
 				window.draw(winText);
 
 				winText.setString("\n\n\n\n\n\n\n\n\nGlobal Game Clock = " + to_string(GLOBAL_GAME_CLOCK.getElapsedTime().asMilliseconds()));
+				window.draw(winText);
+
+				winText.setString("\n\n\n\n\n\n\n\n\n\ndeltaTime = " + to_string(dt));
 				window.draw(winText);
 			}
 

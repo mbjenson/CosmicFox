@@ -129,6 +129,9 @@ void Level::render(sf::RenderWindow& win) {
 			}
 		}
 	}
+	if (usingShader) {
+		win.draw(mapMask, &shader);
+	}
 	// 6th CANOPY LAYER:
 		// MAYBE:
 		// last, but not least, update the canopy layer
@@ -186,4 +189,5 @@ void Level::updateEnemies(float dt, sf::RenderWindow* win) {
 	*/
 	// do the general updating of the level's enemies here. 
 	// look into how I can use threads to update the areas' enemies.
+	
 }

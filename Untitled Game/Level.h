@@ -30,6 +30,12 @@ public:
 	std::vector<Enemy> eVec; // enemies
 	float enemyRenderDistance = 300.f;
 	float enemyPlayerCollisionCheckDistance = 40.f;
+	sf::Vector2f playerSpawn;
+	sf::Shader shader;
+	bool usingShader;
+	sf::Texture mapMaskTex;
+	sf::Sprite mapMask;
+
 	// enemy map stuff
 	// sound map stuff
 };

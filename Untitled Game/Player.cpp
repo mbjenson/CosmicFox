@@ -303,6 +303,14 @@ void Player::update(float deltaTime, TileMap* map) {
 	//checkDeath(deltaTime);
 }
 
+int Player::collisionCheckNewLevel(TileMap* map) {
+	// here I check if the player is standing on tiles that will stransition him to new level.
+	// if I am, then I will delete current level. and load in the next level. 
+	// the levels act as a linked list, each containing the level that comes after it. This way
+	// we can easily traverse through the levels. 
+	// 
+}
+
 void Player::checkDeath(float dt) {
 	if (FLAG_FALL) {
 		if (!falling) {
@@ -322,6 +330,7 @@ void Player::checkDeath(float dt) {
 			}
 			else {
 				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16)));
+				falling = false;
 			}
 
 		}
@@ -334,13 +343,14 @@ void Player::checkDeath(float dt) {
 		finalVel = sf::Vector2f(0, 0);
 		FLAG_DEAD = true;
 
-		respawn(sf::Vector2f(25.f, 25.f));
-		curHealth = maxHealth;
+		//respawn(sf::Vector2f(25.f, 25.f));
+		//curHealth = maxHealth;
 		
 	}
 	if (FLAG_DEAD) {
 		// convert to tile coords
-		respawn(sf::Vector2f(25.f, 25.f));
+		respawn(sf::Vector2f(100.f, 100.f));
+		// need to do this in game.cpp because i cant get information about the spawn point in player.cpp very cleanly
 		curHealth = maxHealth;
 	}
 }

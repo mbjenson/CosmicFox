@@ -17,7 +17,7 @@ int GrassLandsLevel::init(TileMap* map, Player* p1) {
 
 int GrassLandsLevel::init(Player* p1) {
 	player = p1;
-
+	usingShader = false;
 	// Map 1 setup:
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
@@ -49,8 +49,10 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
 	tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
 
-	if (!tileMap->bgTex.loadFromFile("Textures/earth.png"))
+	if (!tileMap->bgTex.loadFromFile("Textures/planet.png"))
 		return -1;
+
+	
 
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());

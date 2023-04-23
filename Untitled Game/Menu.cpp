@@ -7,7 +7,7 @@ int Menu::init() {
 		return -1;
 	if (!quitBTex.loadFromFile("Textures/quitButton.png"))
 		return -1;
-	if (!bgTex.loadFromFile("Textures/earth.png"))
+	if (!bgTex.loadFromFile("Textures/planet.png"))
 		return -1;
 	if (!titleTex.loadFromFile("Textures/CosmicFox.png"))
 		return -1;
@@ -16,24 +16,24 @@ int Menu::init() {
 	title.setScale(15.f, 15.f);
 	title.setPosition(sf::Vector2f(351.f, 250.f));
 	
-
 	bg.setTexture(bgTex);
+	bg.setScale(1.9f, 1.9f);
 	
 	playB.setTexture(playBTex);
 	playB.setTextureRect(sf::IntRect(0, 0, 30, 14));
 	playB.setScale(sf::Vector2f(15.f, 15.f));
-	playB.setPosition(sf::Vector2f(300.f, 700.f));
+	playB.setPosition(sf::Vector2f(450.f, 700.f));
 
 	quitB.setTexture(quitBTex);
 	quitB.setTextureRect(sf::IntRect(0, 0, 30, 14));
 	quitB.setScale(sf::Vector2f(15.f, 15.f));
-	quitB.setPosition(sf::Vector2f(1000.f, 700.f));
+	quitB.setPosition(sf::Vector2f(1050.f, 700.f));
 	
 	return 0;
 }
 
 int Menu::update(sf::RenderWindow& win) {
-	//win.draw(bg);
+	win.draw(bg);
 	win.draw(title);
 	
 	if (playB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {

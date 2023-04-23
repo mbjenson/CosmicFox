@@ -102,6 +102,9 @@
     <ClCompile Include="PauseButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IntroLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -275,6 +278,9 @@
     <Image Include="Textures\CosmicFox.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\planet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -364,6 +370,9 @@
     <ClInclude Include="PauseButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IntroLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\test1.frag">
@@ -380,6 +389,10 @@
     <None Include="Shaders\test7.frag" />
     <None Include="Shaders\test10.frag" />
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Layer3.csv" />
+    <None Include="Assets\Levels\MapFiles\Intro_Logic.csv" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf">
