@@ -96,11 +96,19 @@ void Level::render(sf::RenderWindow& win) {
 				}
 				
 			}
+			
 			if (!player->FLAG_FALL) {
 				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(*player);
 				}
 			}
+			
+			/*
+			if (!player->FLAG_FALL) {
+				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == ((playerPos.x - playerPos.x % tSize) / tSize))
+					win.draw(*player);
+			}
+			*/
 			if (tileMap->layer3Types[x + y * mapDTiles.x] == 0)
 				continue;
 			else {
@@ -131,6 +139,17 @@ void Level::render(sf::RenderWindow& win) {
 					tempSpr.setPosition(sf::Vector2f(x* tSize - tileMap->offsetDim4.x, y* tSize - tileMap->offsetDim4.y));
 					win.draw(tempSpr);
 				}
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 5) {
+					tempSpr.setTextureRect(tileMap->texDim5);
+					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim5.x, y * tSize - tileMap->offsetDim5.y));
+					win.draw(tempSpr);
+				}
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 6) {
+					tempSpr.setTextureRect(tileMap->texDim6);
+					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim6.x, y * tSize - tileMap->offsetDim6.y));
+					win.draw(tempSpr);
+				}
+				
 			}
 		}
 	}

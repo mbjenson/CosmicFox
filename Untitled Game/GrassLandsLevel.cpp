@@ -49,14 +49,18 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap = new TileMap(tileTypes1, tileTypes2, tileTypes3, logicGrid2,
 		mapDimChunks1, terrain1, terrain2, rocks);
 
-	tileMap->texDim1 = sf::IntRect(1, 1, 25, 40);
-	tileMap->offsetDim1 = sf::Vector2i(10, 16);
-	tileMap->texDim2 = sf::IntRect(28, 1, 25, 40);
-	tileMap->offsetDim2 = sf::Vector2i(10, 16);
+	tileMap->texDim1 = sf::IntRect(1, 1, 25, 38);
+	tileMap->offsetDim1 = sf::Vector2i(9, 17);
+	tileMap->texDim2 = sf::IntRect(28, 1, 25, 38);
+	tileMap->offsetDim2 = sf::Vector2i(9, 17);
 	tileMap->texDim3 = sf::IntRect(53, 0, 21, 33);
-	tileMap->offsetDim3 = sf::Vector2i(5, 14);
-	tileMap->texDim4 = sf::IntRect(0, 41, 32, 79);
-	tileMap->offsetDim4 = sf::Vector2i(14, 50);
+	tileMap->offsetDim3 = sf::Vector2i(4, 12);
+	tileMap->texDim4 = sf::IntRect(13, 42, 20, 79);
+	tileMap->offsetDim4 = sf::Vector2i(3, 49);
+	tileMap->texDim5 = sf::IntRect(77, 32, 51, 97);
+	tileMap->offsetDim5 = sf::Vector2i(2, 45);
+	tileMap->texDim6 = sf::IntRect(40, 42, 18, 65);
+	tileMap->offsetDim6 = sf::Vector2i(1, 49);
 
 	if (!tileMap->bgTex.loadFromFile("Textures/planet.png"))
 		return -1;
