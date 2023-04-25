@@ -113,17 +113,22 @@ void Level::render(sf::RenderWindow& win) {
 				// Later change this so that these tiles can be animated
 				if (tileMap->layer3Types[x + y * mapDTiles.x] == 1) {
 					tempSpr.setTextureRect(tileMap->texDim1);
-					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - 4));
+					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim1.x, y * tSize - tileMap->offsetDim1.y));
 					win.draw(tempSpr);
 				}
 				if (tileMap->layer3Types[x + y * mapDTiles.x] == 2) {
 					tempSpr.setTextureRect(tileMap->texDim2);
-					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize - 2));
+					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim2.x, y * tSize - tileMap->offsetDim2.y));
 					win.draw(tempSpr);
 				}
 				if (tileMap->layer3Types[x + y * mapDTiles.x] == 3) {
 					tempSpr.setTextureRect(tileMap->texDim3);
-					tempSpr.setPosition(sf::Vector2f(x * tSize, y * tSize - tSize));
+					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim3.x, y * tSize - tileMap->offsetDim3.y));
+					win.draw(tempSpr);
+				}
+				if (tileMap->layer3Types[x + y * mapDTiles.x] == 4) {
+					tempSpr.setTextureRect(tileMap->texDim4);
+					tempSpr.setPosition(sf::Vector2f(x* tSize - tileMap->offsetDim4.x, y* tSize - tileMap->offsetDim4.y));
 					win.draw(tempSpr);
 				}
 			}

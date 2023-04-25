@@ -6,21 +6,20 @@
 #include "ResHandler.h"
 #include "Level.h"
 
+
 // in a way I take most of the crap from main.cpp and have it happen here.
 
 class Game {
 public:
-	enum class GameState {
-		mainMenu,
-		loading,
-		play,
-		pause,
-		saving,
-	};
+	bool MAINMENU;
+	
+	int loadNewLevel();
 
 private:
 
 	sf::RenderWindow GAME_WINDOW;
 	Camera camera;
+	sf::View mainMenuView;
+
 
 };

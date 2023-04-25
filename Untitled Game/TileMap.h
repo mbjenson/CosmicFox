@@ -97,10 +97,22 @@ public:
 
 	// the different texture dimensions for the non-square textures that will be rendered.
 	sf::IntRect texDim1;
+	sf::Vector2i offsetDim1;
+
 	sf::IntRect texDim2;
+	sf::Vector2i offsetDim2;
+
 	sf::IntRect texDim3;
+	sf::Vector2i offsetDim3;
+
 	sf::IntRect texDim4;
+	sf::Vector2i offsetDim4;
+
 	sf::IntRect texDim5;
+	sf::Vector2i offsetDim5;
+
 	sf::IntRect texDim6;
+	sf::Vector2i offsetDim6;
+
 };
 

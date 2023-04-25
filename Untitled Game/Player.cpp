@@ -304,11 +304,45 @@ void Player::update(float deltaTime, TileMap* map) {
 }
 
 int Player::collisionCheckNewLevel(TileMap* map) {
-	// here I check if the player is standing on tiles that will stransition him to new level.
-	// if I am, then I will delete current level. and load in the next level. 
-	// the levels act as a linked list, each containing the level that comes after it. This way
-	// we can easily traverse through the levels. 
-	// 
+	// check if player is standing on next level logic.
+	
+	updateHitBox();
+	sf::FloatRect tempHitBox(hitBox.left + finalVel.x, hitBox.top + finalVel.y, hitBox.width, hitBox.height);
+	int numPreviousCorners = 0;
+	if (tempHitBox.left < 0 || tempHitBox.left > map->getMapDimTiles().x * map->getTileSize())
+		return 0;
+	if (tempHitBox.top < 0 || tempHitBox.top > map->getMapDimTiles().y * map->getTileSize())
+		return 0;
+	if (tempHitBox.left + tempHitBox.width < 0 || tempHitBox.left + tempHitBox.width > map->getMapDimTiles().x * map->getTileSize())
+		return 0;
+	if (tempHitBox.top + tempHitBox.height < 0 || tempHitBox.top + tempHitBox.height > map->getMapDimTiles().y * map->getTileSize())
+		return 0;
+	
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 3)
+		numPreviousCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 3)
+		numPreviousCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 3)
+		numPreviousCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 3)
+		numPreviousCorners++;
+	if (numPreviousCorners >= 4) {
+		// 1 means go to prev level.
+		return 1;
+	}
+	int numNextCorners = 0;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top)) == 4)
+		numNextCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)) == 4)
+		numNextCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)) == 4)
+		numNextCorners++;
+	if (map->getTileLogic(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)) == 4)
+		numNextCorners++;
+	if (numNextCorners >= 4) {
+		// 2 means go to next level.
+		return 2;
+	}
 	return 0;
 }
 

@@ -125,8 +125,14 @@ public:
 	// the player has just lost all health and death anim needs to be done
 	bool FLAG_NOLIFE;
 	bool FLAG_FALL;
+	// other flags
+	//bool FLAG_NEWLEVEL;
+
+
 
 private:
+
+
 	//animation functions that set the row number for the animation for the player
 	void wLeftAnim();
 	void wRightAnim();
@@ -209,7 +215,8 @@ private:
 
 	bool falling;
 	//1)int dashSpeedTime = 250;
-	int dashSpeedTime = 200;
+	//int dashSpeedTime = 200;
+	int dashSpeedTime = 180;
 	//int dashSpeedTime = 165;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;

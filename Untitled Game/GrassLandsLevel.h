@@ -6,7 +6,7 @@
 class GrassLandsLevel : public Level
 {
 public:
-	GrassLandsLevel();
+	GrassLandsLevel(Player* player);
 
 	int init(TileMap* map, Player* p1);
 

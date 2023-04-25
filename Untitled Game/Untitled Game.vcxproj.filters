@@ -281,6 +281,9 @@
     <Image Include="Textures\planet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\inter.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">

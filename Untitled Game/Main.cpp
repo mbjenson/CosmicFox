@@ -165,6 +165,8 @@ void processEvents(sf::RenderWindow& window) {
 }
 // this is temp main function for when I want to test other things 
 
+
+
 /*
 int main() {
 	sf::Vector2f winDim(1920, 1080);
@@ -222,6 +224,7 @@ int main() {
 */
 
 
+
 int main() {
 
 	bool gameState = false;
@@ -261,9 +264,10 @@ int main() {
 	vig.setScale(0.8, 0.5);
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
-	p1.setPosition(sf::Vector2f(100.f, 100.f));
+	p1.setPosition(sf::Vector2f(400.f, 100.f));
 	p1.init();
 	p1.setState(Player::State::nominal);
+	camera.setCenter(p1.getPosition());
 
 	sf::Texture heart;
 	if (!heart.loadFromFile("Textures/heart.png")) {
@@ -281,16 +285,33 @@ int main() {
 	Spirit spirit(spriritT, sf::Vector2u(7, 8), 5, 0, 60.f);
 	spirit.init();
 
-	GrassLandsLevel newLevel;
-	newLevel.init(&p1);
 	
-	IntroLevel introL;
-	introL.init(&p1);
+	//GrassLandsLevel newLevel;
+	//int hey = sizeof(newLevel);
+	//newLevel.init(&p1);
+	
+	//IntroLevel introL;
+	//int hey1 = sizeof(introL);
+	//introL.init(&p1);
+	
+	//IntroLevel* level1;
+	//GrassLandsLevel* level2;
 
+
+	//levelVec
+	vector<Level*> levelVec(2);
+	int curLevelIndex = 1;
+
+	//levelVec.at(0) = new IntroLevel(&p1);
+	levelVec.at(1) = new GrassLandsLevel(&p1);
+	
 	Level* curLevel;
-	curLevel = &introL;
+	curLevel = levelVec.at(curLevelIndex);
 
+	// check every frame if checkNewLevel is 0 then do nothing, if is 1 then go to previous level, if is 2 then set curlevel = to the next level
 	
+	// everyframe, check for collision with new level logic blocks in tilemap logic grid. 
+
 	//p1.setPosition(sf::Vector2f(25.f, 25.f));
 	//sf::Music music;
 	//if (!music.openFromFile("Sounds/gameAmbience1.wav"))
@@ -298,7 +319,6 @@ int main() {
 	//music.play();
 	//music.setVolume(50.f);
 
-	camera.setCenter(p1.getPosition());
 
 	sf::BlendMode none;
 
@@ -362,7 +382,6 @@ int main() {
 			
 			// HUD:
 			lifeCount.render(window, p1.curHealth, sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
-
 			dashmeter.render(window, p1.getDashTimer(), sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
 
 			int pause = pauseB.update(window);
@@ -370,8 +389,33 @@ int main() {
 				gameState = false;
 				menuState = true;
 			}
-				
-			//window.draw(lifeCount.hSprite);
+			/*
+			tileMap->texDim1 = sf::IntRect(1, 1, 25, 40);
+			tileMap->texDim2 = sf::IntRect(26, 1, 25, 40);
+			tileMap->texDim3 = sf::IntRect(54, 0, 21, 33);
+			*/
+			/*
+			tileMap->texDim1 = sf::IntRect(0, 0, 13, 19);
+			tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
+			tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
+			*/
+			// handling inter-level travel
+			int levelInstruction = p1.collisionCheckNewLevel(curLevel->tileMap);
+			
+			if (levelInstruction == 2) {
+				delete(levelVec.at(curLevelIndex));
+				curLevelIndex += 1;
+				if (curLevelIndex == 1)
+					levelVec.at(curLevelIndex) = new GrassLandsLevel(&p1);
+				curLevel = levelVec.at(curLevelIndex);
+			}
+			if (levelInstruction == 1) {
+				curLevelIndex -= 1;
+				if (curLevelIndex < 0) {
+					curLevelIndex = 0;
+				}
+				curLevel = levelVec.at(curLevelIndex);
+			}
 			
 			if (DEBUG) {
 

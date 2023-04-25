@@ -1,6 +1,8 @@
 #include "GrassLandsLevel.h"
 
-GrassLandsLevel::GrassLandsLevel() {};
+GrassLandsLevel::GrassLandsLevel(Player* player) {
+	init(player);
+};
 
 int GrassLandsLevel::init(TileMap* map, Player* p1) {
 	tileMap = map;
@@ -28,8 +30,10 @@ int GrassLandsLevel::init(Player* p1) {
 		return -1;
 
 	sf::Texture* rocks = new sf::Texture();
-	if (!rocks->loadFromFile("Textures/rocks1.png"))
+	if (!rocks->loadFromFile("Textures/inter.png"))
 		return -1;
+
+	
 
 	int* logicGrid2 = new int[3840];
 	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
@@ -45,14 +49,17 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap = new TileMap(tileTypes1, tileTypes2, tileTypes3, logicGrid2,
 		mapDimChunks1, terrain1, terrain2, rocks);
 
-	tileMap->texDim1 = sf::IntRect(0, 0, 13, 19);
-	tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
-	tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
+	tileMap->texDim1 = sf::IntRect(1, 1, 25, 40);
+	tileMap->offsetDim1 = sf::Vector2i(10, 16);
+	tileMap->texDim2 = sf::IntRect(28, 1, 25, 40);
+	tileMap->offsetDim2 = sf::Vector2i(10, 16);
+	tileMap->texDim3 = sf::IntRect(53, 0, 21, 33);
+	tileMap->offsetDim3 = sf::Vector2i(5, 14);
+	tileMap->texDim4 = sf::IntRect(0, 41, 32, 79);
+	tileMap->offsetDim4 = sf::Vector2i(14, 50);
 
 	if (!tileMap->bgTex.loadFromFile("Textures/planet.png"))
 		return -1;
-
-	
 
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());

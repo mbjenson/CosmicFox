@@ -182,6 +182,7 @@
     <Image Include="Textures\earth.png" />
     <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
+    <Image Include="Textures\inter.png" />
     <Image Include="Textures\planet.png" />
     <Image Include="Textures\playerButton.png" />
     <Image Include="Textures\quitButton.png" />

@@ -4,7 +4,7 @@
 class IntroLevel : public Level
 {
 public:
-	IntroLevel();
+	IntroLevel(Player* player);
 	
 	int init(Player* p1);
 
