@@ -106,6 +106,9 @@ public:
 	sf::Texture shadowTex;
 	sf::Sprite shadowSprite;
 	
+	sf::Clock deathTimer;
+	int deathRestTime = 1500;
+
 	bool detectHit(sf::FloatRect badBox);
 
 	void fall(); // when fall, player must be drawn behind certain things that it would usually be drawn in front of.
@@ -176,6 +179,7 @@ private:
 	sf::Vector2u dashAnimDimW;
 	sf::Vector2u dashAnimDimNW;
 
+	sf::Vector2u deathAnimDim;
 
 	/*
 	* Effects #include effects.hpp
@@ -277,10 +281,12 @@ private:
 	{
 		states.transform *= getTransform();
 		
-		if (voidCorners < 2)
-			target.draw(shadowSprite);
-		if (attacking) {
-			target.draw(sword);
+		if (!FLAG_DEAD) {
+			if (voidCorners < 2)
+				target.draw(shadowSprite);
+			if (attacking) {
+				target.draw(sword);
+			}
 		}
 
 		//sf::RectangleShape lastSafe(sf::Vector2f(3.f, 3.f));

@@ -108,6 +108,9 @@
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="deathScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -287,6 +290,12 @@
     <Image Include="Textures\inter.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\deathText.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\win.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -380,6 +389,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="deathScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

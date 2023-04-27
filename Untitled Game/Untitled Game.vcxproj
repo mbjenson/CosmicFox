@@ -149,6 +149,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DashMeter.cpp" />
+    <ClCompile Include="deathScreen.cpp" />
     <ClCompile Include="DungeonLevel.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -180,6 +181,7 @@
   <ItemGroup>
     <Image Include="Textures\CosmicFox.png" />
     <Image Include="Textures\darkMask.png" />
+    <Image Include="Textures\deathText.png" />
     <Image Include="Textures\earth.png" />
     <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
@@ -236,6 +238,7 @@
     <Image Include="Textures\vignetteShadow.png" />
     <Image Include="Textures\wall.png" />
     <Image Include="Textures\waterSpriteSheettest32.png" />
+    <Image Include="Textures\win.png" />
     <Image Include="Textures\yellowGlow.png" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +246,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DashMeter.h" />
+    <ClInclude Include="deathScreen.h" />
     <ClInclude Include="DungeonLevel.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />

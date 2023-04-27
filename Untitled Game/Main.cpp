@@ -8,6 +8,7 @@
 //#include <thread>
 
 #include "PauseButton.h"
+#include "deathScreen.h"
 #include "Menu.h"
 #include "Player.h"
 #include "Camera.h"
@@ -132,10 +133,11 @@ void deathTransition(sf::RenderWindow* win) {
 	sf::Texture winTex;
 	winTex.create(win->getSize().x, win->getSize().y);
 	sf::Sprite mask(winTex);
-	
+	mask.setColor(sf::Color(255, 255, 255, 100));
 	sf::BlendMode none;
 	while (timer.getElapsedTime().asMilliseconds() < 1000) {
-		mask.setColor(sf::Color(255, 255, 255, timer.getElapsedTime().asMilliseconds() / 5));
+
+		//mask.setColor(sf::Color(255, 255, 255, timer.getElapsedTime().asMilliseconds() / 5));
 		win->clear();
 		win->draw(mask);
 		win->display();
@@ -193,72 +195,16 @@ void processEvents(sf::RenderWindow& window) {
 		}
 	}
 }
-// this is temp main function for when I want to test other things 
-
-
-
-/*
-int main() {
-	sf::Vector2f winDim(1920, 1080);
-
-	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Resize);
-
-	
-	//sf::Texture black;
-	//if (!black.loadFromFile("Textures/black.png")) {
-	//	return -1;
-	//}
-	//sf::Sprite box(black);
-	
-	sf::Texture bgT;
-	if (!bgT.loadFromFile("Textures/earth.png"))
-		return -1;
-	sf::Sprite bg(bgT);
-	
-	
-	
-	sf::Texture tex;
-	tex.create(winDim.x, winDim.x);
-	sf::Sprite spr(tex);
-	
-	sf::Vector2f topLeft(0, 0);
-	sf::Vector2f playerPos(400.f, 200.f);
-		//distance from top left of screen
-	
-
-	sf::Shader shader;
-	if (!shader.loadFromFile("Shaders/test6.frag", sf::Shader::Fragment))
-		return -1;
-	
-	shader.setUniform("u_resolution", sf::Vector2f(tex.getSize().x, tex.getSize().y));
-	shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
-	sf::Clock mainClock;
-	while (window.isOpen()) {
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed())
-				window.close();
-		}
-		sf::Vector2f center(topLeft.x + sf::Mouse::getPosition().x + 250, topLeft.y + sf::Mouse::getPosition().y + 400);
-		shader.setUniform("circleCenter", sf::Vector2f(center));
-
-		window.clear();
-		
-		window.draw(bg);
-		window.draw(spr, &shader);
-		
-
-		window.display();
-	}
-}
-*/
-
-
 
 int main() {
 
-	bool gameState = false;
-	bool menuState = true;
+	enum class State {
+		game,
+		menu,
+		death,
+	};
+	State state = State::menu;
+
 	sf::Vector2f winDim(2560, 1440);
 	//sf::Vector2f winDim(1920, 1080);
 	sf::RenderWindow window(sf::VideoMode(winDim.x, winDim.y), "Untitled Game", sf::Style::Close | sf::Style::Fullscreen);
@@ -315,40 +261,25 @@ int main() {
 	Spirit spirit(spriritT, sf::Vector2u(7, 8), 5, 0, 60.f);
 	spirit.init();
 
+	deathScreen deathMenu;
 	
-	//GrassLandsLevel newLevel;
-	//int hey = sizeof(newLevel);
-	//newLevel.init(&p1);
-	
-	//IntroLevel introL;
-	//int hey1 = sizeof(introL);
-	//introL.init(&p1);
-	
-	//IntroLevel* level1;
-	//GrassLandsLevel* level2;
-
-
 	//levelVec
 	vector<Level*> levelVec(2);
 	int curLevelIndex = 1;
-
-	//levelVec.at(0) = new IntroLevel(&p1);
-	//levelVec.at(0) = new IntroLevel(&p1);
+	
 	levelVec.at(1) = new GrassLandsLevel(&p1);
+	//levelVec.at(0) = new IntroLevel(&p1);
+
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);
 	p1.setPosition(curLevel->playerSpawn);
-	// check every frame if checkNewLevel is 0 then do nothing, if is 1 then go to previous level, if is 2 then set curlevel = to the next level
 	
-	// everyframe, check for collision with new level logic blocks in tilemap logic grid. 
-
-	//p1.setPosition(sf::Vector2f(25.f, 25.f));
-	//sf::Music music;
-	//if (!music.openFromFile("Sounds/gameAmbience1.wav"))
-	//	return -1;
-	//music.play();
-	//music.setVolume(50.f);
-
+	sf::Music music;
+	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
+		return -1;
+	music.play();
+	music.setVolume(65.f);
+	music.setLoop(true);
 
 	sf::BlendMode none;
 
@@ -358,6 +289,12 @@ int main() {
 	PauseButton pauseB;
 	pauseB.init();
 	
+	sf::Texture win;
+	win.loadFromFile("Textures/win.png");
+	sf::Sprite winScreen(win);
+	
+	winScreen.setScale(3.f, 3.f);
+	int endgame = 0;
 
 	sf::Clock mainClock;
 	sf::Clock dtClock;
@@ -366,13 +303,12 @@ int main() {
 		float dt = dtClock.restart().asSeconds();
 		processEvents(window);
 		// Game.GameState ** change to this later using Game.hpp
-		if (menuState) {
+		if (state == State::menu) {
 			window.setView(menuView);
 			window.clear();
 			int result = mainMenu.update(window);
 			if (result == 1) {
-				gameState = true;
-				menuState = false;
+				state = State::game;
 			}
 			if (result == 2) {
 				// quit game.
@@ -381,7 +317,22 @@ int main() {
 			}
 			window.display();
 		}
-		if (gameState) {
+		if (state == State::death) {
+			window.setView(menuView);
+			window.clear();
+			deathMenu.init();
+			int result = deathMenu.update(window);
+			if (result == 1) {
+				p1.respawn(curLevel->playerSpawn);
+				p1.curHealth = p1.maxHealth;
+				state = State::game;
+			}
+			if (result == 2) {
+				window.close();
+			}
+			window.display();
+		}
+		if (state == State::game) {
 			
 			// update bg position
 			//newLevel.tileMap->updateBG(camera.getCenter());
@@ -416,22 +367,10 @@ int main() {
 
 			int pause = pauseB.update(window);
 			if (pause) {
-				gameState = false;
-				menuState = true;
+				state = State::menu;
 			}
-			/*
-			tileMap->texDim1 = sf::IntRect(1, 1, 25, 40);
-			tileMap->texDim2 = sf::IntRect(26, 1, 25, 40);
-			tileMap->texDim3 = sf::IntRect(54, 0, 21, 33);
-			*/
-			/*
-			tileMap->texDim1 = sf::IntRect(0, 0, 13, 19);
-			tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
-			tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
-			*/
 			// handling inter-level travel
 			int levelInstruction = p1.collisionCheckNewLevel(curLevel->tileMap);
-			
 			if (levelInstruction == 2) {
 				delete(levelVec.at(curLevelIndex));
 				curLevelIndex += 1;
@@ -442,6 +381,7 @@ int main() {
 				p1.setPosition(curLevel->playerSpawn);
 				levelTransition(&window);
 			}
+			/*
 			if (levelInstruction == 1) {
 				curLevelIndex -= 1;
 				if (curLevelIndex < 0) {
@@ -449,11 +389,18 @@ int main() {
 				}
 				curLevel = levelVec.at(curLevelIndex);
 			}
+			*/
 			if (p1.FLAG_DEAD) {
-				deathTransition(&window);
-				levelTransition(&window);
-				p1.respawn(curLevel->playerSpawn);
-				
+				if (p1.deathTimer.getElapsedTime().asMilliseconds() > p1.deathRestTime) {
+					state = State::death;
+				}
+			}
+			if (curLevelIndex == 1 && levelVec.at(curLevelIndex)->eVec.empty()) {
+				if (endgame < 2000) {
+					winScreen.setPosition(camera.getCenter().x - camera.getSize().x / 4, camera.getCenter().y - camera.getSize().y / 2);
+					window.draw(winScreen);
+					endgame++;
+				}
 			}
 			
 			if (DEBUG) {
@@ -494,140 +441,3 @@ int main() {
 	}
 	return 0;
 }
-
-
-
-
-/*
-	sf::Texture enemyT;
-	if (!enemyT.loadFromFile("Textures/playerCube16.png"))
-		return -1;
-
-	Enemy* e1 = new Enemy(&enemyT, sf::Vector2f(16, 16));
-	//e1.setOrigin(sf::Vector2f(enemyT.getSize().x / 2, enemyT.getSize().y / 2));
-	e1->init();
-	e1->setPosition(45.f, 45.f);
-
-	Enemy* e2 = new Enemy(&enemyT, sf::Vector2f(16, 16));
-	e2->init();
-	e2->setPosition(45.f, 80.f);
-
-	std::vector<Enemy> eVec;
-	eVec.push_back(*e1);
-	eVec.push_back(*e2);
-
-	//std::vector<Enemy> delQueue;
-	*/
-
-// TODO:
-// ?? maybe not needed because I am going to have a 16x16 sprite anyway
-// add new check for the tile collision that checks the center of each component of hitbox on the x and the y
-/*f
-//1)
-p1.updatePlayerTile(&tileMap);
-camera.update(p1, dt);
-window.setView(camera);
-//2)
-sf::Vector2i renderSize(13, 8);
-tileMap.render(p1.curTile, window, renderSize);
-//p1.updateAnimation(&pMoveClock);
-//3)
-p1.updateMovement(dt, &tileMap);
-//sh1.setUniform("time", mainClock.getElapsedTime().asSeconds());
-window.draw(p1);
-// top tile map is rendered last because of draw order
-topTileMap.render(p1.curTile, window, renderSize);
-*/
-
-/*
-	int tileTypes[] = {
-		0, 0, 1, 0, 0, 0, 0, 0,
-		1, 1, 0, 0, 1, 0, 1, 0,
-		1, 0, 0, 0, 1, 1, 0, 1,
-		0, 0, 0, 6, 6, 0, 1, 1,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 6, 6, 0, 0, 0,
-		1, 1, 1, 2, 3, 0, 0, 0,
-		6, 6, 6, 6, 6, 6, 6, 6,
-	};
-	int logGrid[] = {
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,	};
-
-	sf::Vector2u groundTexSize(16, 16);
-	Tile grass(terrarin, groundTexSize, 0);
-	Tile grassStone(terrarin, groundTexSize, 1);
-	Tile stoneWall(terrarin, groundTexSize, 2);
-	Tile stone(terrarin, groundTexSize, 3);
-	Tile stairsR(terrarin, groundTexSize, 4);
-	Tile stairsL(terrarin, groundTexSize, 5);
-	Tile under(terrarin, groundTexSize, 6);
-
-	Tile tiles1[] = { grass, grassStone, stoneWall, stone, stairsR, stairsL, under };
-
-	sf::Vector2u temp_tileSize(16, 16);
-	TileMap tileMap(7, tiles1, temp_mapSize, tileTypes, logGrid, temp_tileSize);
-	*/
-
-
-/*
-	// Shader settup
-	if (!sf::Shader::isAvailable())
-		return -1;
-
-	sf::Shader sh1;
-	if (!sh1.loadFromFile("Shaders/light_test.frag", sf::Shader::Fragment))
-		return -1;
-	sh1.setUniform("u_resolution", sf::Vector2f(winDim.x, winDim.y));
-
-	sf::Texture blackT;
-	if (!blackT.loadFromFile("Textures/black.png"))
-		return -1;
-	sf::Sprite lightS(blackT);
-
-	lightS.setScale(
-		winDim.x / lightS.getGlobalBounds().width,
-		winDim.y / lightS.getGlobalBounds().height
-	);
-	*/
-
-
-
-	/*
-		sf::Texture heart;
-		if (!heart.loadFromFile("Textures/heart.png"))
-			return -1;
-
-		sf::Sprite test(heart);
-
-		sf::RenderTexture bgTex;
-		bgTex.create(winDim.x, winDim.y);
-		bgTex.draw(test);
-		bgTex.display();
-		sf::Sprite bg(bgTex.getTexture());
-
-		HudBar lifeBar(heart, sf::Vector2f(5, 5), &camera);
-		*/
-
-
-		//lifeBar.render(window, p1.health);
-
-					//bg.setPosition(p1.getPosition().x-19, p1.getPosition().y-19);
-					//window.draw(bg);
-
-//if (newMap->checkForUpdate(p1.getPosition())) {
-			//	newMap->updateTexMap();
-			//	newMap->updatePlayerChunk(p1.getPosition());
-			//}
-			//sf::Sprite mapSprite(newMap->getMapTex()->getTexture());
-
-			//window.draw(mapSprite);
-			//shadowSprite.setPosition(sf::Vector2f(p1.getPosition().x - 8, p1.getPosition().y - 6));
-			//window.draw(shadowSprite);
-			//window.draw(p1);

@@ -4,19 +4,6 @@ GrassLandsLevel::GrassLandsLevel(Player* player) {
 	init(player);
 };
 
-int GrassLandsLevel::init(TileMap* map, Player* p1) {
-	tileMap = map;
-	player = p1;
-	tileMap->texDim1 = sf::IntRect(0, 0, 13, 19);
-	tileMap->texDim2 = sf::IntRect(16, 0, 16, 32);
-	tileMap->texDim3 = sf::IntRect(34, 1, 35, 28);
-	//tileMap->texDim4 = sf::IntRect();
-	//tileMap->texDim5 = sf::IntRect();
-	//tileMap->texDim6 = sf::IntRect();
-	return 0;
-	
-}
-
 int GrassLandsLevel::init(Player* p1) {
 	player = p1;
 	usingShader = false;
@@ -32,8 +19,6 @@ int GrassLandsLevel::init(Player* p1) {
 	sf::Texture* rocks = new sf::Texture();
 	if (!rocks->loadFromFile("Textures/inter.png"))
 		return -1;
-
-	
 
 	int* logicGrid2 = new int[3840];
 	read_ints("Assets/Levels/MapFiles/Map1Logic.csv", logicGrid2);
@@ -69,49 +54,60 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
 
-	
-
 	// initialize enemies
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))
 		return -1;
+
+	
 
 	sf::Vector2u ghostSize(24, 24);
 	GhostEnemy g1(&ghostTex, ghostSize, 1, 0, 0.f);
 	GhostEnemy g2(&ghostTex, ghostSize, 1, 0, 0.f);
 	GhostEnemy g3(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g4(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g5(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g6(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g7(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g8(&ghostTex, ghostSize, 1, 0, 0.f);
 
 	g1.initGhost();
 	g2.initGhost();
 	g3.initGhost();
+	g4.initGhost();
+	g5.initGhost();
+	g6.initGhost();
+	g7.initGhost();
+	g8.initGhost();
 	
-	
-	g2.setSpawn(sf::Vector2f(360.f, 600.f));
-	g3.setSpawn(sf::Vector2f(360.f, 400.f));
 	g1.setSpawn(sf::Vector2f(350.f, 500.f));
+	g2.setSpawn(sf::Vector2f(360.f, 600.f));
+	g3.setSpawn(sf::Vector2f(370.f, 700.f));
+	g4.setSpawn(sf::Vector2f(100.f, 400.f));
+	g5.setSpawn(sf::Vector2f(390.f, 1000.f));
+	g6.setSpawn(sf::Vector2f(200.f, 1010.f));
+	g7.setSpawn(sf::Vector2f(358.f, 1200.f));
+	g8.setSpawn(sf::Vector2f(600.f, 300.f));
+	
+	g1.setPosition(g1.spawnpoint);
 	g2.setPosition(g2.spawnpoint);
 	g3.setPosition(g3.spawnpoint);
-	g1.setPosition(g1.spawnpoint);
+	g4.setPosition(g4.spawnpoint);
+	g5.setPosition(g5.spawnpoint);
+	g6.setPosition(g6.spawnpoint);
+	g7.setPosition(g7.spawnpoint);
+	g8.setPosition(g8.spawnpoint);
+
 	eVec.push_back(g1);
 	eVec.push_back(g2);
 	eVec.push_back(g3);
+	eVec.push_back(g4);
+	eVec.push_back(g5);
+	eVec.push_back(g6);
+	eVec.push_back(g7);
+	eVec.push_back(g8);
 	
 	playerSpawn = sf::Vector2f(400.f, 28.f);
-	//g1.init();
-	//g1.setPosition(sf::Vector2f(200.f, 200.f));
-	/*
-	sf::Vector2i enemyTexDim(24, 24);
-	Enemy e1(&enemyT, sf::Vector2f(16.f, 16.f), enemyTexDim, 1, 0, 0.f);
-	e1.init();
-	e1.setPosition(150.f, 60.f);
-	
-	Enemy e2(&enemyT, sf::Vector2f(16.f, 16.f));
-	e2.init();
-	e2.setPosition(200.f, 200.f);
-	*/
-	//eVec.push_back(g1);
-	
 	
 	return 0;
-
 }
 

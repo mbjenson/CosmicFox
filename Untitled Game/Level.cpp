@@ -102,6 +102,12 @@ void Level::render(sf::RenderWindow& win) {
 					win.draw(*player);
 				}
 			}
+			if (player->FLAG_DEAD) {
+				if ((playerPos.y - playerPos.y % tSize) / tSize == y && (playerPos.x - playerPos.x % tSize) / tSize == x) {
+					win.draw(*player);
+				}
+			}
+			
 			
 			/*
 			if (!player->FLAG_FALL) {

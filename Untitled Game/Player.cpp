@@ -262,21 +262,14 @@ void Player::update(float deltaTime, TileMap* map) {
 				//tSprite.setColor(sf::Color::White);
 				tSprite.setColor(sf::Color(255, 255, 255, 100));
 			}
-			
-			
-			
 			if (curStunClock < hitBackTime) {
-					
 				finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
 				collisionCheckTile(map);
 				collisionCheckVoid(map);
 				move(finalVel);
-				
 			}
 			else {
-					
 				state = State::nominal;
-				
 			}
 		}
 		else {
@@ -284,11 +277,7 @@ void Player::update(float deltaTime, TileMap* map) {
 			state = State::nominal;
 			tSprite.setColor(sf::Color::White);
 		}
-		
-		
 	}
-		// effect: greyed out or flashing
-
 	case State::dead:
 	{
 		checkDeath(deltaTime);
@@ -310,7 +299,6 @@ void Player::update(float deltaTime, TileMap* map) {
 		sword.restartAnim();
 	updateAnim();
 	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 5));
-
 	//checkDeath(deltaTime);
 }
 
@@ -373,13 +361,13 @@ void Player::checkDeath(float dt) {
 		else {
 			if (curHealth <= 0) {
 				FLAG_NOLIFE = true;
+				falling = false;
 			}
 			else {
-				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16) / 2, lastSafePos.y - fmod(lastSafePos.y, 16) / 2));
+				//setPosition(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16) / 2));
+				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16) / 2));
 				falling = false;
-				
 			}
-
 		}
 	}
 	else {
@@ -387,7 +375,12 @@ void Player::checkDeath(float dt) {
 	}
 	if (FLAG_NOLIFE) {
 		state = State::dead;
+		if (!FLAG_DEAD) {
+			deathTimer.restart();
+		}
 		finalVel = sf::Vector2f(0, 0);
+		updateRow(16, 8);
+		updateAnim();
 		FLAG_DEAD = true;
 
 		//respawn(sf::Vector2f(25.f, 25.f));
@@ -395,10 +388,11 @@ void Player::checkDeath(float dt) {
 		
 	}
 	if (FLAG_DEAD) {
+		tSprite.setColor(sf::Color::White);
 		// convert to tile coords
 		//respawn(sf::Vector2f(100.f, 100.f));
 		// need to do this in game.cpp because i cant get information about the spawn point in player.cpp very cleanly
-		curHealth = maxHealth;
+		//curHealth = maxHealth;
 	}
 }
 
@@ -474,10 +468,6 @@ void Player::init() {
 	FLAG_FALL = false;
 
 	setFacing(sf::Vector2f(0, 1.f));
-	
-}
-
-void Player::invincibleEffect() {
 	
 }
 
@@ -789,115 +779,6 @@ void Player::updateRotMouse()
 	setRotation(thisAngle+90);
 }
 
-// updates the player's current tile
-
-
-// check for collision with collidable tiles in tilemap
-/*
-void Player::collisionCheckTile(TileMap* map) {
-	int i = 0;
-	while (i < 2) {
-		updateHitBox();
-		sf::FloatRect tempHitBox(hitBox.left + finalVel.x, hitBox.top + finalVel.y, hitBox.width, hitBox.height);
-		bool TL, TR, BL, BR;
-		//UPDATE CORNER BOOLS by passing in their location and checking if the tile they reside on is collidable
-
-		if (tempHitBox.left < 0 || tempHitBox.left > map->mapSize.x * map->tileSize.x)
-			return;
-		if (tempHitBox.top < 0 || tempHitBox.top > map->mapSize.y * map->tileSize.y)
-			return;
-		if (tempHitBox.left + tempHitBox.width < 0 || tempHitBox.left + tempHitBox.width > map->mapSize.x * map->tileSize.x)
-			return;
-		if (tempHitBox.top + tempHitBox.height < 0 || tempHitBox.top + tempHitBox.height > map->mapSize.y * map->tileSize.y)
-			return;
-
-		// if top left corner intersects a collidable tile.
-		if (map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top)).collidable)
-			TL = true;
-		else
-			TL = false;
-		// if top right intersects a collidable tile.
-		if (map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top)).collidable)
-			TR = true;
-		else
-			TR = false;
-		// if bottom left intersects a collidable tile.
-		if (map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height)).collidable)
-			BL = true;
-		else
-			BL = false;
-		// if bottom right intersects a collidable tile.
-		if (map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height)).collidable)
-			BR = true;
-		else
-			BR = false;
-
-		// Corner cases involve corrected the player movement by the smaller distance(between x and y) to get out of tile bounds
-		if (TL && !TR && !BL && !BR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top));
-			if ((thisTile.getPosition().y + map->tileSize.y) - tempHitBox.top > (thisTile.getPosition().x + map->tileSize.x) - tempHitBox.left) {
-				finalVel.x = finalVel.x + ((thisTile.getPosition().x + map->tileSize.x) - tempHitBox.left);
-				moveDir.x = 0;
-			}
-			else {
-				finalVel.y = finalVel.y + ((thisTile.getPosition().y + map->tileSize.y) - tempHitBox.top);
-				moveDir.y = 0;
-			}
-		}
-		if (TR && !TL && !BL && !BR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
-			if ((thisTile.getPosition().y + map->tileSize.y) - tempHitBox.top > (tempHitBox.left + tempHitBox.width) - thisTile.getPosition().x) {
-				finalVel.x = finalVel.x - ((tempHitBox.left + tempHitBox.width) - thisTile.getPosition().x);
-				moveDir.x = 0;
-			}
-			else {
-				finalVel.y = finalVel.y + ((thisTile.getPosition().y + map->tileSize.y) - tempHitBox.top);
-				moveDir.y = 0;
-			}
-		}
-		if (BR && !TL && !BL && !TR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top + tempHitBox.height));
-			if ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y > (tempHitBox.left + tempHitBox.width) - thisTile.getPosition().x) {
-				finalVel.x = finalVel.x - ((tempHitBox.left + tempHitBox.width) - thisTile.getPosition().x);
-				moveDir.x = 0;
-			}
-			else {
-				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y);
-				moveDir.y = 0;
-			}
-		}
-		if (BL && !TL && !TR && !BR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
-			if ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y > (thisTile.getPosition().x + map->tileSize.x) - tempHitBox.left) {
-				finalVel.x = finalVel.x - (tempHitBox.left - (thisTile.getPosition().x + map->tileSize.x));
-				moveDir.x = 0;
-			}
-			else {
-				finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y);
-				moveDir.y = 0;
-			}
-		}
-		if (TR && BR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));
-			finalVel.x = finalVel.x + (thisTile.getPosition().x - (tempHitBox.left + tempHitBox.width));
-		}
-		if (TL && BL) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top));
-			finalVel.x = finalVel.x + ((thisTile.getPosition().x + map->tileSize.x) - tempHitBox.left);
-		}
-		if (TL && TR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top));
-			finalVel.y = finalVel.y + ((thisTile.getPosition().y + map->tileSize.y) - tempHitBox.top);
-		}
-		if (BL && BR) {
-			Tile thisTile = map->getTileWithPoints(sf::Vector2f(tempHitBox.left, tempHitBox.top + tempHitBox.height));
-			finalVel.y = finalVel.y - ((tempHitBox.top + tempHitBox.height) - thisTile.getPosition().y);
-		}
-		i++;
-	}
-}
-*/
-
 //respawn player at a location
 void Player::respawn(sf::Vector2f spawnPoint) {
 	setPosition(spawnPoint);
@@ -905,7 +786,7 @@ void Player::respawn(sf::Vector2f spawnPoint) {
 	state = State::nominal;
 	isDashing = false;
 	tSprite.setColor(sf::Color::White);
-	
+	//curHealth = maxHealth;
 	FLAG_DEAD = false;
 	FLAG_NOLIFE = false;
 	FLAG_FALL = false;
