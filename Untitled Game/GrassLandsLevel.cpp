@@ -75,13 +75,27 @@ int GrassLandsLevel::init(Player* p1) {
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))
 		return -1;
 
-	GhostEnemy g1(&ghostTex, sf::Vector2u(24, 24), 1, 0, 0.f);
+	sf::Vector2u ghostSize(24, 24);
+	GhostEnemy g1(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g2(&ghostTex, ghostSize, 1, 0, 0.f);
+	GhostEnemy g3(&ghostTex, ghostSize, 1, 0, 0.f);
+
 	g1.initGhost();
-	g1.setSpawn(sf::Vector2f(200.f, 200.f));
+	g2.initGhost();
+	g3.initGhost();
+	
+	
+	g2.setSpawn(sf::Vector2f(360.f, 600.f));
+	g3.setSpawn(sf::Vector2f(360.f, 400.f));
+	g1.setSpawn(sf::Vector2f(350.f, 500.f));
+	g2.setPosition(g2.spawnpoint);
+	g3.setPosition(g3.spawnpoint);
 	g1.setPosition(g1.spawnpoint);
 	eVec.push_back(g1);
+	eVec.push_back(g2);
+	eVec.push_back(g3);
 	
-	
+	playerSpawn = sf::Vector2f(400.f, 28.f);
 	//g1.init();
 	//g1.setPosition(sf::Vector2f(200.f, 200.f));
 	/*

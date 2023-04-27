@@ -42,6 +42,7 @@ void Enemy::zoomAttack(sf::Vector2f playPos, sf::Vector2f distVec, float distSiz
 	return;
 }
 
+
 void Enemy::collisionCheckTile(TileMap* map) {
 	int i = 0;
 	while (i < 2) {
@@ -154,6 +155,7 @@ void Enemy::collisionCheckTile(TileMap* map) {
 		}
 		i++;
 	}
+	
 }
 
 /*
@@ -193,7 +195,7 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 	switch (curState) {
 	case State::nominal:
 	{
-		
+		tSprite.setColor(stdCol);
 		basicMovement(playerPos, distVec, distSize, deltaTime);
 		break;
 		//move(finalVel);
@@ -222,11 +224,17 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 			// playerSwordRadiusSize - distSize;
 			// then the amount the player moves is proportional to how close the enemy is to the player.
 			// the closer the more it moves
-			float tempHitSpeed = pow((hitBackSpeed / (distSize)), 2) * 5;
+			float tempHitSpeed = pow((hitBackSpeed / (distSize)), 2) * 4;
+			tSprite.setColor(sf::Color::Red);
 			finalVel = sf::Vector2f(deltaTime * hitVector.x * tempHitSpeed, deltaTime * hitVector.y * tempHitSpeed);
 		}
+		if (stunClock.getElapsedTime().asMilliseconds() > hitBackTime) {
+			tSprite.setColor(stdCol);
+		}
+		
 		// stun:
 		if (stunClock.getElapsedTime().asMilliseconds() < totalHitTime) {
+
 			break;
 		}
 		

@@ -127,6 +127,36 @@ sf::Clock GLOBAL_GAME_CLOCK;
 //	that cooperates with the light map.
 // Implement lighting for different objects. Check out Saved web article by Matt Greer: https://mattgreer.dev/blog/dynamic-lighting-and-shadows/
 
+void deathTransition(sf::RenderWindow* win) {
+	sf::Clock timer;
+	sf::Texture winTex;
+	winTex.create(win->getSize().x, win->getSize().y);
+	sf::Sprite mask(winTex);
+	
+	sf::BlendMode none;
+	while (timer.getElapsedTime().asMilliseconds() < 1000) {
+		mask.setColor(sf::Color(255, 255, 255, timer.getElapsedTime().asMilliseconds() / 5));
+		win->clear();
+		win->draw(mask);
+		win->display();
+	}
+}
+// fade to black then back
+void levelTransition(sf::RenderWindow* win) {
+	sf::Clock timer;
+	sf::Texture winTex;
+	winTex.create(win->getSize().x, win->getSize().y);
+	sf::Sprite mask(winTex);
+	//sf::BlendMode none;
+
+	while (timer.getElapsedTime().asMilliseconds() < 1000) {
+		win->clear();
+		win->draw(mask);
+		win->display();
+	}
+
+}
+
 void setKeyPressesKBD(Player& player) {
 	player.upPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 	player.downPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
@@ -303,11 +333,11 @@ int main() {
 	int curLevelIndex = 1;
 
 	//levelVec.at(0) = new IntroLevel(&p1);
+	//levelVec.at(0) = new IntroLevel(&p1);
 	levelVec.at(1) = new GrassLandsLevel(&p1);
-	
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);
-
+	p1.setPosition(curLevel->playerSpawn);
 	// check every frame if checkNewLevel is 0 then do nothing, if is 1 then go to previous level, if is 2 then set curlevel = to the next level
 	
 	// everyframe, check for collision with new level logic blocks in tilemap logic grid. 
@@ -405,9 +435,12 @@ int main() {
 			if (levelInstruction == 2) {
 				delete(levelVec.at(curLevelIndex));
 				curLevelIndex += 1;
-				if (curLevelIndex == 1)
+				if (curLevelIndex == 1) {
 					levelVec.at(curLevelIndex) = new GrassLandsLevel(&p1);
+				}
 				curLevel = levelVec.at(curLevelIndex);
+				p1.setPosition(curLevel->playerSpawn);
+				levelTransition(&window);
 			}
 			if (levelInstruction == 1) {
 				curLevelIndex -= 1;
@@ -415,6 +448,12 @@ int main() {
 					curLevelIndex = 0;
 				}
 				curLevel = levelVec.at(curLevelIndex);
+			}
+			if (p1.FLAG_DEAD) {
+				deathTransition(&window);
+				levelTransition(&window);
+				p1.respawn(curLevel->playerSpawn);
+				
 			}
 			
 			if (DEBUG) {

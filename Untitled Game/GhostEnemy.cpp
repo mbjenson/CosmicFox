@@ -25,7 +25,7 @@ int GhostEnemy::initGhost() {
 	curState = State::nominal;
 	beingHit = false;
 
-	
+	stdCol = sf::Color(255, 255, 255, 150);
 	//idle = true;
 	// 
 	// This one is default perhaps?
@@ -102,12 +102,16 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 		followVel.x -= followVel.x * 0.005;
 		followVel.y -= followVel.y * 0.005;
 	}
+	
 	finalVel = followVel;
+	finalVel.y += sin(GLOBAL_GAME_CLOCK.getElapsedTime().asSeconds() * 2) * dt * 8;
+
 }
 
 
 void Enemy::setAnimations() {
 	updateRow(0, 1);
+	/*
 	if (distSize > detectionRadius) {
 		updateRow(0, 1);
 	}
@@ -117,6 +121,7 @@ void Enemy::setAnimations() {
 	if (playerDirNormal.x > 0) {
 		updateRow(2, 1);
 	}
+	*/
 	
 	
 	// set it so that the ghost is facing towards the player during preperation for attack other wise it is looking away

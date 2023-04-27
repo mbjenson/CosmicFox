@@ -36,6 +36,7 @@ public:
 	
 	int damage = 1;
 	
+	sf::Color stdCol;
 	sf::Vector2f moveDir;
 	sf::Vector2f finalVel;
 	sf::Vector2f followVel;

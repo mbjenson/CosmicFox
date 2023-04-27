@@ -105,6 +105,9 @@
     <ClCompile Include="IntroLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\enemy.png">
@@ -374,6 +377,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IntroLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

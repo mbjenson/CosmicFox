@@ -209,14 +209,14 @@ private:
 	//1)float dashSpeed = 275.f;
 	//2) float dashSpeed = 180.f;
 	//3) float dashSpeed = 220.f
-	float dashSpeed = 240.f;
+	float dashSpeed = 170.f;
 	//1) int dashCooldown = 1000;
 	int dashCooldown = 1400;
 
 	bool falling;
 	//1)int dashSpeedTime = 250;
 	//int dashSpeedTime = 200;
-	int dashSpeedTime = 180;
+	int dashSpeedTime = 250;
 	//int dashSpeedTime = 165;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;

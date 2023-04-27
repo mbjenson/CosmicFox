@@ -150,6 +150,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DashMeter.cpp" />
     <ClCompile Include="DungeonLevel.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DashMeter.h" />
     <ClInclude Include="DungeonLevel.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />

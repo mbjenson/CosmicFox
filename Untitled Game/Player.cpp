@@ -259,24 +259,32 @@ void Player::update(float deltaTime, TileMap* map) {
 		int curStunClock = stunClock.getElapsedTime().asMilliseconds();
 		if (curStunClock < invincibleTime) {
 			if (curStunClock > flashRedTime){
-				tSprite.setColor(sf::Color::White);
+				//tSprite.setColor(sf::Color::White);
+				tSprite.setColor(sf::Color(255, 255, 255, 100));
 			}
+			
+			
+			
 			if (curStunClock < hitBackTime) {
 					
 				finalVel = sf::Vector2f(deltaTime * hitVec.x * knockBackSpeed, deltaTime * hitVec.y * knockBackSpeed);
 				collisionCheckTile(map);
 				collisionCheckVoid(map);
 				move(finalVel);
+				
 			}
 			else {
 					
 				state = State::nominal;
+				
 			}
 		}
 		else {
 			beingHit = false;
 			state = State::nominal;
+			tSprite.setColor(sf::Color::White);
 		}
+		
 		
 	}
 		// effect: greyed out or flashing
@@ -285,6 +293,9 @@ void Player::update(float deltaTime, TileMap* map) {
 	{
 		checkDeath(deltaTime);
 	}
+	}
+	if (!beingHit) {
+		tSprite.setColor(sf::Color::White);
 	}
 	// check invincibility
 	if (stunClock.getElapsedTime().asMilliseconds() > invincibleTime) {
@@ -364,8 +375,9 @@ void Player::checkDeath(float dt) {
 				FLAG_NOLIFE = true;
 			}
 			else {
-				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16), lastSafePos.y - fmod(lastSafePos.y, 16)));
+				respawn(sf::Vector2f(lastSafePos.x - fmod(lastSafePos.x, 16) / 2, lastSafePos.y - fmod(lastSafePos.y, 16) / 2));
 				falling = false;
+				
 			}
 
 		}
@@ -384,7 +396,7 @@ void Player::checkDeath(float dt) {
 	}
 	if (FLAG_DEAD) {
 		// convert to tile coords
-		respawn(sf::Vector2f(100.f, 100.f));
+		//respawn(sf::Vector2f(100.f, 100.f));
 		// need to do this in game.cpp because i cant get information about the spawn point in player.cpp very cleanly
 		curHealth = maxHealth;
 	}
@@ -453,7 +465,7 @@ void Player::init() {
 	curHealth = maxHealth;
 	hitBackTime = 200;
 	knockBackSpeed = 100;
-	invincibleTime = 1000;
+	invincibleTime = 1500;
 	beingHit = false;
 	invincible = false;
 	flashRedTime = 50;
@@ -893,6 +905,7 @@ void Player::respawn(sf::Vector2f spawnPoint) {
 	state = State::nominal;
 	isDashing = false;
 	tSprite.setColor(sf::Color::White);
+	
 	FLAG_DEAD = false;
 	FLAG_NOLIFE = false;
 	FLAG_FALL = false;
