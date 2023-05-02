@@ -238,7 +238,7 @@ int main() {
 
 	sf::Sprite vig(vignette);
 	//vig.setOrigin(sf::Vector2f(vignette.getSize().x / 2, vignette.getSize().y / 2));
-	vig.setScale(0.7f, 0.5f); // old : 0.7, 0.5
+	vig.setScale(0.728f, 0.52f); // old : 0.7, 0.5
 	//vig.setOrigin(vig.getGlobalBounds().width / 2, vig.getGlobalBounds().height / 2);
 	
 
@@ -268,20 +268,20 @@ int main() {
 	
 	//levelVec
 	vector<Level*> levelVec(2);
-	int curLevelIndex = 1;
+	int curLevelIndex = 0;
 	
-	levelVec.at(1) = new GrassLandsLevel(&p1);
-	//levelVec.at(0) = new IntroLevel(&p1);
+	//levelVec.at(1) = new GrassLandsLevel(&p1);
+	levelVec.at(0) = new IntroLevel(&p1);
 
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);
 	p1.setPosition(curLevel->playerSpawn);
-	
+
 	sf::Music music;
 	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 		return -1;
 	music.play();
-	music.setVolume(35.f);
+	music.setVolume(20.f);
 	music.setLoop(true);
 
 	sf::BlendMode none;
@@ -313,6 +313,7 @@ int main() {
 			window.clear();
 			int result = mainMenu.update(window);
 			if (result == 1) {
+				
 				state = State::game;
 			}
 			if (result == 2) {
@@ -351,10 +352,6 @@ int main() {
 			// using renderState (blend mode) we can blend the background texture with the foreground texture
 			window.draw(curLevel->tileMap->bg, sf::RenderStates(none));
 			p1.update(dt, curLevel->tileMap);
-			
-
-		
-			
 			
 			camera.update(p1, dt, 
 				sf::Vector2f(	curLevel->tileMap->getMapDimTiles().x * curLevel->tileMap->tileSize, 
@@ -448,6 +445,9 @@ int main() {
 				window.draw(winText);
 			}
 
+			if (curLevelIndex == 1) {
+				music.setVolume(36.f);
+			}
 			window.display();
 		}
 	}

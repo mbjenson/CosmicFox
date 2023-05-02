@@ -33,16 +33,10 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TileMapOld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sword.cpp">
@@ -54,15 +48,6 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hud.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HudElement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HudBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,12 +57,6 @@
     <ClCompile Include="ResHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InteractableMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GrassLandsLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -85,12 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Spirit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SwordEnemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DungeonLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GhostEnemy.cpp">
@@ -103,9 +76,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntroLevel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="deathScreen.cpp">
@@ -310,9 +280,6 @@
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sword.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -320,15 +287,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Background.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HudElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HudBar.h">
@@ -343,12 +301,6 @@
     <ClInclude Include="ResHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InteractableMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GrassLandsLevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -356,12 +308,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Spirit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SwordEnemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DungeonLevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GhostEnemy.h">
@@ -374,9 +320,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IntroLevel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="deathScreen.h">

@@ -5,7 +5,7 @@ class DashMeter
 {
 public:
 	DashMeter() {
-		meter.setFillColor(sf::Color(130, 25, 45, 100));
+		meter.setFillColor(sf::Color(130, 25, 45, 190));
 	}
 
 	void render(sf::RenderWindow& win, int dashClock, sf::Vector2f topLeftCorner) {
@@ -23,7 +23,7 @@ public:
 
 	sf::RectangleShape meter;
 	float ratio = 50.f;
-	sf::Color loading = sf::Color(130, 25, 45, 100);
-	sf::Color ready = sf::Color(15, 130, 45, 100);
+	sf::Color loading = sf::Color(130, 25, 45, 190);
+	sf::Color ready = sf::Color(15, 130, 45, 190);
 };
 

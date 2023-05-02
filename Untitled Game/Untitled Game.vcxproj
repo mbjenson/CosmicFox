@@ -146,33 +146,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DashMeter.cpp" />
     <ClCompile Include="deathScreen.cpp" />
-    <ClCompile Include="DungeonLevel.cpp" />
-    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GhostEnemy.cpp" />
     <ClCompile Include="GrassLandsLevel.cpp" />
     <ClCompile Include="HudBar.cpp" />
-    <ClCompile Include="Hud.cpp" />
-    <ClCompile Include="HudElement.cpp" />
-    <ClCompile Include="InteractableMap.cpp" />
     <ClCompile Include="IntroLevel.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResHandler.cpp" />
     <ClCompile Include="Spirit.cpp" />
     <ClCompile Include="Sword.cpp" />
-    <ClCompile Include="SwordEnemy.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMapOld.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -239,33 +229,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Background.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DashMeter.h" />
     <ClInclude Include="deathScreen.h" />
-    <ClInclude Include="DungeonLevel.h" />
-    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GhostEnemy.h" />
     <ClInclude Include="GrassLandsLevel.h" />
     <ClInclude Include="HudBar.h" />
-    <ClInclude Include="Hud.h" />
-    <ClInclude Include="HudElement.h" />
-    <ClInclude Include="InteractableMap.h" />
     <ClInclude Include="IntroLevel.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MappingFunctions.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="PauseButton.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResHandler.h" />
     <ClInclude Include="Spirit.h" />
     <ClInclude Include="Sword.h" />
-    <ClInclude Include="SwordEnemy.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMapOld.h" />
     <ClInclude Include="TileMap.h" />

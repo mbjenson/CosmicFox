@@ -53,7 +53,7 @@ int IntroLevel::init(Player* p1) {
 	mapMask.setTexture(mapMaskTex);
 	shader.setUniform("u_resolution", sf::Vector2f(mapPixelDim.y, mapPixelDim.y));
 	shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
-	shader.setUniform("radius", 0.7f);
+	shader.setUniform("radius", 0.9f);
 
 	if (!tileMap->bgTex.loadFromFile("Textures/black.png"))
 		return -1;

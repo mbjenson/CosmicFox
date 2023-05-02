@@ -30,11 +30,6 @@ void HudBar::render(sf::RenderWindow& win, int quantity, sf::Vector2f topLeft) {
 		win.draw(hSprite);
 		hSprite.setPosition(hSprite.getPosition().x + hSprite.getGlobalBounds().width + 2, hSprite.getPosition().y);
 		
-			//hSprite.setTextureRect(sf::IntRect(0, 0, textureSize.x, textureSize.y));
-		
-		
-			//hSprite.setTextureRect(sf::IntRect(textureSize.x, 0, textureSize.x, textureSize.y));
-		
 
 		
 		//win.draw(hSprite);

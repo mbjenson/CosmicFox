@@ -18,7 +18,7 @@ int GhostEnemy::initGhost() {
 	
 	FLAG_CHASING = false;
 	
-	maxHealth = 7;
+	maxHealth = 4;
 	curHealth = maxHealth;
 	dampingFactor = 0.2;
 	

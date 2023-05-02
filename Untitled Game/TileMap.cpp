@@ -10,7 +10,7 @@ TileMap::TileMap(	int* types1, int* types2, int* types3, int* logic, sf::Vector2
 	layer1Texture = layer1;
 	layer2Texture = layer2;
 	layer3Texture = layer3;
-	// layer3Logic = layer3log[]
+	
 }
 
 void TileMap::updateBG(sf::Vector2f cameraCenter) {
@@ -20,12 +20,7 @@ void TileMap::updateBG(sf::Vector2f cameraCenter) {
 void TileMap::init() {
 	mapTex.create(mapDimChunks.x * chunkSize * tileSize, mapDimChunks.y * chunkSize * tileSize);
 	bg.setTexture(bgTex);
-	bg.setScale(1.f, 1.f);
-	
-	//bg.setOrigin(bgTex.getSize().x / 2, bgTex.getSize().y / 2);
-	// take param for this.
-	bg.setOrigin((bgTex.getSize().x / 2) - (bgTex.getSize().x / 4), (bgTex.getSize().y / 2) - (bgTex.getSize().y / 4));
-
+	bg.setOrigin((bgTex.getSize().x / 2) - (bgTex.getSize().x / 3), (bgTex.getSize().y / 2) - (bgTex.getSize().y / 3));
 }
 
 bool TileMap::checkForUpdate(sf::Vector2f playerPos) {
@@ -46,46 +41,6 @@ void TileMap::updateAnimations() {
 int TileMap::getLayer1TypeAt(int x, int y) {
 	return layer1Types[x + y * mapDimChunks.x * chunkSize];
 }
-/*
-void TileMap::drawTopLayer(sf::Vector2f playerPos) {
-	sf::IntRect drawArea(curChunk.x - 1, curChunk.y - 1, 3, 3);
-	
-	if (curChunk.x == 0) {
-		drawArea.left = 0;
-		drawArea.width -= 1;
-	}
-	if (curChunk.y == 0) {
-		drawArea.top = 0;
-		drawArea.height -= 1;
-	}
-	if (curChunk.x == mapDimChunks.x - 1) {
-		drawArea.width -= 1;
-	}
-	if (curChunk.y == mapDimChunks.y - 1) {
-		drawArea.height -= 1;
-	}
-	if (curChunk.x < 0 || curChunk.x > mapDimChunks.x - 1 || curChunk.y < 0 || curChunk.y > mapDimChunks.y - 1)
-		return;
-
-	drawArea = sf::IntRect(drawArea.left * chunkSize, drawArea.top * chunkSize,
-		drawArea.width * chunkSize, drawArea.height * chunkSize);
-
-	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++) {
-		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
-			int curTile3 = layer3Types[x + y * chunkSize * mapDimChunks.x];
-			sf::Sprite tempSpr3(*layer3Texture);
-			tempSpr3.setTextureRect(sf::IntRect(0, curTile3 * tileSize * 2, tileSize, tileSize * 2));
-			tempSpr3.setPosition(sf::Vector2f(x * tileSize, (y * tileSize) - tileSize));
-			if (static_cast<int>(playerPos.x) == x && static_cast<int>(playerPos.y) == y) {
-
-			}
-			mapTex.draw(tempSpr3);
-		}
-	}
-}
-*/
-
-
 
 void TileMap::updateTexMap() {
 
@@ -137,36 +92,6 @@ void TileMap::updateTexMap() {
 	curDrawArea = drawArea;
 	mapTex.display();
 }
-/*
-void TileMap::updateTexMap(sf::IntRect drawArea) {
-	
-	
-	mapTex.clear();
-	
-	mapTex.draw(bg);
-	
-	mapTex.display();
-	
-	for (int y = drawArea.top; y < drawArea.height + drawArea.top; y++) {
-		for (int x = drawArea.left; x < drawArea.width + drawArea.left; x++) {
-			int curTile = layer1Types[x + y * chunkSize * mapDimChunks.x];
-			int curTile2 = layer2Types[x + y * chunkSize * mapDimChunks.x];
-
-			sf::Sprite tempSpr1(*layer1Texture);
-			tempSpr1.setTextureRect(sf::IntRect(0, curTile * tileSize, tileSize, tileSize));
-			tempSpr1.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
-
-			sf::Sprite tempSpr2(*layer2Texture);
-			tempSpr2.setTextureRect(sf::IntRect(0, curTile2 * tileSize, tileSize, tileSize));
-			tempSpr2.setPosition(sf::Vector2f(x * tileSize, y * tileSize));
-
-			mapTex.draw(tempSpr1);
-			mapTex.draw(tempSpr2);
-		}
-	}
-	mapTex.display();
-}
-*/
 
 int TileMap::getTileLogic(sf::Vector2f playerPos) {
 	// player pos / tile size = current tile
