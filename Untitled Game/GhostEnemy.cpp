@@ -13,9 +13,12 @@ int GhostEnemy::initGhost() {
 	FLAG_DEAD = false;
 	
 	setOrigin(sf::Vector2f(enemySize.x / 2, enemySize.y / 2));
-	detectionRadius = 100.f;
+	detectionRadius = 70.f; // old: 100.f
+	followRadius = 100.f;
 	
-	maxHealth = 5;
+	FLAG_CHASING = false;
+	
+	maxHealth = 7;
 	curHealth = maxHealth;
 	dampingFactor = 0.2;
 	
@@ -37,7 +40,7 @@ int GhostEnemy::initGhost() {
 
 
 void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
-	// define the dashing and facing mechanics
+	
 	
 	// start by pursuing the player at a slow speed for 500ms
 	// pause for 100 ms
@@ -50,38 +53,37 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 	int dashTime = 3000;
 	int pause = 3200;
 
-	int dashSpeed = 180;
+	int dashSpeed = 160;
+	// old : 180
 	
 	int curTime = attackClock.getElapsedTime().asMilliseconds();
+	if (distSize < detectionRadius)
+		FLAG_CHASING = true;
 	
-	if (distSize < detectionRadius) {
+	if (FLAG_CHASING && distSize < followRadius) {
 		sf::Vector2f normalMovement(distVec.x / distSize, distVec.y / distSize);
 		if (curTime > pause) {
 			//sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
 			attackClock.restart();
-			
 		}
 		else if (curTime > dashTime) {
-
 			// PAUSE
-			followVel = sf::Vector2f(0, 0);
-			//followVel.x -= followVel.x * 0.01;
-			//followVel.y -= followVel.y * 0.01;
+			//followVel = sf::Vector2f(0, 0);
+			followVel.x -= followVel.x * 0.03;
+			followVel.y -= followVel.y * 0.03;
+
 			
 		}
 		else if (curTime > prepDashTime) {
 			// DASH
-
+			
 			followVel = sf::Vector2f(dt * playerDirDashStart.x * dashSpeed, dt * playerDirDashStart.y * dashSpeed);
-
-			//followVel.x -= followVel.x * 0.01;
-			//followVel.y -= followVel.y * 0.01;
-			//attackClock.restart();
 		}
-		else if (curTime > prepDashTime - 20) {
+		else if (curTime > prepDashTime - 150 && curTime < prepDashTime - 130) {
 			playerDirDashStart = sf::Vector2f((playPos.x - getPosition().x) / distSize, (playPos.y - getPosition().y) / distSize);
 		}
 		else if (curTime > pursuePlayerTime) {
+			
 			// PAUSE
 			//followVel = sf::Vector2f(0, 0);
 			followVel.x -= followVel.x * 0.04;
@@ -98,6 +100,7 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 	
 	else {
 		attackClock.restart();
+		FLAG_CHASING = false;
 		// slow enemy down
 		followVel.x -= followVel.x * 0.005;
 		followVel.y -= followVel.y * 0.005;

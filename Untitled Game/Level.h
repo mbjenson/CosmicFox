@@ -36,6 +36,10 @@ public:
 	sf::Texture mapMaskTex;
 	sf::Sprite mapMask;
 
+	sf::SoundBuffer sBuf;
+	sf::Sound s1;
+	sf::Sound s2;
+	sf::Sound s3;
 	
 	// enemy map stuff
 	// sound map stuff

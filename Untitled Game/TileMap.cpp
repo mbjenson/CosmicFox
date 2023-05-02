@@ -20,9 +20,12 @@ void TileMap::updateBG(sf::Vector2f cameraCenter) {
 void TileMap::init() {
 	mapTex.create(mapDimChunks.x * chunkSize * tileSize, mapDimChunks.y * chunkSize * tileSize);
 	bg.setTexture(bgTex);
-	bg.setScale(0.5f, 0.5f);
-	//bg.setColor(sf::Color(0, 0, 0, 100));
-	bg.setOrigin(bgTex.getSize().x / 2, bgTex.getSize().y / 2);
+	bg.setScale(1.f, 1.f);
+	
+	//bg.setOrigin(bgTex.getSize().x / 2, bgTex.getSize().y / 2);
+	// take param for this.
+	bg.setOrigin((bgTex.getSize().x / 2) - (bgTex.getSize().x / 4), (bgTex.getSize().y / 2) - (bgTex.getSize().y / 4));
+
 }
 
 bool TileMap::checkForUpdate(sf::Vector2f playerPos) {

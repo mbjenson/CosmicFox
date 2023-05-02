@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "TileMap.h"
 #include "Sword.h"
+#include <SFML/audio.hpp>
 
 #include <math.h>
 
@@ -213,14 +214,16 @@ private:
 	//1)float dashSpeed = 275.f;
 	//2) float dashSpeed = 180.f;
 	//3) float dashSpeed = 220.f
-	float dashSpeed = 170.f;
+	//4)float dashSpeed = 170.f;
+	float dashSpeed = 140.f;
 	//1) int dashCooldown = 1000;
 	int dashCooldown = 1400;
 
 	bool falling;
 	//1)int dashSpeedTime = 250;
 	//int dashSpeedTime = 200;
-	int dashSpeedTime = 250;
+	//int dashSpeedTime = 250; matches with dashspeed 4
+	int dashSpeedTime = 285;
 	//int dashSpeedTime = 165;
 	sf::Vector2f dashVel;
 	sf::Vector2f prepDashVel;
@@ -231,6 +234,11 @@ private:
 	void setFacing();
 	void setFacing(sf::Vector2f);
 
+	sf::SoundBuffer attackBuffer;
+	sf::SoundBuffer dashBuf;
+	sf::Sound s1;
+	sf::Sound s2;
+	
 	
 	int attackMoveSpeed = 35;
 	//sf::Clock attackTimer;

@@ -47,12 +47,22 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->texDim6 = sf::IntRect(40, 42, 18, 65);
 	tileMap->offsetDim6 = sf::Vector2i(1, 49);
 
-	if (!tileMap->bgTex.loadFromFile("Textures/planet.png"))
+	if (!sBuf.loadFromFile("Sounds/GhostDeath.wav")) {
 		return -1;
+	}
+	s1.setBuffer(sBuf);
+	s1.setVolume(40.f);
+
+	if (!tileMap->bgTex.loadFromFile("Textures/beachBG.png"))
+		return -1;
+
+	
 
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
+	
+	tileMap->bg.setScale(sf::Vector2f(1.3f, 1.3f));
 
 	// initialize enemies
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))

@@ -293,13 +293,25 @@ void Player::update(float deltaTime, TileMap* map) {
 	}
 	// finally, update the player's position on the map
 	sword.updatePos(getPosition());
-	if (attacking)
+	if (attacking) {
 		sword.updateAnim();
-	else
+		if (s1.Playing) { // for some reason I couldn't get the sound to happen fast enough unless I do this if statement
+			
+			s1.play();
+			s1.setPlayingOffset(sf::milliseconds(180));
+		}
+	}
+	else {
 		sword.restartAnim();
+	}
+	if (isDashing) {
+		if (s2.Playing) {
+			s2.play();
+			s2.setPlayingOffset(sf::milliseconds(20));
+		}
+	}
 	updateAnim();
-	shadowSprite.setPosition(sf::Vector2f(getPosition().x- 8, getPosition().y - 5));
-	//checkDeath(deltaTime);
+	shadowSprite.setPosition(sf::Vector2f(getPosition().x - 8, getPosition().y - 5));
 }
 
 int Player::collisionCheckNewLevel(TileMap* map) {
@@ -469,6 +481,11 @@ void Player::init() {
 
 	setFacing(sf::Vector2f(0, 1.f));
 	
+	attackBuffer.loadFromFile("Sounds/swordSlash.wav");
+	//s1.setBuffer(attackBuffer);
+	dashBuf.loadFromFile("Sounds/dash.wav");
+	s1.setBuffer(attackBuffer);
+	s2.setBuffer(dashBuf);
 }
 
 void Player::setAnimation() {

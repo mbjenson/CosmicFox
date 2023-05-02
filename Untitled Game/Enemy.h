@@ -48,8 +48,8 @@ public:
 	int hitBackSpeed = 200;
 	//int hitBackTime = 90;
 	int hitBackTime = 90;
-	//int totalHitTime = 200;
-	int totalHitTime = 120;
+	int totalHitTime = 150;
+	//int totalHitTime = 120;
 	sf::Vector2f spawnpoint;
 	
 	float dampingFactor = 0.2;
@@ -84,6 +84,9 @@ public:
 
 	bool FLAG_DEAD;
 	//sf::Vector2u animDim;
+
+	float followRadius;
+	bool FLAG_CHASING;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{

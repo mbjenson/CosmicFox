@@ -134,19 +134,10 @@
     <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\arraysprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\arrow.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\grassalpha.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\stonealpha.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\animationtest.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\arrowSmall.png">
@@ -162,9 +153,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\stonealpha32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\animationtest2.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\arrowSpriteSheet32.png">
@@ -201,9 +189,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\testLevelMap.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\animTestIdle1.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\foxIdleDown1.png">
@@ -294,6 +279,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\win.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\beachBG.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -427,6 +415,15 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Sounds\gameAmbience1.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\GhostDeath.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\swordSlash.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\dash.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>

@@ -179,6 +179,7 @@
     <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\beachBG.png" />
     <Image Include="Textures\CosmicFox.png" />
     <Image Include="Textures\darkMask.png" />
     <Image Include="Textures\deathText.png" />
@@ -191,11 +192,6 @@
     <Image Include="Textures\quitButton.png" />
     <Image Include="Textures\spirit.png" />
     <Image Include="Textures\swordSlash1.png" />
-    <Image Include="Textures\animationtest.png" />
-    <Image Include="Textures\animationtest2.png" />
-    <Image Include="Textures\animTestIdle1.png" />
-    <Image Include="Textures\arraysprite.png" />
-    <Image Include="Textures\arrow.png" />
     <Image Include="Textures\arrowSmall.png" />
     <Image Include="Textures\arrowSpriteSheet32.png" />
     <Image Include="Textures\black.png" />
@@ -298,7 +294,10 @@
     <Text Include="Assets\Levels\MapFiles\stringTest1.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="Sounds\dash.wav" />
     <Media Include="Sounds\gameAmbience1.wav" />
+    <Media Include="Sounds\GhostDeath.wav" />
+    <Media Include="Sounds\swordSlash.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -216,7 +216,7 @@ int main() {
 	Camera camera;
 	camera.setSize(sf::Vector2f(1920, 1080));
 	camera.zoom(0.15f);
-	//camera.zoom(0.70f);
+	//camera.zoom(0.30f);
 
 	sf::Font roboto;
 	if (!roboto.loadFromFile("Assets/Fonts/Roboto-Regular.ttf")) {
@@ -237,7 +237,10 @@ int main() {
 		return -1;
 
 	sf::Sprite vig(vignette);
-	vig.setScale(0.8, 0.5);
+	//vig.setOrigin(sf::Vector2f(vignette.getSize().x / 2, vignette.getSize().y / 2));
+	vig.setScale(0.7f, 0.5f); // old : 0.7, 0.5
+	//vig.setOrigin(vig.getGlobalBounds().width / 2, vig.getGlobalBounds().height / 2);
+	
 
 	Player p1(fox, window, sf::Vector2u(16, 16), 8, 0, 80.f);
 	p1.setPosition(sf::Vector2f(400.f, 100.f));
@@ -261,7 +264,7 @@ int main() {
 	Spirit spirit(spriritT, sf::Vector2u(7, 8), 5, 0, 60.f);
 	spirit.init();
 
-	deathScreen deathMenu;
+	
 	
 	//levelVec
 	vector<Level*> levelVec(2);
@@ -278,7 +281,7 @@ int main() {
 	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 		return -1;
 	music.play();
-	music.setVolume(65.f);
+	music.setVolume(35.f);
 	music.setLoop(true);
 
 	sf::BlendMode none;
@@ -289,10 +292,12 @@ int main() {
 	PauseButton pauseB;
 	pauseB.init();
 	
+	deathScreen deathMenu;
+
 	sf::Texture win;
 	win.loadFromFile("Textures/win.png");
 	sf::Sprite winScreen(win);
-	
+
 	winScreen.setScale(3.f, 3.f);
 	int endgame = 0;
 
@@ -346,9 +351,15 @@ int main() {
 			// using renderState (blend mode) we can blend the background texture with the foreground texture
 			window.draw(curLevel->tileMap->bg, sf::RenderStates(none));
 			p1.update(dt, curLevel->tileMap);
+			
+
+		
+			
+			
 			camera.update(p1, dt, 
 				sf::Vector2f(	curLevel->tileMap->getMapDimTiles().x * curLevel->tileMap->tileSize, 
 								curLevel->tileMap->getMapDimTiles().y * curLevel->tileMap->tileSize));
+
 			window.setView(camera);
 			
 			curLevel->updateEnemies(dt, &window);
@@ -358,7 +369,8 @@ int main() {
 			window.draw(spirit);
 
 			// VIGNETTE EFFECT:
-			vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
+			//vig.setPosition(sf::Vector2f(camera.getCenter().x - camera.getSize().x / 2, camera.getCenter().y - camera.getSize().y / 2));
+			vig.setPosition(sf::Vector2f(camera.getCenter().x - vig.getGlobalBounds().width / 2, camera.getCenter().y - vig.getGlobalBounds().height / 2));
 			window.draw(vig);
 			
 			// HUD:

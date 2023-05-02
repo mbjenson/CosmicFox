@@ -192,6 +192,12 @@ void Level::updateEnemies(float dt, sf::RenderWindow* win) {
 	for (int i = 0; i < eVec.size(); i++) {
 		if (eVec.at(i).FLAG_DEAD) {
 			eVec.erase(eVec.begin() + i);
+			if (s1.Playing) {
+				s1.play();
+			}
+			
+			
+			
 		}
 	}
 	/*
