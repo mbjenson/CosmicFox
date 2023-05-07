@@ -75,21 +75,26 @@ public:
 	// get a which tile coords are located
 	sf::Vector2i getTileWithCoords(sf::Vector2f coords);
 
-	
+	sf::Vector2f bgOffset = sf::Vector2f(0.f, 0.f);
 
 	int* layer1Types;
 	int* layer2Types;
 	int* layer3Types;
 
 	int* logicGrid;
+
 	sf::RenderTexture mapTex; // we will draw the textures for the tile map to this texture;
+
 	int tileSize = 16; // num pixels per tile where (x = tileSize, y = tileSize)
 	int chunkSize = 16; // num tiles per chunk where (x = chunkSize, y = chunkSize)
+
 	sf::Vector2i curChunk; // the player's current chuck in the world.
 	sf::Vector2i mapDimChunks; // the dimensions of the world in chunks.
+
 	sf::Texture* layer1Texture;
 	sf::Texture* layer2Texture;
 	sf::Texture* layer3Texture;
+
 	sf::Texture bgTex;
 	sf::Sprite bg;
 

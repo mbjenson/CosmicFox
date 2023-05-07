@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CrashLevel.cpp" />
     <ClCompile Include="DashMeter.cpp" />
     <ClCompile Include="deathScreen.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -163,73 +164,34 @@
     <ClCompile Include="ResHandler.cpp" />
     <ClCompile Include="Spirit.cpp" />
     <ClCompile Include="Sword.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="TileMapOld.cpp" />
     <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="_TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\beachBG.png" />
+    <Image Include="Textures\clouds.png" />
     <Image Include="Textures\CosmicFox.png" />
-    <Image Include="Textures\darkMask.png" />
     <Image Include="Textures\deathText.png" />
-    <Image Include="Textures\earth.png" />
     <Image Include="Textures\enemySpriteSheetmk1.png" />
     <Image Include="Textures\grassLands3.png" />
-    <Image Include="Textures\inter.png" />
+    <Image Include="Textures\inter2.png" />
     <Image Include="Textures\planet.png" />
     <Image Include="Textures\playerButton.png" />
     <Image Include="Textures\quitButton.png" />
     <Image Include="Textures\spirit.png" />
     <Image Include="Textures\swordSlash1.png" />
-    <Image Include="Textures\arrowSmall.png" />
-    <Image Include="Textures\arrowSpriteSheet32.png" />
     <Image Include="Textures\black.png" />
-    <Image Include="Textures\boxtest16x32.png" />
-    <Image Include="Textures\boxtesttwo16x32.png" />
-    <Image Include="Textures\enemy.png" />
-    <Image Include="Textures\foxIdleDown1.png" />
-    <Image Include="Textures\foxIdleDown2.png" />
-    <Image Include="Textures\foxSpriteSheetmk1.png" />
     <Image Include="Textures\foxSpriteSheetmk2.png" />
-    <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png" />
-    <Image Include="Textures\grass.png" />
-    <Image Include="Textures\grassalpha.png" />
-    <Image Include="Textures\grassalpha32.png" />
     <Image Include="Textures\grassalpha64.png" />
-    <Image Include="Textures\grassLands2.png" />
     <Image Include="Textures\heart.png" />
-    <Image Include="Textures\link.png" />
-    <Image Include="Textures\link128.png" />
-    <Image Include="Textures\linkscaled.png" />
-    <Image Include="Textures\playerCube16.png" />
     <Image Include="Textures\playerShadow.png" />
-    <Image Include="Textures\playerSquare.png" />
-    <Image Include="Textures\Rocks1.png" />
-    <Image Include="Textures\rockTowerSmall.png" />
-    <Image Include="Textures\shadowText.png" />
-    <Image Include="Textures\slash1.png" />
-    <Image Include="Textures\slashAnim1.png" />
-    <Image Include="Textures\slashAnim2.png" />
-    <Image Include="Textures\stonealpha.png" />
-    <Image Include="Textures\stonealpha32.png" />
     <Image Include="Textures\stonealpha64.png" />
-    <Image Include="Textures\swordCombo1.png" />
-    <Image Include="Textures\terrainsheet2mk2.png" />
-    <Image Include="Textures\terrainSheettestone16x32.png" />
-    <Image Include="Textures\testLevelMap.png" />
-    <Image Include="Textures\testTileSheet16.png" />
-    <Image Include="Textures\tileSheet16mk1.png" />
-    <Image Include="Textures\vignetteMask.png" />
     <Image Include="Textures\vignetteShadow.png" />
-    <Image Include="Textures\wall.png" />
-    <Image Include="Textures\waterSpriteSheettest32.png" />
     <Image Include="Textures\win.png" />
-    <Image Include="Textures\yellowGlow.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CrashLevel.h" />
     <ClInclude Include="DashMeter.h" />
     <ClInclude Include="deathScreen.h" />
     <ClInclude Include="Enemy.h" />
@@ -247,12 +209,13 @@
     <ClInclude Include="ResHandler.h" />
     <ClInclude Include="Spirit.h" />
     <ClInclude Include="Sword.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="TileMapOld.h" />
     <ClInclude Include="TileMap.h" />
-    <ClInclude Include="_TileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer3.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Logic.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer2.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer3.csv" />
@@ -261,18 +224,10 @@
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
-    <None Include="Shaders\light_test.frag" />
-    <None Include="Shaders\test1.frag" />
-    <None Include="Shaders\test10.frag" />
-    <None Include="Shaders\test4.frag" />
     <None Include="Shaders\test6.frag" />
-    <None Include="Shaders\test7.frag" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Assets\Levels\MapFiles\stringTest1.txt" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Sounds\dash.wav" />

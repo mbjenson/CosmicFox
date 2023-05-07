@@ -62,7 +62,8 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
 	
-	//tileMap->bg.setScale(sf::Vector2f(1.2f, 1.2f));
+	
+
 
 	// initialize enemies
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))

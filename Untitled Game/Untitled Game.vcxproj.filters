@@ -21,19 +21,10 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="_TileMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMapOld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
@@ -81,129 +72,27 @@
     <ClCompile Include="deathScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CrashLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\enemy.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\grass.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\link.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\wall.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\linkscaled.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\link128.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\graphics-vertex-array-tilemap-tileset.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\grassalpha.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\stonealpha.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\arrowSmall.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\grassalpha64.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\stonealpha64.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\grassalpha32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\stonealpha32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\arrowSpriteSheet32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\waterSpriteSheettest32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\terrainsheet2mk2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\playerSquare.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\testTileSheet16.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\playerCube16.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\tileSheet16mk1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\boxtest16x32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\boxtesttwo16x32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\terrainSheettestone16x32.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\black.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\testLevelMap.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\foxIdleDown1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\foxIdleDown2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\foxSpriteSheetmk1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\shadowText.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\slash1.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\heart.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\grassLands2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\foxSpriteSheetmk2.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\slashAnim1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\slashAnim2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\swordCombo1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\rockTowerSmall.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\Rocks1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\playerShadow.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\vignetteMask.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\vignetteShadow.png">
@@ -215,16 +104,7 @@
     <Image Include="Textures\spirit.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\yellowGlow.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\grassLands3.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\earth.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\darkMask.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\enemySpriteSheetmk1.png">
@@ -242,9 +122,6 @@
     <Image Include="Textures\planet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\inter.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\deathText.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -254,12 +131,15 @@
     <Image Include="Textures\beachBG.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\inter2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\clouds.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="_TileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -268,13 +148,7 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMapOld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -325,36 +199,29 @@
     <ClInclude Include="deathScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CrashLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\test1.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Shaders\light_test.frag">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Assets\Levels\MapFiles\Map1Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Logic.csv" />
     <None Include="Assets\Levels\MapFiles\Map1Layer3.csv" />
-    <None Include="Shaders\test4.frag" />
     <None Include="Shaders\test6.frag" />
-    <None Include="Shaders\test7.frag" />
-    <None Include="Shaders\test10.frag" />
     <None Include="Assets\Levels\MapFiles\Map1Layer2.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer1.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer2.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Layer3.csv" />
     <None Include="Assets\Levels\MapFiles\Intro_Logic.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Logic.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer1.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer2.csv" />
+    <None Include="Assets\Levels\MapFiles\CrashLevel_Layer3.csv" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Roboto-Regular.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Assets\Levels\MapFiles\stringTest1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Sounds\gameAmbience1.wav">

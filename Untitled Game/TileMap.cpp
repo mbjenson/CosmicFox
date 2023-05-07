@@ -14,7 +14,7 @@ TileMap::TileMap(	int* types1, int* types2, int* types3, int* logic, sf::Vector2
 }
 
 void TileMap::updateBG(sf::Vector2f cameraCenter) {
-	bg.setPosition(cameraCenter.x - cameraCenter.x * 0.1, cameraCenter.y - cameraCenter.y * 0.1);
+	bg.setPosition((cameraCenter.x - cameraCenter.x * 0.1) + bgOffset.x, (cameraCenter.y - cameraCenter.y * 0.1) + bgOffset.y);
 }
 
 void TileMap::init() {

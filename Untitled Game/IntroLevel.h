@@ -7,7 +7,5 @@ public:
 	IntroLevel(Player* player);
 	
 	int init(Player* p1);
-
-	// add sounds and other things
 };
 

@@ -7,7 +7,8 @@ IntroLevel::IntroLevel(Player* player) {
 int IntroLevel::init(Player* p1) {
 	player = p1;
 
-	playerSpawn = sf::Vector2f(100.f, 100.f);
+	playerSpawn = sf::Vector2f(110.f, 100.f);
+	
 
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
@@ -18,7 +19,7 @@ int IntroLevel::init(Player* p1) {
 		return -1;
 
 	sf::Texture* rocks = new sf::Texture();
-	if (!rocks->loadFromFile("Textures/inter.png"))
+	if (!rocks->loadFromFile("Textures/inter2.png"))
 		return -1;
 
 	int* logicGrid2 = new int[1024];
@@ -53,7 +54,7 @@ int IntroLevel::init(Player* p1) {
 	mapMask.setTexture(mapMaskTex);
 	shader.setUniform("u_resolution", sf::Vector2f(mapPixelDim.y, mapPixelDim.y));
 	shader.setUniform("currentTexture", sf::Shader::CurrentTexture);
-	shader.setUniform("radius", 0.9f);
+	shader.setUniform("radius", 1.f);
 
 	if (!tileMap->bgTex.loadFromFile("Textures/black.png"))
 		return -1;
