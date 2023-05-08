@@ -2,7 +2,7 @@
 A Top-down 2D action zelda-like game with interactive movement and simple combat.
 
 ## Purpose
-The main purpose of this project was to Create a game with no engine using the SFML graphics API.
+The main purpose of this project was to create a game with no engine using the SFML graphics API.
 
 ## Gameplay features
 - Top-down 2D, melee combat.
