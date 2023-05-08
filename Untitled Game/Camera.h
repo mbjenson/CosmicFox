@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 
+// top-down view camera class.
+// inherits basic functionality from sf::View class
 class Camera : public sf::View
 {
 public:
@@ -13,7 +15,6 @@ public:
 	sf::Vector2f velocity;
 	sf::Vector2f distance;
 	float lag = 5.5;
-	float maxSpeed;
 
 };
 

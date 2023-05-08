@@ -1,21 +1,6 @@
 #include "Level.h"
 
 void Level::render(sf::RenderWindow& win) {
-
-	// UPDATING AND DRAWING:
-
-	// BACKGROUND LAYER:
-	
-	// we need to draw the background of the map.
-	
-	// handling falling player
-	// NOTE: i now realize that I cannot use the renderTexture becuase it does not take into
-	// For this, we refer to player.cpp's vector2f fallPosition and draw everything from that point of view, so to speak, while the player falls.
-	// we dont need to worry about changing how we draw entities and 3rd layer objects because they will be drawn ontop of the first two layers and if the 
-	// player is behind the first two, it will be hidden from the third.
-	// this can easily be done by updating that variable in collisionCheckVoid in player.cpp. then, we basically can draw the base layers of the map (1, 2)
-	// once and then continue to draw the third layer continuously but from the pov of fallLocation vector2f.
-	// NICE.
 	
 	int tSize = tileMap->tileSize;
 	if (player->FLAG_FALL) {
@@ -34,7 +19,6 @@ void Level::render(sf::RenderWindow& win) {
 				int curTile = tileMap->layer1Types[x + y * cSize * mapDimChunk.x];
 				int curTile2 = tileMap->layer2Types[x + y * cSize * mapDimChunk.x];
 				
-				
 				sf::Sprite tempSpr1(*tileMap->layer1Texture);
 				tempSpr1.setTextureRect(sf::IntRect(0, curTile * tSize, tSize, tSize));
 				tempSpr1.setPosition(sf::Vector2f(x * tSize, y * tSize));
@@ -45,22 +29,7 @@ void Level::render(sf::RenderWindow& win) {
 
 				tileMap->mapTex.draw(tempSpr1);
 				tileMap->mapTex.draw(tempSpr2);
-				/*
-				if (fallPosition.y < lastSafePosition.y) { // player fell facing away from camera
-					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
-						tileMap->mapTex.draw(*player);
-				}
-				*/
-				/*
-				if (fallPosition.y > lastSafePosition.y) { // player fell facing towards the camera
-					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
-						tileMap->mapTex.draw(*player);
-				}
-				else {
-					if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
-						tileMap->mapTex.draw(*player);
-				}
-				*/
+				
 				if (x == fallDrawArea.left + fallDrawArea.width - 1 && y == intTileStart.y)
 					tileMap->mapTex.draw(*player);
 			}
@@ -80,10 +49,9 @@ void Level::render(sf::RenderWindow& win) {
 	win.draw(mapSprite);
 
 	// 3rd LAYER/ Interactable:		
-	//						Like the lights, trees, chairs, doors and other things that go above
-	//						the floor that can be interacted with.
-	//						This layer also need to be drawn with the player and enemies because moving
-	//						objects can go in front or behind the interactable tiles.
+	//						Like the trees ad other things that go above
+	//						the floor that can walked around.
+
 	sf::Vector2i mapDTiles = tileMap->getMapDimTiles();
 	sf::IntRect thisDrawArea = tileMap->curDrawArea;
 	sf::Vector2i playerPos(static_cast<int>(player->getPosition().x), static_cast<int>(player->getPosition().y));
@@ -94,9 +62,7 @@ void Level::render(sf::RenderWindow& win) {
 				if ((enemyPos.y - enemyPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(i);
 				}
-				
 			}
-			
 			if (!player->FLAG_FALL) {
 				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == (thisDrawArea.width + thisDrawArea.left - 1)) {
 					win.draw(*player);

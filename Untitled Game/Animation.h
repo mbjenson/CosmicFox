@@ -1,13 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+// Base class for animated objects.
 class Animation : public sf::Drawable, public sf::Transformable
 {
 public:
 	Animation();
 	~Animation();
 	Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int rowLength, int rowNumber, float animationTime);
-	// for static tiles
 	Animation(sf::Texture& textureSheet, sf::Vector2u textureDim, int rowNumber);
 	
 	void updateAnimation();

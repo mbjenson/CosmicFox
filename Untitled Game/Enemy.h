@@ -6,10 +6,10 @@
 
 extern sf::Clock GLOBAL_GAME_CLOCK;
 
+// Base enemy class. Inherits basic functionality from the Entity class
 class Enemy : public Entity
 {
 public:
-	//Enemy(sf::Texture* spriteSheet, sf::Vector2f enemySize);
 	Enemy(sf::Texture* spriteSheet, sf::Vector2u texDim, int rowlength, int rowNumber, float animDuration);
 	Enemy();
 	bool init();
@@ -65,37 +65,30 @@ public:
 	int curHealth;
 
 	bool stunned;
+	bool losingHealth;
 
 	float detectionRadius;
-
 	sf::Vector2f enemySize;
 
-	bool losingHealth;
 	int loseHealthCooldown = 50;
-	sf::Clock loseHealthTimer;
 	
 	float distSize;
 	sf::Vector2f playerDirNormal; // the normalized vector to the player
 	sf::Vector2f hitVector; // the normalized vector captured at the moment the enemy is hit by the player
-	//sf::Vector2f prevPlayerPos;
+	sf::Vector2f playerDirDashStart;
 	
 	sf::Clock attackClock;
-	sf::Vector2f playerDirDashStart;
-
-	bool FLAG_DEAD;
-	//sf::Vector2u animDim;
+	sf::Clock loseHealthTimer;
 
 	float followRadius;
+
 	bool FLAG_CHASING;
+	bool FLAG_DEAD;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();
-		
-		
-		
 		target.draw(tSprite, states);
 	}
-	
 };
 

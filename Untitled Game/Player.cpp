@@ -64,7 +64,6 @@ void Player::update(float deltaTime, TileMap* map) {
 		// calculates the walking velocity and only applies it here if the state has not changed.
 		normalizeWalkVel();
 		walkVelocity = moveDir * walkSpeed * deltaTime;
-		//applyWalkFriction();
 		// * walkVelocity is now packed and ready for shipment... *
 		updateTrav();
 		if (state == State::nominal) {
@@ -308,15 +307,8 @@ void Player::collisionCheckEnemy(sf::FloatRect hitBox, int damage) {
 
 void Player::init() {
 	setHitBoxSize(sf::Vector2f(8.f, 6.f), sf::Vector2f(3.f, 6.f));
-
 	setOrigin(sf::Vector2f(8, 8));
-	// trav bools
-	travNorth = false; travSouth = false; travEast = false; travWest = false; travDiag = false;
-	dashEast = false; dashWest = false; dashSouth = false; dashNorth = false;
-	// key press bools
-	spacePressed = false; upPressed = false; downPressed = false; leftPressed = false;
-	rightPressed = false;
-	dashVel = sf::Vector2f(0, 0);
+	
 	// row num and row len
 	idleDownAnimDim = sf::Vector2u(8, 0);
 	wRightAnimDim = sf::Vector2u(8, 1);
@@ -342,7 +334,7 @@ void Player::init() {
 	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
 	sword.initSword();
 
-	lastSafePos = sf::Vector2f(0, 0);
+	
 	healthHitBox = sf::FloatRect(0, 0, 8, 13);
 	curHealth = maxHealth;
 	hitBackTime = 200;
@@ -500,27 +492,13 @@ void Player::normalizeWalkVel() {
 	}
 }
 
-void Player::applyWalkFriction() {
-	if (travEast)
-		walkVelocity.x -= walkVelocity.x * kinFrictionCoef;
-	if (travWest)
-		walkVelocity.x += -walkVelocity.x * kinFrictionCoef;
-	if (travSouth)
-		walkVelocity.y -= walkVelocity.y * kinFrictionCoef;
-	if (travNorth)
-		walkVelocity.y += -walkVelocity.y * kinFrictionCoef;
-}
+
 
 void Player::setState(State _state) {
 	Player::state = _state;
 }
 
-void Player::setDiagBool() {
-	if ((travNorth && travEast) || (travNorth && travWest) || (travSouth && travEast) || (travSouth && travWest))
-		travDiag = true;
-	else
-		travDiag = false;
-}
+
 
 //here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
 
@@ -631,14 +609,6 @@ void Player::dashAnimNW() {
 	Player::Animation::updateRow(dashAnimDimNW.y, dashAnimDimNW.x);
 }
 
-bool Player::detectHit(sf::FloatRect badBox) {
-
-	if (healthHitBox.intersects(badBox)) {
-		return true;
-	}
-	return false;
-}
-
 void Player::updateTrav() {
 	//sf::Vector2f rndVel(floor(wlkVel.x / 1), floor(wlkVel.y / 1));
 	if (finalVel.y < 0)
@@ -660,7 +630,7 @@ void Player::updateTrav() {
 }
 
 // updates player's rotation to face the mouse
-// ** deprecated **
+// cool and all but not useful
 void Player::updateRotMouse()
 {
 	sf::Vector2i mousePixelPos = sf::Mouse::getPosition(*pWindow);
@@ -851,8 +821,4 @@ int Player::getDashTimer() {
 
 sf::Vector2f Player::getFacing() {
 	return lastFacing;
-}
-
-void Player::updatePWindow(sf::RenderWindow& win) {
-	pWindow = &win;
 }

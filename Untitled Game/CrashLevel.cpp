@@ -8,7 +8,7 @@ int CrashLevel::init(Player* p1) {
 
 	player = p1;
 
-	playerSpawn = sf::Vector2f(256,256); // change this later
+	playerSpawn = sf::Vector2f(217,168);
 
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
@@ -40,6 +40,8 @@ int CrashLevel::init(Player* p1) {
 	tileMap->offsetDim1 = sf::Vector2i(0, 4);
 	tileMap->texDim2 = sf::IntRect(28, 1, 25, 38);
 	tileMap->offsetDim2 = sf::Vector2i(9, 17);
+	tileMap->texDim3 = sf::IntRect(40, 42, 18, 65);
+	tileMap->offsetDim3 = sf::Vector2i(1, 49);
 
 	usingShader = false;
 
