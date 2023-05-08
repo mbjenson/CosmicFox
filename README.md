@@ -1,5 +1,5 @@
 # CosmicFox
-A Top-down 2D action zelda-like game with interactive movement and simple combat.
+A Top-down 2D action zelda-like game with interactive movement and combat.
 
 ## Purpose
 The main purpose of this project was to create a game with no engine using the SFML graphics API.
