@@ -22,14 +22,14 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 ### TileMap
 - The Tilemap uses a chunk and grid based system.
 - the two layers are like the floor and the carpet. These layers contain the ground tile type and any overlay like grass that would appear on top of it.
-#### *Rendering and Optimizations
+#### > Rendering and Optimizations
 - The bottom two layers of the tilemap are drawn to a render texture that acts as a single sprite and can be displayed every frame with one draw instruction and updates only when the player enters a new chunk. This method of drawing to a render texture greatly increased performance and allowed for seamless transition between chunks as the player moves about the level.
 
 ### Levels
 - The level class contains things like sounds, background images, a tilemap, enemy data, and more.
 - It is the base class for the levels in the game.
 - levels, like tilemaps, uses a grid and chunk system.
-#### Rendering and optimization
+#### > Rendering and optimization
 - The level renders by drawing the background, the tilemap, and then drawing an interactive layer of objects. the interactive layer of objects contains stones, trees, and other objects the player can move around.
 - To make it appear as though the player is moving behind objects in the level, the player is drawn at the end of its respective row position, so after a row of interactable trees or stone is drawn, the current row being drawn is checked against the players row and the player is drawn if they match.
 - The entities are also drawn in this fasion.
