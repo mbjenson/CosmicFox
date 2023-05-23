@@ -22,7 +22,7 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 ### TileMap
 - The Tilemap uses a chunk and grid based system.
 - the two layers are like the floor and the carpet. These layers contain the ground tile type and any overlay like grass that would appear on top of it.
-#### Rendering and Optimizations
+#### *Rendering and Optimizations
 - The bottom two layers of the tilemap are drawn to a render texture that acts as a single sprite and can be displayed every frame with one draw instruction and updates only when the player enters a new chunk. This method of drawing to a render texture greatly increased performance and allowed for seamless transition between chunks as the player moves about the level.
 
 ### Levels
