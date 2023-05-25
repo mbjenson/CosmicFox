@@ -44,26 +44,27 @@ int Menu::init() {
 int Menu::update(sf::RenderWindow& win) {
 	win.draw(bg);
 	win.draw(title);
-	
-	if (playB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			music.stop();
-			return 1;
+	if (win.hasFocus()) {
+		if (playB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				music.stop();
+				return 1;
+			}
+			playB.setTextureRect(sf::IntRect(0, 14, 30, 14));
 		}
-		playB.setTextureRect(sf::IntRect(0, 14, 30, 14));
-	}
-	else {
-		playB.setTextureRect(sf::IntRect(0, 0, 30, 14));
-	}
-	if (quitB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			music.stop();
-			return 2;
+		else {
+			playB.setTextureRect(sf::IntRect(0, 0, 30, 14));
 		}
-		quitB.setTextureRect(sf::IntRect(0, 14, 30, 14));
-	}
-	else {
-		quitB.setTextureRect(sf::IntRect(0, 0, 30, 14));
+		if (quitB.getGlobalBounds().contains(sf::Vector2f(win.mapPixelToCoords(sf::Mouse::getPosition())))) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				music.stop();
+				return 2;
+			}
+			quitB.setTextureRect(sf::IntRect(0, 14, 30, 14));
+		}
+		else {
+			quitB.setTextureRect(sf::IntRect(0, 0, 30, 14));
+		}
 	}
 	win.draw(playB);
 	win.draw(quitB);
