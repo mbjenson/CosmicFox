@@ -13,13 +13,9 @@ public:
 	*/
 	TileMap(int* types1, int* types2, int* types3, int* _logic, sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2, sf::Texture* layer3);
 	//TileMapmk2(sf::Vector2i _mapDimChunks, sf::Texture* layer1, sf::Texture* layer2);
-	/*
-	Initializes the sf::renderTexture mapTex.
-	MAYBE: will initialize the animated tiles for the map.
-		Loops through the array of ints which represents the tile types and if the tile type (an int)
-		Matches one of those that are said to be animated, the tile coord value for this tile is added to
-		the animatedTile array.
-	*/
+	
+	//Initializes the sf::renderTexture mapTex.
+	
 	void init();		
 
 	/*
@@ -35,7 +31,8 @@ public:
 	for very fast loading of the game.
 	*/
 	void updateTexMap();
-	void updateTexMap(sf::IntRect drawArea);
+	//void updateTexMap(sf::IntRect drawArea);
+		
 	/*
 	Checks for the players coordinates to see if they have left the current chunk.
 	If they have, sets the current chunk that the player is within the map. 

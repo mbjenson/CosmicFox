@@ -107,10 +107,18 @@ int main() {
 	winText.setScale(0.5, 0.5);
 	winText.setFillColor(sf::Color::White);
 
+	sf::Text hudText;
+	hudText.setFont(roboto);
+	hudText.setCharacterSize(15);
+	hudText.setScale(0.5, 0.5);
+	hudText.setFillColor(sf::Color(230, 0, 0));
+	
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
 		return -1;
 	
+	
+
 	sf::Texture vignette;
 	if (!vignette.loadFromFile("Textures/vignetteShadow.png"))
 		return -1;
@@ -143,9 +151,9 @@ int main() {
 
 	// vector of null levels. A level is initialized and loaded when the player advances to a given level.
 	vector<Level*> levelVec(3);
-	int curLevelIndex = 0;
-	
-	levelVec.at(0) = new CrashLevel(&p1);
+	int curLevelIndex = 2;
+	levelVec.at(2) = new GrassLandsLevel(&p1);
+	//levelVec.at(0) = new CrashLevel(&p1);
 
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);
@@ -214,6 +222,7 @@ int main() {
 		}
 		if (state == State::game) {
 			// update bg position
+			
 			curLevel->tileMap->updateBG(camera.getCenter());
 			setKeyPressesKBD(p1);
 			window.clear();
@@ -281,6 +290,13 @@ int main() {
 				}
 			}
 			
+			if (curLevelIndex == 2) {
+				string remEnemies = to_string(levelVec.at(curLevelIndex)->eVec.size());
+				hudText.setPosition(sf::Vector2f(camera.getCenter().x - 17.f, camera.getCenter().y + 5 - camera.getSize().y / 2));
+				hudText.setString("ENEMIES: " + remEnemies);
+				window.draw(hudText);
+			}
+
 			if (DEBUG) {
 
 				string xPlayerCord = roundedString(2, p1.getPosition().x);

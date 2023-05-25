@@ -741,7 +741,6 @@ void Player::collisionCheckTile(TileMap* map) {
 				// NOTE: when finished, remove moveDir.n = 0, this is already done
 				moveDir.y = 0;
 			}
-			
 		}
 		if (TR && !TL && !BL && !BR) {
 			sf::Vector2f tilePos = map->getTilePos(sf::Vector2f(tempHitBox.left + tempHitBox.width, tempHitBox.top));

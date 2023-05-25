@@ -17,7 +17,7 @@ int GrassLandsLevel::init(Player* p1) {
 		return -1;
 
 	sf::Texture* rocks = new sf::Texture();
-	if (!rocks->loadFromFile("Textures/inter.png"))
+	if (!rocks->loadFromFile("Textures/inter2.png"))
 		return -1;
 
 	int* logicGrid2 = new int[3840];
