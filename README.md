@@ -9,8 +9,7 @@ The main purpose of this project was to create a game with no engine and learn a
 - Level progression through 3 completed maps.
 - Dashing mechanics and sword combat.
 - Orchestral Ambient track.
-- retro-pixel art style.
-- all original artwork.
+- retro-pixel art style (all original artwork).
 - player Hud.
 
 ## game images:
