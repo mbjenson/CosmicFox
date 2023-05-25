@@ -1,8 +1,13 @@
 # CosmicFox
-A Top-down 2D action zelda-like game with interactive movement and combat.
+*A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
+
+![CosmicFox](https://github.com/mbjenson/CosmicFox/assets/115751313/87a5bee9-ec81-4cdf-9824-a044eeb8fb4a)
+
+## description
+Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat
 
 ## Purpose
-The main purpose of this project was to create a game with no engine and learn about how rendering works and how games are made.
+The main purpose of this project was to create a game with no engine and study the underlying structure and principles of games and their development process.
 
 ## Gameplay features
 - Top-down 2D.
@@ -10,13 +15,18 @@ The main purpose of this project was to create a game with no engine and learn a
 - Dashing mechanics and sword combat.
 - Orchestral Ambient track.
 - retro-pixel art style (all original artwork).
-- player Hud.
 
-## game images:
-<img width="600" alt="Screenshot 2023-05-25 111647" src="https://github.com/mbjenson/CosmicFox/assets/115751313/1abc8108-0150-4082-8c94-ea69275afb6a">
-<img width="600" alt="Screenshot 2023-05-25 111656" src="https://github.com/mbjenson/CosmicFox/assets/115751313/74910127-9768-45a1-bb1e-97e963ef84e4">
-![CosmicFox01](https://github.com/mbjenson/CosmicFox/assets/115751313/6b997b49-2314-4889-ac90-a49dade3b9a9)
+## Previews
 
+### environments
+#### Crash Site
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/0222c4a4-97e4-43d7-93fe-4239d553f6f9)
+#### Mountain Pass
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/ac206a29-3479-4bc9-b16f-be2a848b6aeb)
+#### Grass Lands
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/a8b8ea18-6075-4050-a71b-23ecf0212630)
+
+### Combat
 
 ## Implementation
 ### C++ Use
@@ -58,6 +68,18 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 4) 8 total cases are considered for collision resolution. For each edge and each corner.
 6) The collision is resolved by subtracting the calculated velocity with the distance the player will overlap a collidable tile. Corner cases are resolved by calculating the shortest path from the player's corner to an edge of the collidable box. 
 this entire process is repeated only two times. This is because each bounding box is a rectangle and therefore the greatest number of resoltions that will be needed is two.
+
+## Animation
+- the animation class is the class that all moving actors inherit from. This class gives basic functionality for animating objects using spritesheets.
+
+## Player.cpp
+- The player class controls all the players interactions with the world, user input, and more.
+- the file contains just around 800 lines of code that handle everything from collision detection and sword mechanics to animation logic and sound.
+- the update function handles the logic and flow of the players state. An enum class was used to handle the different player states and designate distinct sections of logic in the function.
+
+## Enemies
+- The enemy in this game is an undead fox.
+- The enemy ai uses a simple pursue and dash sequence that makes for a high action experience.
 
 ## Art
 All of the art for this game is original and was creted using GIMP. (GNU image manipulation program).
