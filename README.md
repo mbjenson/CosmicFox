@@ -15,8 +15,7 @@ The main purpose of this project was to create a game with no engine and learn a
 ## game images:
 <img width="600" alt="Screenshot 2023-05-25 111647" src="https://github.com/mbjenson/CosmicFox/assets/115751313/1abc8108-0150-4082-8c94-ea69275afb6a">
 <img width="600" alt="Screenshot 2023-05-25 111656" src="https://github.com/mbjenson/CosmicFox/assets/115751313/74910127-9768-45a1-bb1e-97e963ef84e4">
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/c2e2b581-179d-460c-aa6b-16d9ad4ac810)
-
+![text](https://github.com/mbjenson/CosmicFox/blob/master/CosmicFox01.gif)
 
 ## Implementation
 ### C++ Use
