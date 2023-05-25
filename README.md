@@ -1,7 +1,7 @@
 # CosmicFox
 *A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
 
-![CosmicFox](https://github.com/mbjenson/CosmicFox/assets/115751313/87a5bee9-ec81-4cdf-9824-a044eeb8fb4a)
+<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/assets/115751313/83ceb313-718d-458d-899b-2cc9a7097a82">
 
 ## description
 Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat
@@ -36,7 +36,7 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 - This game uses a tile based system for the world. 
 
 ## TileMap
-- The Tilemap uses a chunk and grid based system.
+- The Tilemap uses a chunk and grid based system to manage placement of tiles.
 - The information for the map's data is stored in csv files. The csv files are read into memory when the corresponding level is loaded into the game.
 - The tilemap is made up of three layers of tiles. the first and second layer are the base layers and act like the floor and rug, so to speak. The third layer is an interactable layer and contains objects which the player can move around.
 #### Rendering and Optimization
