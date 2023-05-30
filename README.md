@@ -34,15 +34,16 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 
 ## Tiles
 - This game uses a tile based system for the world. 
+- Tiles have textures.
 
 ## TileMap
 - The Tilemap uses a chunk and grid based system to manage placement of tiles.
 - The information for the map's data is stored in csv files. The csv files are read into memory when the corresponding level is loaded into the game.
 - The tilemap is made up of three layers of tiles. the first and second layer are the base layers and act like the floor and rug, so to speak. The third layer is an interactable layer and contains objects which the player can move around.
+- Each tilemap has logic which represents how the player interacts with the tile. For example a tile could be collidable, open-space, a door, etc.
 #### Rendering and Optimization
-- The bottom two layers of the tilemap are drawn to a render texture that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. 
-- This method of drawing to a render texture greatly increased performance and allowed for seamless transition between chunks as the player moves about the level.
-- An area of 3x3 chunks of the base 2 layers are drawn arouund the player. The interactable layer has a smaller render distance from the player to reduce draw calls and increase performance.
+- The bottom two layers of the tilemap are drawn to a 'render texture' that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
+- The Culling distance was set to a one chunk radius around the player. So a 3x3 chunk area was drawn around the player. The interactable layer had a slightly smaller render distance to get maximum performance because those objects were drawn every frame.
 
 ## Levels
 - The level class contains things like sounds, background image, a tilemap, enemy data, and more.
