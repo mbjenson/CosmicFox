@@ -1,10 +1,9 @@
 # CosmicFox
-*A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
+Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat
 
 <img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/assets/115751313/83ceb313-718d-458d-899b-2cc9a7097a82">
 
-## description
-Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat
+*A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
 
 ## Purpose
 The main purpose of this project was to create a game with no engine and study the underlying structure and principles of games and their development process.
