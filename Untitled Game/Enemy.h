@@ -40,6 +40,7 @@ public:
 	sf::Vector2f moveDir;
 	sf::Vector2f finalVel;
 	sf::Vector2f followVel;
+	sf::Vector2f roamVel;
 
 	// current row in a tileMap;
 	int curRow;
@@ -79,6 +80,7 @@ public:
 	
 	sf::Clock attackClock;
 	sf::Clock loseHealthTimer;
+	sf::Clock roamClock;
 
 	float followRadius;
 

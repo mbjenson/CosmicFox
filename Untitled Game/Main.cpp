@@ -84,6 +84,7 @@ int main() {
 		death,
 		quit,
 	};
+
 	State state = State::menu;
 
 	sf::Vector2f winDim(2560, 1440);
@@ -117,8 +118,6 @@ int main() {
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
 		return -1;
 	
-	
-
 	sf::Texture vignette;
 	if (!vignette.loadFromFile("Textures/vignetteShadow.png"))
 		return -1;
@@ -151,9 +150,10 @@ int main() {
 
 	// vector of null levels. A level is initialized and loaded when the player advances to a given level.
 	vector<Level*> levelVec(3);
+	//int curLevelIndex = 0;
 	int curLevelIndex = 0;
-	
 	levelVec.at(0) = new CrashLevel(&p1);
+	//levelVec.at(2) = new GrassLandsLevel(&p1);
 
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);

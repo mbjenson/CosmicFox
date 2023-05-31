@@ -96,6 +96,7 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 			followVel.y -= followVel.y * 0.003;
 			followVel += sf::Vector2f(dt * normalMovement.x * dampingFactor, dt * normalMovement.y * dampingFactor);
 		}
+		
 	}
 	
 	else {
@@ -104,9 +105,26 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 		// slow enemy down
 		followVel.x -= followVel.x * 0.005;
 		followVel.y -= followVel.y * 0.005;
+		// roam right and left
+		if (followVel.x < 1 && followVel.y < 1) {
+
+
+			if (roamClock.getElapsedTime().asMilliseconds() > 5000)
+				roamClock.restart();
+
+			int curRoamTime = roamClock.getElapsedTime().asMilliseconds();
+
+			if (curRoamTime < 2500) {
+				roamVel.x -= 1 * dt;
+			}
+			else {
+				roamVel.x += 1 * dt;
+			}
+		}
+		roamVel.x -= roamVel.x * 0.05;
 	}
 	
-	finalVel = followVel;
+	finalVel = followVel + roamVel;
 	finalVel.y += sin(GLOBAL_GAME_CLOCK.getElapsedTime().asSeconds() * 2) * dt * 8;
 
 }

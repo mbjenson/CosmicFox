@@ -9,10 +9,7 @@ public:
 	int initGhost();
 
 	void GhostUpdate(float dt, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win);
-	
-	
 
-	//sf::Texture ghostTexture;
 	
 };
 
