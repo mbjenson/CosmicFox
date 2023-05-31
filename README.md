@@ -1,19 +1,33 @@
 # CosmicFox
-A Top-down 2D action zelda-like game with interactive movement and combat.
+Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat and a retro-pixel art style. It was created using the SFML graphics API and implemented in C++.
+
+<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/assets/115751313/83ceb313-718d-458d-899b-2cc9a7097a82">
+
+*A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
 
 ## Purpose
-The main purpose of this project was to create a game with no engine and learn about how rendering works and how games are made.
+The main purpose of this project was to create a game with no engine and study the underlying structure and principles of games and their development process.
 
 ## Gameplay features
 - Top-down 2D.
 - Level progression through 3 completed maps.
 - Dashing mechanics and sword combat.
-- Orchestral Ambient track.
 - retro-pixel art style (all original artwork).
-- player Hud.
+- Orchestral Music.
 
-## game images:
-### ***provide a few gifs and images of the games content.
+## Previews
+
+### environments
+#### Crash Site
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/0222c4a4-97e4-43d7-93fe-4239d553f6f9)
+#### Mountain Pass
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/ac206a29-3479-4bc9-b16f-be2a848b6aeb)
+#### Grass Lands
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/a8b8ea18-6075-4050-a71b-23ecf0212630)
+
+### Combat And Dashing
+![](https://github.com/mbjenson/CosmicFox/assets/115751313/e654a780-4070-4efc-90ca-661ca6ede789)
+
 
 ## Implementation
 ### C++ Use
@@ -21,15 +35,16 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 
 ## Tiles
 - This game uses a tile based system for the world. 
+- Tiles have textures.
 
 ## TileMap
-- The Tilemap uses a chunk and grid based system.
+- The Tilemap uses a chunk and grid based system to manage placement of tiles.
 - The information for the map's data is stored in csv files. The csv files are read into memory when the corresponding level is loaded into the game.
 - The tilemap is made up of three layers of tiles. the first and second layer are the base layers and act like the floor and rug, so to speak. The third layer is an interactable layer and contains objects which the player can move around.
+- Each tilemap has logic which represents how the player interacts with the tile. For example a tile could be collidable, open-space, a door, etc.
 #### Rendering and Optimization
-- The bottom two layers of the tilemap are drawn to a render texture that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. 
-- This method of drawing to a render texture greatly increased performance and allowed for seamless transition between chunks as the player moves about the level.
-- An area of 3x3 chunks of the base 2 layers are drawn arouund the player. The interactable layer has a smaller render distance from the player to reduce draw calls and increase performance.
+- The bottom two layers of the tilemap are drawn to a 'render texture' that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
+- The Culling distance was set to a one chunk radius around the player. So a 3x3 chunk area was drawn around the player. The interactable layer had a slightly smaller render distance to get maximum performance because those objects were drawn every frame.
 
 ## Levels
 - The level class contains things like sounds, background image, a tilemap, enemy data, and more.
@@ -55,6 +70,18 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 4) 8 total cases are considered for collision resolution. For each edge and each corner.
 6) The collision is resolved by subtracting the calculated velocity with the distance the player will overlap a collidable tile. Corner cases are resolved by calculating the shortest path from the player's corner to an edge of the collidable box. 
 this entire process is repeated only two times. This is because each bounding box is a rectangle and therefore the greatest number of resoltions that will be needed is two.
+
+## Animation
+- the animation class is the class that all moving actors inherit from. This class gives basic functionality for animating objects using spritesheets.
+
+## Player.cpp
+- The player class controls all the players interactions with the world, user input, and more.
+- the file contains just around 800 lines of code that handle everything from collision detection and sword mechanics to animation logic and sound.
+- the update function handles the logic and flow of the players state. An enum class was used to handle the different player states and designate distinct sections of logic in the function.
+
+## Enemies
+- The enemy in this game is an undead fox.
+- The enemy ai uses a simple pursue and dash sequence that makes for a high action experience.
 
 ## Art
 All of the art for this game is original and was creted using GIMP. (GNU image manipulation program).
