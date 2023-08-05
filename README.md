@@ -1,7 +1,7 @@
 # CosmicFox
-Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat and a retro-pixel art style. It was created using the SFML graphics API and implemented in C++.
+Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat and a retro-pixel art style. It was created using the SFML graphics API and Programmed using C++.
 
-<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/assets/115751313/83ceb313-718d-458d-899b-2cc9a7097a82">
+<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/blob/master/CosmicFoxTitle.png">
 
 *A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
 
@@ -19,14 +19,16 @@ The main purpose of this project was to create a game with no engine and study t
 
 ### Environments:
 #### Crash Site
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/0222c4a4-97e4-43d7-93fe-4239d553f6f9)
+![](https://github.com/mbjenson/CosmicFox/blob/master/crashSite.png)
 #### Mountain Pass
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/ac206a29-3479-4bc9-b16f-be2a848b6aeb)
+![](https://github.com/mbjenson/CosmicFox/blob/master/MountainPassCosmicFox.png)
+#### Bridge
+![](https://github.com/mbjenson/CosmicFox/blob/master/bridgeCosmicFox.png)
 #### Grass Lands
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/a8b8ea18-6075-4050-a71b-23ecf0212630)
+![](https://github.com/mbjenson/CosmicFox/blob/master/GrassLandsCosmicFox1.png)
 
-### Combat And Dashing:
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/e654a780-4070-4efc-90ca-661ca6ede789)
+### Demo Video:
+### put link here
 
 
 ## Implementation
