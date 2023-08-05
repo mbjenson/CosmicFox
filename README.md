@@ -17,7 +17,7 @@ The main purpose of this project was to create a game with no engine and study t
 
 ## Previews
 
-### environments
+### Environments:
 #### Crash Site
 ![](https://github.com/mbjenson/CosmicFox/assets/115751313/0222c4a4-97e4-43d7-93fe-4239d553f6f9)
 #### Mountain Pass
@@ -25,7 +25,7 @@ The main purpose of this project was to create a game with no engine and study t
 #### Grass Lands
 ![](https://github.com/mbjenson/CosmicFox/assets/115751313/a8b8ea18-6075-4050-a71b-23ecf0212630)
 
-### Combat And Dashing
+### Combat And Dashing:
 ![](https://github.com/mbjenson/CosmicFox/assets/115751313/e654a780-4070-4efc-90ca-661ca6ede789)
 
 
