@@ -17,6 +17,9 @@ The main purpose of this project was to create a game with no engine and study t
 
 ## Previews
 
+### Demo Video:
+### put link here
+
 ### Environments:
 #### Crash Site
 ![](https://github.com/mbjenson/CosmicFox/blob/master/crashSite.png)
@@ -27,8 +30,7 @@ The main purpose of this project was to create a game with no engine and study t
 #### Grass Lands
 ![](https://github.com/mbjenson/CosmicFox/blob/master/GrassLandsCosmicFox1.png)
 
-### Demo Video:
-### put link here
+
 
 
 ## Implementation
