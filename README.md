@@ -40,20 +40,17 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 - Tiles have textures.
 
 ## TileMap
-- The Tilemap uses a chunk and grid based system to manage placement of tiles.
+- The Tilemap uses a chunk and grid based system to manage placement/loading of the map.
 - The information for the map's data is stored in csv files. The csv files are read into memory when the corresponding level is loaded into the game.
-- The tilemap is made up of three layers of tiles. the first and second layer are the base layers and act like the floor and rug, so to speak. The third layer is an interactable layer and contains objects which the player can move around.
-- Each tilemap has logic which represents how the player interacts with the tile. For example a tile could be collidable, open-space, a door, etc.
+- The tilemap is made up of three layers of tiles.
 #### Rendering and Optimization
-- The bottom two layers of the tilemap are drawn to a 'render texture' that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
-- The Culling distance was set to a one chunk radius around the player. So a 3x3 chunk area was drawn around the player. The interactable layer had a slightly smaller render distance to get maximum performance because those objects were drawn every frame.
+- Each tile is dynamically drawn to a single texture which is drawn using a single draw call. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
+- The Level is culled at a set distance to only load the part of the world the player can see.
 
 ## Levels
-- The level class contains things like sounds, background image, a tilemap, enemy data, and more.
-- It is the base class for the levels in the game.
-- levels, like tilemaps, uses a grid and chunk system.
+- The level class contains the Tilemap, sounds, enemies, objectives and other things that make the world interactive.
 #### Rendering and Optimization
-- The level rendering process starts by drawing the background, the first two layers of the tilemap, then the interactable layer of the tilemap (3rd layer). The 3rd layer is drawn from the the interactive layer of objects contains stones, trees, enemies, and other objects the player can move around.
+- The level rendering function is in charge of drawing the tilemap, the player, and the enemies.
 - To make it appear as though the player is moving behind objects in the level, the player is drawn at the end of its respective row position. In other words, after a row of interactable objects are drawn, the current row being drawn is checked against the players row and the player is drawn if they match.
 - Entities are also drawn in this fasion.
 
