@@ -1,5 +1,5 @@
 # CosmicFox
-Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat and a retro-pixel art style. It was created using the SFML graphics API and Programmed using C++.
+Cosmic Fox is a Top-down 2D action zelda-like game.
 
 <img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/blob/master/CosmicFoxTitle.png">
 
