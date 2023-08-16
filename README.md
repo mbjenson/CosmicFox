@@ -11,7 +11,7 @@ The main purpose of this project was to create a game with no engine and study t
 ## Gameplay features
 - Top-down 2D.
 - Level progression through 3 completed maps.
-- Dashing mechanics and sword combat.
+- Dashing and sword combat.
 - retro-pixel art style (all original artwork).
 - Orchestral Music.
 
