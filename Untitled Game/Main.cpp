@@ -163,7 +163,7 @@ int main() {
 	if (!music.openFromFile("Sounds/gameAmbience1.wav"))
 		return -1;
 	music.play();
-	music.setVolume(20.f);
+	music.setVolume(70.f);
 	music.setLoop(true);
 
 	sf::BlendMode none;
@@ -282,6 +282,7 @@ int main() {
 				}
 			}
 
+			/*
 			if (curLevelIndex == 2 && levelVec.at(curLevelIndex)->eVec.empty()) {
 				if (endgame < 2000) {
 					winScreen.setPosition(camera.getCenter().x - camera.getSize().x / 4, camera.getCenter().y - camera.getSize().y / 2);
@@ -296,6 +297,7 @@ int main() {
 				hudText.setString("ENEMIES: " + remEnemies);
 				window.draw(hudText);
 			}
+			*/
 
 			if (DEBUG) {
 

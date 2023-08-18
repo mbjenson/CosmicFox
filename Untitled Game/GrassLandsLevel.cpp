@@ -55,21 +55,32 @@ int GrassLandsLevel::init(Player* p1) {
 
 	if (!tileMap->bgTex.loadFromFile("Textures/beachBG.png"))
 		return -1;
-
 	
-
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
 	
-	
-
 
 	// initialize enemies
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))
 		return -1;
 
+	// Current Goal:
+	// Update the game so that enemies randomly spawn around the map and come to you automatically and you must fight them off.
+	// the first two levels will have no enemies and the last you must reach a score of 10,000 by killing the undead. 
+
+	// this will improve the game dramatically.
+
+	/*
+	As time moves on, I will have more and more enemies that spawn.
+	Constantly check for win condition, that is, if the player's score >= 10,000.
+	Each undead gives the player a score of 200.
 	
+	*/
+
+
+
+
 
 	sf::Vector2u ghostSize(24, 24);
 	GhostEnemy g1(&ghostTex, ghostSize, 1, 0, 0.f);
