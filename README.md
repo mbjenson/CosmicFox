@@ -1,57 +1,57 @@
 # CosmicFox
-Cosmic Fox is a Top-down 2D action zelda-like game with interactive movement and combat and a retro-pixel art style. It was created using the SFML graphics API and implemented in C++.
+Cosmic Fox is a Top-down 2D action zelda-like game.
 
-<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/assets/115751313/83ceb313-718d-458d-899b-2cc9a7097a82">
+<img width="600" alt="image" src="https://github.com/mbjenson/CosmicFox/blob/master/CosmicFoxTitle.png">
 
-*A space-faring forest animal has found himself stranded on a strange planet with floatting islands and must protect himself from the mysterious threats that lurk above the clouds.*
+*A space-faring forest animal has found himself stranded on a strange planet of floatting islands and must protect himself and his luminescent companion from the mysterious threats that lurk above the clouds.*
 
 ## Purpose
-The main purpose of this project was to create a game with no engine and study the underlying structure and principles of games and their development process.
+The main purpose of this project was to create a game with no pre-existing engine and study the underlying structure and principles of games and their development process.
 
 ## Gameplay features
 - Top-down 2D.
 - Level progression through 3 completed maps.
-- Dashing mechanics and sword combat.
+- Dashing and sword combat.
 - retro-pixel art style (all original artwork).
 - Orchestral Music.
 
 ## Previews
 
-### environments
-#### Crash Site
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/0222c4a4-97e4-43d7-93fe-4239d553f6f9)
-#### Mountain Pass
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/ac206a29-3479-4bc9-b16f-be2a848b6aeb)
-#### Grass Lands
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/a8b8ea18-6075-4050-a71b-23ecf0212630)
+### Demo Video:
+#### https://youtu.be/BHPyVc5tPnQ
 
-### Combat And Dashing
-![](https://github.com/mbjenson/CosmicFox/assets/115751313/e654a780-4070-4efc-90ca-661ca6ede789)
+### Environments:
+#### *Crash Site:*
+![](https://github.com/mbjenson/CosmicFox/blob/master/crashSite.png)
+#### *Mountain Pass:*
+![](https://github.com/mbjenson/CosmicFox/blob/master/MountainPassCosmicFox.png)
+#### *Bridge:*
+![](https://github.com/mbjenson/CosmicFox/blob/master/bridgeCosmicFox.png)
+#### *Grass Lands:*
+![](https://github.com/mbjenson/CosmicFox/blob/master/GrassLandsCosmicFox1.png)
+
+
 
 
 ## Implementation
 ### C++ Use
 The entire project is coded in C++. The IDE used was visual Studio 2019
 
-## Tiles
+## World
 - This game uses a tile based system for the world. 
-- Tiles have textures.
 
-## TileMap
-- The Tilemap uses a chunk and grid based system to manage placement of tiles.
+### TileMap
+- The Tilemap uses a chunk and grid system to manage placement/loading of the map.
 - The information for the map's data is stored in csv files. The csv files are read into memory when the corresponding level is loaded into the game.
-- The tilemap is made up of three layers of tiles. the first and second layer are the base layers and act like the floor and rug, so to speak. The third layer is an interactable layer and contains objects which the player can move around.
-- Each tilemap has logic which represents how the player interacts with the tile. For example a tile could be collidable, open-space, a door, etc.
+- The tilemap is made up of three layers of tiles.
 #### Rendering and Optimization
-- The bottom two layers of the tilemap are drawn to a 'render texture' that acts as a single sprite and can be displayed every frame with one draw instruction. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
-- The Culling distance was set to a one chunk radius around the player. So a 3x3 chunk area was drawn around the player. The interactable layer had a slightly smaller render distance to get maximum performance because those objects were drawn every frame.
+- Each tile is dynamically drawn to a single texture which is drawn using a single draw call. It updates only when the player enters a new chunk. This greatly increased performance and allowed for seamless transition around the level.
+- The Level is culled at a set distance to only load the part of the world the player can see.
 
-## Levels
-- The level class contains things like sounds, background image, a tilemap, enemy data, and more.
-- It is the base class for the levels in the game.
-- levels, like tilemaps, uses a grid and chunk system.
+### Levels
+- The level class contains the Tilemap, sounds, enemies, objectives and other things that make the world interactive.
 #### Rendering and Optimization
-- The level rendering process starts by drawing the background, the first two layers of the tilemap, then the interactable layer of the tilemap (3rd layer). The 3rd layer is drawn from the the interactive layer of objects contains stones, trees, enemies, and other objects the player can move around.
+- The level rendering function is in charge of drawing the tilemap, the player, and the enemies.
 - To make it appear as though the player is moving behind objects in the level, the player is drawn at the end of its respective row position. In other words, after a row of interactable objects are drawn, the current row being drawn is checked against the players row and the player is drawn if they match.
 - Entities are also drawn in this fasion.
 
@@ -62,17 +62,12 @@ The entire project is coded in C++. The IDE used was visual Studio 2019
 - A dark mask is drawn over the whole level. The player's world position is calculated and given as a parameter. The shaders linearly interpolates between the black and clear areas to give a smoothly faded edge.
 
 ## Collisions
-- collidable objects all have a rectangular bounding box. 
-- To detect collisions for entities, the algorithm:
-1) Get corners of player's bounding box.
-2) Convert to tile coordinates. each corner has a boolean value assigned to it.
-3) Check the tilemap's logic grid to see if it is a collidable tile. set corresponding corner boolean accordingly.
-4) 8 total cases are considered for collision resolution. For each edge and each corner.
-6) The collision is resolved by subtracting the calculated velocity with the distance the player will overlap a collidable tile. Corner cases are resolved by calculating the shortest path from the player's corner to an edge of the collidable box. 
-this entire process is repeated only two times. This is because each bounding box is a rectangle and therefore the greatest number of resoltions that will be needed is two.
+- A Custom algorithm for collision detection and resolution was created and used
+- 8 cases are considered when evaluating collisions.
+- Collidable objects have rectangular bounding boxes.
 
 ## Animation
-- the animation class is the class that all moving actors inherit from. This class gives basic functionality for animating objects using spritesheets.
+- the animation class provides basic functionality for animating objects using spritesheets.
 
 ## Player.cpp
 - The player class controls all the players interactions with the world, user input, and more.
@@ -80,15 +75,15 @@ this entire process is repeated only two times. This is because each bounding bo
 - the update function handles the logic and flow of the players state. An enum class was used to handle the different player states and designate distinct sections of logic in the function.
 
 ## Enemies
-- The enemy in this game is an undead fox.
-- The enemy ai uses a simple pursue and dash sequence that makes for a high action experience.
+- The enemy in this game is an undead fox-like creature.
+- The enemy ai uses different pursuit and dash mechanics that make for high-intensity gameplay.
 
 ## Art
-All of the art for this game is original and was creted using GIMP. (GNU image manipulation program).
+- All of the art for this game is original and was creted using GIMP. (GNU image manipulation program).
 A retro-pixel art style was chosen for this game.
 
 ## music
-Music for this game was written using REAPER digital audio workspace and the BBC symphony orchestra core from Spitfire Audio.
+- Music for this game was written using REAPER digital audio workspace and the BBC symphony orchestra core from Spitfire Audio.
 
 
 
