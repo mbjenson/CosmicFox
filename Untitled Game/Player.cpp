@@ -334,7 +334,6 @@ void Player::init() {
 	sword = Sword(19, sf::Vector2f(21, 20), swordTex, sf::Vector2u(42, 32), 3, 0, 60.f, 400, 120, 1);
 	sword.initSword();
 
-	
 	healthHitBox = sf::FloatRect(0, 0, 8, 13);
 	curHealth = maxHealth;
 	hitBackTime = 200;
@@ -350,14 +349,13 @@ void Player::init() {
 	setFacing(sf::Vector2f(0, 1.f));
 	
 	attackBuffer.loadFromFile("Sounds/swordSlash.wav");
-	//s1.setBuffer(attackBuffer);
 	dashBuf.loadFromFile("Sounds/dash.wav");
 	s1.setBuffer(attackBuffer);
 	s2.setBuffer(dashBuf);
 }
 
 void Player::setAnimation() {
-	// horizontal movement has priority over vertical movement
+	// horizontal movement has priority over vertical movement for animations
 	if (isDashing) {
 		if (dashVel.x == 0 && dashVel.y < 0) {
 			dashAnimN();
@@ -492,16 +490,9 @@ void Player::normalizeWalkVel() {
 	}
 }
 
-
-
 void Player::setState(State _state) {
 	Player::state = _state;
 }
-
-
-
-//here I will set the values of the animation dims and other specs for the player like giving dirbools initial values
-
 
 void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
 	hitBox.width = size.x;
@@ -509,13 +500,6 @@ void Player::setHitBoxSize(sf::Vector2f size, sf::Vector2f offset) {
 	hitBoxOffset.x = offset.x;
 	hitBoxOffset.y = offset.y;
 }
-// takes position (middle of player) and calculates the top and left coord of hitbox rect
-/*
-void Player::updateHitBox() {
-	hitBox.left = getPosition().x - hitBoxSize.x / 2 + hitBoxOffset.x;
-	hitBox.top = getPosition().y - hitBoxSize.y / 2 + hitBoxOffset.y;
-}
-*/
 
 void Player::updateHitBox() {
 	hitBox.left = getPosition().x - hitBox.width / 2;// + hitBoxOffset.x;
