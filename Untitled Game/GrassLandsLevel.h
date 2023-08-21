@@ -13,5 +13,6 @@ public:
 	int init(Player* p1);
 
 	sf::Texture ghostTex;
+	sf::Vector2u ghostSize;
 };
 

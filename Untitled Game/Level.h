@@ -15,11 +15,10 @@ class Level
 {
 public:
 
-
 	void render(sf::RenderWindow& win);
 	//int init(); declare an innit function for each Version of the level that inits all components of the Level
 	void updateEnemies(float deltaTime, sf::RenderWindow* window); // this needs to be seperate because we need to thread it
-	
+
 	// vector of enemies for a given level;
 	// player can check for hit on all of the enemies by checking which ones are within range of each other, if
 	TileMap* tileMap;
@@ -40,8 +39,8 @@ public:
 	sf::Sound s1;
 	sf::Sound s2;
 	sf::Sound s3;
-	
-	// enemy map stuff
-	// sound map stuff
+
+	bool hasEnemies;
+	int numEnemies = 0;
 };
 

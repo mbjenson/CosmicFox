@@ -27,11 +27,10 @@ public:
 
 	void update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win);
 	void basicMovement(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
-	void zoomAttack(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt); // not used
 	void collisionCheckTile(TileMap* map);
 	void getHit(int damage);
 	void setSpawn(sf::Vector2f);
-	//int damageRecieved;
+
 	bool beingHit;
 	
 	int damage = 1;
@@ -77,6 +76,8 @@ public:
 	sf::Vector2f playerDirNormal; // the normalized vector to the player
 	sf::Vector2f hitVector; // the normalized vector captured at the moment the enemy is hit by the player
 	sf::Vector2f playerDirDashStart;
+	
+	sf::Vector2f enemyCollisionVec; // a normalized directional vector representing the direction the enemy will move away from another enemy
 	
 	sf::Clock attackClock;
 	sf::Clock loseHealthTimer;

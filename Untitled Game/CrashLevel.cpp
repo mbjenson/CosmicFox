@@ -10,6 +10,8 @@ int CrashLevel::init(Player* p1) {
 
 	playerSpawn = sf::Vector2f(217,168);
 
+	hasEnemies = false;
+
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))
 		return -1;

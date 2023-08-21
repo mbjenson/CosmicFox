@@ -74,7 +74,6 @@ void Level::render(sf::RenderWindow& win) {
 				}
 			}
 			
-			
 			/*
 			if (!player->FLAG_FALL) {
 				if ((playerPos.y - playerPos.y % tSize) / tSize == y && x == ((playerPos.x - playerPos.x % tSize) / tSize))
@@ -85,12 +84,7 @@ void Level::render(sf::RenderWindow& win) {
 				continue;
 			else {
 				sf::Sprite tempSpr(*tileMap->layer3Texture);
-				// sf::Clock animTimer;???
-				// use this animTimer to check if tiles should move to the next frame in the animation???
-				// create a different class that uses sprites and Animation.h to animate different tiles
 				
-				// These are specific dimensioins for the interactable layer spriteSheet.
-				// Later change this so that these tiles can be animated
 				if (tileMap->layer3Types[x + y * mapDTiles.x] == 1) {
 					tempSpr.setTextureRect(tileMap->texDim1);
 					tempSpr.setPosition(sf::Vector2f(x * tSize - tileMap->offsetDim1.x, y * tSize - tileMap->offsetDim1.y));
@@ -128,42 +122,40 @@ void Level::render(sf::RenderWindow& win) {
 	if (usingShader) {
 		win.draw(mapMask, &shader);
 	}
-	// 6th CANOPY LAYER:
-		// MAYBE:
-		// last, but not least, update the canopy layer
 }
 
 void Level::updateEnemies(float dt, sf::RenderWindow* win) {
-	// maybe a for each loop is much faster, I am only using for loop because I want to be able to erase the enemies if necessary
-	
-	for (auto& e : eVec) {
 
-		// always update the player distance size here so that it is properly handled
-		e.distSize = sqrt(pow(player->getPosition().x - e.getPosition().x, 2)
-			+ pow(player->getPosition().y - e.getPosition().y, 2));
-		if (e.distSize > enemyRenderDistance) {
-			continue;
-		}
-		else {
-			if (player->attacking) {
-				if (player->sword.checkHit(e.hitBox)) {
-					e.getHit(player->sword.damage);
+	if (hasEnemies) {
+		// spawn enemies
+		for (auto& e : eVec) {
+			// always update the player distance size here so that it is properly handled
+			e.distSize = sqrt(pow(player->getPosition().x - e.getPosition().x, 2)
+				+ pow(player->getPosition().y - e.getPosition().y, 2));
+			if (e.distSize > enemyRenderDistance) {
+				continue;
+			}
+			else {
+				if (player->attacking) {
+					if (player->sword.checkHit(e.hitBox)) {
+						e.getHit(player->sword.damage);
+					}
 				}
+				if (e.distSize < enemyPlayerCollisionCheckDistance)
+					player->collisionCheckEnemy(e.hitBox, e.damage);
+				e.update(dt, player->getPosition(), tileMap, win);
 			}
-			if (e.distSize < enemyPlayerCollisionCheckDistance)
-				player->collisionCheckEnemy(e.hitBox, e.damage);
-			e.update(dt, player->getPosition(), tileMap, win);
 		}
-	}
-	for (int i = 0; i < eVec.size(); i++) {
-		if (eVec.at(i).FLAG_DEAD) {
-			eVec.erase(eVec.begin() + i);
-			if (s1.Playing) {
-				s1.play();
+		for (int i = 0; i < eVec.size(); i++) {
+			if (eVec.at(i).FLAG_DEAD) {
+				eVec.erase(eVec.begin() + i);
+				if (s1.Playing) {
+					s1.play();
+				}
+
+
+
 			}
-			
-			
-			
 		}
 	}
 	/*

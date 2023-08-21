@@ -59,30 +59,16 @@ int GrassLandsLevel::init(Player* p1) {
 	tileMap->init();
 	tileMap->updatePlayerChunk(player->getPosition());
 	tileMap->updateTexMap();
-	
 
 	// initialize enemies
 	if (!ghostTex.loadFromFile("Textures/enemySpriteSheetmk1.png"))
 		return -1;
 
-	// Current Goal:
-	// Update the game so that enemies randomly spawn around the map and come to you automatically and you must fight them off.
-	// the first two levels will have no enemies and the last you must reach a score of 10,000 by killing the undead. 
+	hasEnemies = true;
+	numEnemies = 8;
 
-	// this will improve the game dramatically.
-
-	/*
-	As time moves on, I will have more and more enemies that spawn.
-	Constantly check for win condition, that is, if the player's score >= 10,000.
-	Each undead gives the player a score of 200.
+	ghostSize = sf::Vector2u(24, 24);
 	
-	*/
-
-
-
-
-
-	sf::Vector2u ghostSize(24, 24);
 	GhostEnemy g1(&ghostTex, ghostSize, 1, 0, 0.f);
 	GhostEnemy g2(&ghostTex, ghostSize, 1, 0, 0.f);
 	GhostEnemy g3(&ghostTex, ghostSize, 1, 0, 0.f);
@@ -105,9 +91,9 @@ int GrassLandsLevel::init(Player* p1) {
 	g2.setSpawn(sf::Vector2f(360.f, 600.f));
 	g3.setSpawn(sf::Vector2f(370.f, 700.f));
 	g4.setSpawn(sf::Vector2f(100.f, 400.f));
-	g5.setSpawn(sf::Vector2f(390.f, 1000.f));
-	g6.setSpawn(sf::Vector2f(200.f, 1010.f));
-	g7.setSpawn(sf::Vector2f(358.f, 1200.f));
+	g5.setSpawn(sf::Vector2f(390.f, 600.f));
+	g6.setSpawn(sf::Vector2f(200.f, 700.f));
+	g7.setSpawn(sf::Vector2f(358.f, 650.f));
 	g8.setSpawn(sf::Vector2f(600.f, 300.f));
 	
 	g1.setPosition(g1.spawnpoint);
@@ -127,9 +113,11 @@ int GrassLandsLevel::init(Player* p1) {
 	eVec.push_back(g6);
 	eVec.push_back(g7);
 	eVec.push_back(g8);
-	
+
 	playerSpawn = sf::Vector2f(400.f, 28.f);
 	
 	return 0;
 }
+
+// handle spawning in of enemies
 

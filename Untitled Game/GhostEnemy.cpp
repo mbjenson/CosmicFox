@@ -2,9 +2,7 @@
 
 GhostEnemy::GhostEnemy(sf::Texture* enemyTex, sf::Vector2u texDim, int rowLength, int rowNumber, float animDuration) : 
 	Enemy(enemyTex, texDim, rowLength, rowNumber, animDuration)
-{
-
-}
+{}
 
 int GhostEnemy::initGhost() {
 
@@ -13,16 +11,17 @@ int GhostEnemy::initGhost() {
 	FLAG_DEAD = false;
 	
 	setOrigin(sf::Vector2f(enemySize.x / 2, enemySize.y / 2));
-	detectionRadius = 70.f; // old: 100.f
-	followRadius = 100.f;
+	detectionRadius = 70.f; // won't be needing this
+	followRadius = 100.f; // or this
 	
 	FLAG_CHASING = false;
 	
-	maxHealth = 4;
+	maxHealth = 5;
 	curHealth = maxHealth;
-	dampingFactor = 0.2;
+	dampingFactor = 0.5; 
 	
-	hitBox = sf::FloatRect(0, 0, 18, 21);
+	//hitBox = sf::FloatRect(0, 0, 18, 21);
+	hitBox = sf::FloatRect(0, 0, 16, 16); // new, more fair hitbox
 	distSize = 0.f;
 	
 	curState = State::nominal;
@@ -36,11 +35,7 @@ int GhostEnemy::initGhost() {
 	return 0;
 }
 
-
-
-
 void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
-	
 	
 	// start by pursuing the player at a slow speed for 500ms
 	// pause for 100 ms
@@ -48,20 +43,30 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 	// pause for 100ms
 	// > restart
 
-	int pursuePlayerTime = 2200;
-	int prepDashTime = 2600;
-	int dashTime = 3000;
-	int pause = 3200;
+	//int pursuePlayerTime = 5000;
+	int pursuePlayerTime = 1000 * curHealth;
+	// old 2220
+	int prepDashTime = pursuePlayerTime + 400;
+	//int prepDashTime = 5400;
+	// old 2600
+	int dashTime = pursuePlayerTime + 800;
+	//int dashTime = 5800;
+	// old 3000
+	int pause = pursuePlayerTime + 1000;
+	//int pause = 6000;
+	// old 3200
 
-	int dashSpeed = 160;
+	int dashSpeed = 115;
 	// old : 180
 	
 	int curTime = attackClock.getElapsedTime().asMilliseconds();
-	if (distSize < detectionRadius)
-		FLAG_CHASING = true;
+	//if (distSize < detectionRadius)
+	FLAG_CHASING = true;
 	
-	if (FLAG_CHASING && distSize < followRadius) {
-		sf::Vector2f normalMovement(distVec.x / distSize, distVec.y / distSize);
+	//if (FLAG_CHASING && distSize < followRadius) {
+	sf::Vector2f movementVector(distVec.x / distSize, distVec.y / distSize);
+	if (distSize < 100.f) {
+		
 		if (curTime > pause) {
 			//sf::Vector2f inverseNormalMovement((distVec.x * -1) / distSize, (distVec.y * -1) / distSize);
 			attackClock.restart();
@@ -69,82 +74,46 @@ void Enemy::basicMovement(sf::Vector2f playPos, sf::Vector2f distVec, float dist
 		else if (curTime > dashTime) {
 			// PAUSE
 			//followVel = sf::Vector2f(0, 0);
-			followVel.x -= followVel.x * 0.03;
-			followVel.y -= followVel.y * 0.03;
-
-			
+			followVel.x -= followVel.x * 0.06;
+			followVel.y -= followVel.y * 0.06;
 		}
 		else if (curTime > prepDashTime) {
 			// DASH
-			
 			followVel = sf::Vector2f(dt * playerDirDashStart.x * dashSpeed, dt * playerDirDashStart.y * dashSpeed);
 		}
 		else if (curTime > prepDashTime - 150 && curTime < prepDashTime - 130) {
 			playerDirDashStart = sf::Vector2f((playPos.x - getPosition().x) / distSize, (playPos.y - getPosition().y) / distSize);
 		}
 		else if (curTime > pursuePlayerTime) {
-			
 			// PAUSE
 			//followVel = sf::Vector2f(0, 0);
-			followVel.x -= followVel.x * 0.04;
-			followVel.y -= followVel.y * 0.04;
+			followVel.x -= followVel.x * 0.06;
+			followVel.y -= followVel.y * 0.06;
 			//followVel += sf::Vector2f(dt * playerDirDashStart.x, dt * playerDirDashStart.y);
 		}
 		else if (curTime < pursuePlayerTime) {
 			// PURSUE
-			followVel.x -= followVel.x * 0.003;
-			followVel.y -= followVel.y * 0.003;
-			followVel += sf::Vector2f(dt * normalMovement.x * dampingFactor, dt * normalMovement.y * dampingFactor);
+			followVel.x -= followVel.x * 0.009; // friction..
+			followVel.y -= followVel.y * 0.009; // friction..
+			followVel += sf::Vector2f(dt * movementVector.x * dampingFactor, dt * movementVector.y * dampingFactor);
 		}
-		
 	}
-	
 	else {
-		attackClock.restart();
-		FLAG_CHASING = false;
-		// slow enemy down
-		followVel.x -= followVel.x * 0.005;
-		followVel.y -= followVel.y * 0.005;
-		// roam right and left
-		if (followVel.x < 1 && followVel.y < 1) {
-
-
-			if (roamClock.getElapsedTime().asMilliseconds() > 5000)
-				roamClock.restart();
-
-			int curRoamTime = roamClock.getElapsedTime().asMilliseconds();
-
-			if (curRoamTime < 2500) {
-				roamVel.x -= 1 * dt;
-			}
-			else {
-				roamVel.x += 1 * dt;
-			}
-		}
-		roamVel.x -= roamVel.x * 0.05;
+		followVel.x -= followVel.x * 0.009; // friction..
+		followVel.y -= followVel.y * 0.009; // friction..
+		followVel += sf::Vector2f(dt * movementVector.x * dampingFactor, dt * movementVector.y * dampingFactor);
 	}
 	
 	finalVel = followVel + roamVel;
+
+	// hovering movement
 	finalVel.y += sin(GLOBAL_GAME_CLOCK.getElapsedTime().asSeconds() * 2) * dt * 8;
 
 }
 
-
+// didn't end up animating the ghost...
 void Enemy::setAnimations() {
 	updateRow(0, 1);
-	/*
-	if (distSize > detectionRadius) {
-		updateRow(0, 1);
-	}
-	if (playerDirNormal.x < 0) {
-		updateRow(1, 1);
-	}
-	if (playerDirNormal.x > 0) {
-		updateRow(2, 1);
-	}
-	*/
 	
-	
-	// set it so that the ghost is facing towards the player during preperation for attack other wise it is looking away
 }
 

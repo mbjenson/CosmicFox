@@ -112,7 +112,7 @@ int main() {
 	hudText.setFont(roboto);
 	hudText.setCharacterSize(15);
 	hudText.setScale(0.5, 0.5);
-	hudText.setFillColor(sf::Color(230, 0, 0));
+	hudText.setFillColor(sf::Color(200, 150, 0));
 	
 	sf::Texture fox;
 	if (!fox.loadFromFile("Textures/foxSpriteSheetmk2.png"))
@@ -150,10 +150,10 @@ int main() {
 
 	// vector of null levels. A level is initialized and loaded when the player advances to a given level.
 	vector<Level*> levelVec(3);
-	//int curLevelIndex = 0;
 	int curLevelIndex = 0;
+	//int curLevelIndex = 0;
 	levelVec.at(0) = new CrashLevel(&p1);
-	//levelVec.at(2) = new GrassLandsLevel(&p1);
+	
 
 	Level* curLevel;
 	curLevel = levelVec.at(curLevelIndex);
@@ -180,9 +180,10 @@ int main() {
 	win.loadFromFile("Textures/win.png");
 	sf::Sprite winScreen(win);
 
-	winScreen.setScale(3.f, 3.f);
+	winScreen.setScale(2.5f, 2.5f);
 	int endgame = 0;
 
+	// GAME LOOP
 	sf::Clock mainClock;
 	sf::Clock dtClock;
 	while (window.isOpen())
@@ -221,6 +222,7 @@ int main() {
 			window.close();
 		}
 		if (state == State::game) {
+			
 			// update bg position
 			
 			curLevel->tileMap->updateBG(camera.getCenter());
@@ -242,6 +244,7 @@ int main() {
 			window.setView(camera);
 			
 			curLevel->updateEnemies(dt, &window);
+			
 			curLevel->render(window);
 			
 			spirit.update(p1.getPosition(), dt);
@@ -281,8 +284,7 @@ int main() {
 					state = State::death;
 				}
 			}
-
-			/*
+			
 			if (curLevelIndex == 2 && levelVec.at(curLevelIndex)->eVec.empty()) {
 				if (endgame < 2000) {
 					winScreen.setPosition(camera.getCenter().x - camera.getSize().x / 4, camera.getCenter().y - camera.getSize().y / 2);
@@ -292,14 +294,16 @@ int main() {
 			}
 			
 			if (curLevelIndex == 2) {
-				string remEnemies = to_string(levelVec.at(curLevelIndex)->eVec.size());
+				
+				int remEnemies = levelVec.at(curLevelIndex)->eVec.size();
+				int score = 100 * (curLevel->numEnemies - remEnemies);
+				string strScore = to_string(score);
 				hudText.setPosition(sf::Vector2f(camera.getCenter().x - 17.f, camera.getCenter().y + 5 - camera.getSize().y / 2));
-				hudText.setString("ENEMIES: " + remEnemies);
+				hudText.setString("score: " + strScore);
 				window.draw(hudText);
 			}
-			*/
-
-			if (DEBUG) {
+			
+			if (DEBUG) { // press 'G' to show debugging information.
 
 				string xPlayerCord = roundedString(2, p1.getPosition().x);
 				string yPlayerCord = roundedString(2, p1.getPosition().y);

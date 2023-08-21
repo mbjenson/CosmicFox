@@ -1,22 +1,7 @@
 #include "Enemy.h"
 
-/*
-Enemy::Enemy(sf::Texture* spriteSheet, sf::Vector2f _TexDim) {
-
-	tSprite.setTexture(*spriteSheet);
-	tSprite.setTextureRect(sf::IntRect(0, 0, _TexDim.x, _TexDim.y));
-	//tSprite.setTextureRect()
-
-};
-*/
-
 Enemy::Enemy(sf::Texture* spriteSheet, sf::Vector2u texDim, int _rowLength, int _rowNum, float _animTime) : 
-	Entity( *spriteSheet, texDim, _rowLength, _rowNum, _animTime )
-{
-	
-}
-
-
+	Entity( *spriteSheet, texDim, _rowLength, _rowNum, _animTime ) {}
 
 bool Enemy::init() {
 
@@ -27,7 +12,7 @@ bool Enemy::init() {
 	moveSpeed = 50;
 	maxHealth = 5;
 	curHealth = maxHealth;
-	dampingFactor = 0.2;
+	dampingFactor = 0;
 	curRow = 0;
 	hitBox = sf::FloatRect(0, 0, 16, 16);
 	distSize = 0.f; 
@@ -38,11 +23,6 @@ bool Enemy::init() {
 	//prevPlayerPos = sf::Vector2f(200, 200);
 	return true;
 }
-
-void Enemy::zoomAttack(sf::Vector2f playPos, sf::Vector2f distVec, float distSize, float dt) {
-	return;
-}
-
 
 void Enemy::collisionCheckTile(TileMap* map) {
 	int i = 0;
@@ -164,6 +144,9 @@ void Enemy::setSpawn(sf::Vector2f _spawnpoint) {
 }
 
 void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win) {
+
+	// use the calculated value for the enemycollisionvector to move the player slightly
+
 	curRow = static_cast<int>(getPosition().y) / map->tileSize;
 	sf::Vector2f distVec(playerPos.x - getPosition().x, playerPos.y - getPosition().y);
 	//distSize = sqrt(pow(distVec.x, 2) + pow(distVec.y, 2));
@@ -206,11 +189,7 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 			//finalVel.y -= finalVel.y * 0.1;
 			break;
 		}
-		
 	}
-	// update hitBox Pos:
-	
-	// update Sword:
 	
 	// update Animations:
 	setAnimations();
@@ -222,8 +201,6 @@ void Enemy::update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::Re
 	//prevPlayerPos = playerPos;
 	updateAnim();
 }
-
-
 
 void Enemy::getHit(int damage) {
 	if (curHealth <= 0)
@@ -241,4 +218,3 @@ void Enemy::revive() {
 	FLAG_DEAD = false;
 	setPosition(spawnpoint);
 }
-

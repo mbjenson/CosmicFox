@@ -9,6 +9,7 @@ int IntroLevel::init(Player* p1) {
 
 	playerSpawn = sf::Vector2f(110.f, 100.f);
 	
+	hasEnemies = false;
 
 	sf::Texture* terrain1 = new sf::Texture();
 	if (!terrain1->loadFromFile("Textures/grassLands3.png"))

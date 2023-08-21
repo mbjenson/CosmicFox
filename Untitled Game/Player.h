@@ -230,6 +230,8 @@ public:
 	int fallTime = 800;
 	float fallSpeed = 100.f;
 
+	int score;
+
 private:
 	// information for each animation.
 	// contains information used by the animation class to set
