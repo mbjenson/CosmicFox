@@ -35,7 +35,7 @@ The main purpose of this project was to create a game with no pre-existing engin
 
 ## Implementation
 ### C++ Use
-The entire project is coded in C++. The IDE used was visual Studio 2019
+The entire project is coded in C++. The IDE used was Visual Studio 2019
 
 ## World
 - This game uses a tile based system for the world. 
