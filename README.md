@@ -6,7 +6,7 @@ Cosmic Fox is a Top-down 2D action zelda-like game.
 *A space-faring forest animal has found himself stranded on a strange planet of floatting islands and must protect himself and his luminescent companion from the mysterious threats that lurk above the clouds.*
 
 ## Purpose
-The main purpose of this project was to create a game with no pre-existing engine and study the underlying structure and principles of games and their development process.
+The main purpose of this project was to create a game with no pre-existing engine and study the underlying structure and principles of games and their development process while building my programming, organization, and problem solving skills.
 
 ## Gameplay features
 - Top-down 2D.
