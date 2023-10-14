@@ -99,9 +99,11 @@ int main() {
 	camera.zoom(0.15f);
 
 	sf::Font roboto;
+	
 	if (!roboto.loadFromFile("Assets/Fonts/Roboto-Regular.ttf")) {
 		return -1;
 	}
+	
 	sf::Text winText;
 	winText.setFont(roboto);
 	winText.setCharacterSize(10);
@@ -308,7 +310,7 @@ int main() {
 				string xPlayerCord = roundedString(2, p1.getPosition().x);
 				string yPlayerCord = roundedString(2, p1.getPosition().y);
 
-				winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2, camera.getCenter().y + 5 - camera.getSize().y / 2));
+				winText.setPosition(sf::Vector2f(camera.getCenter().x + 5 - camera.getSize().x / 2, camera.getCenter().y + 15 - camera.getSize().y / 2));
 				winText.setString("x = " + xPlayerCord);
 				window.draw(winText);
 
