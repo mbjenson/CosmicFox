@@ -6,7 +6,12 @@
 
 extern sf::Clock GLOBAL_GAME_CLOCK;
 
-// Base enemy class. Inherits basic functionality from the Entity class
+/*
+* Base Enemy class
+* child class of Entity
+* 
+* Contains functionality for movement, attacking, and collisions in the level.
+*/
 class Enemy : public Entity
 {
 public:
@@ -26,6 +31,9 @@ public:
 	};
 
 	void update(float deltaTime, sf::Vector2f playerPos, TileMap* map, sf::RenderWindow* win);
+	/*
+	* basicMovement function implements the movement of the enemy to seek out and attack the player
+	*/
 	void basicMovement(sf::Vector2f playerPos, sf::Vector2f distanceVec, float distanceSize, float dt);
 	void collisionCheckTile(TileMap* map);
 	void getHit(int damage);

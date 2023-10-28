@@ -2,6 +2,11 @@
 #include <SFML/graphics.hpp>
 #include <SFML/audio.hpp>
 
+/*
+* death screen
+* 
+* contains the necessary code for displaying an image aswell as restart and quit options for the player.
+*/
 class deathScreen
 {
 public:

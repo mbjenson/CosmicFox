@@ -8,7 +8,12 @@
 
 extern sf::Clock GLOBAL_GAME_CLOCK;
 
-// Code for the player character. 
+/*
+* Player class
+* 
+* Contains all the code for the fox player in the game.
+* The player is controlled by the user and navigated through each level.
+*/
 class Player : public Entity
 {
 public:

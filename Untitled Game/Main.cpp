@@ -5,13 +5,12 @@
 #include <fstream>
 #include <math.h>
 #include <iostream>
-
+#include "ResHandler.h"
 #include "PauseButton.h"
 #include "deathScreen.h"
 #include "Menu.h"
 #include "Player.h"
 #include "Camera.h"
-#include "ResHandler.h"
 #include "GrassLandsLevel.h"
 #include "HudBar.h"
 #include "DashMeter.h"

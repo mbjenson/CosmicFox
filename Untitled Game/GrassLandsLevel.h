@@ -2,7 +2,6 @@
 #include "Level.h"
 #include "GhostEnemy.h"
 
-
 class GrassLandsLevel : public Level
 {
 public:

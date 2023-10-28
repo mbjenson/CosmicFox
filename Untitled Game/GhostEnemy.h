@@ -1,6 +1,10 @@
 #pragma once
 #include "Enemy.h"
 
+/*
+* child class of enemy
+* ghost enemy floats around the level and chases the player down and dashes after it when too close.
+*/
 class GhostEnemy : public Enemy
 {
 public:

@@ -163,7 +163,6 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ResHandler.cpp" />
     <ClCompile Include="Spirit.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="TileMap.cpp" />

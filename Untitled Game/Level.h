@@ -9,18 +9,24 @@
 
 
 /*
-	Generic level class that can be provided with player*. contains the tileMap and necessary things for a specific level
+ * Generic level class that implemented levels inherit 
+ * contains the tilemap, sounds, enemies, textures, player, and all things that go into making a level
 */
 class Level 
 {
 public:
-
+	/*
+	* Renders a level to the window
+	* uses the player position and screen size to determine the render distance
+	* parses the submaps into chunks to only render necessary sprites to the screen to save time and reduce draw calls
+	*/
 	void render(sf::RenderWindow& win);
-	//int init(); declare an innit function for each Version of the level that inits all components of the Level
-	void updateEnemies(float deltaTime, sf::RenderWindow* window); // this needs to be seperate because we need to thread it
+	/*
+	* updates all enemies present in the level
+	*/
+	void updateEnemies(float deltaTime, sf::RenderWindow* window);
 
-	// vector of enemies for a given level;
-	// player can check for hit on all of the enemies by checking which ones are within range of each other, if
+	// contains grid of textures in three levels
 	TileMap* tileMap;
 	
 	Player* player; // get needed infomation about player status for tileMap

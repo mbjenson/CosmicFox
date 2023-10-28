@@ -1,6 +1,10 @@
 #pragma once
 #include <SFML/graphics.hpp>
 
+/*
+* player hud element.
+* Displays the players dash cooldown meter.
+*/
 class DashMeter
 {
 public:

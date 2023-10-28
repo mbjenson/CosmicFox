@@ -1,6 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+/*
+* basic hud element class
+* contains an image, position, and other functionality for the hud item
+*/
 class HudBar
 {
 public:

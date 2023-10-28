@@ -14,9 +14,7 @@ void Camera::update(Player& player1, float deltaTime, sf::Vector2f mapSize)
 	velocity.y = (distance.y * lag) * deltaTime;
 
 	position += velocity;
-
 	
-
 	int outOfBounds = 0;
 	sf::Vector2f tempCenter(position);
 	if (position.x - getSize().x / 2 < 0) {

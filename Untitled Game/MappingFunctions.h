@@ -1,7 +1,9 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-// -> the inline keyword is used when you want to define a function that will be inherited to more than one file
+/*
+* generic utility mapping functions used throughout my program
+*/
 
 // convert screen coordinates to world coordinates
 inline sf::Vector2f screenToWorld(float x, float y, sf::Vector2f viewTopLeft) {
